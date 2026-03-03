@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CvPreviewPanel from '../components/CvPreviewPanel.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout title="CV | Aldrick Tadeo" description="Preview and download Aldrick Tadeo's engineering CV.">
+  <div class="shell flow-layout">
+    <section>
+      <p class="eyebrow">Curriculum Vitae</p>
+      <h1>CV Preview and Download</h1>
+      <p>
+        The CV is authored in Typst and exported as an ATS-friendly PDF through CI to keep the
+        published file in sync with the source.
+      </p>
+    </section>
+
+    <CvPreviewPanel pdfPath={siteConfig.cvPdfPath} />
+  </div>
+</BaseLayout>

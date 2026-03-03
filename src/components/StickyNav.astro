@@ -1,0 +1,56 @@
+---
+import { siteConfig } from '../config/site';
+
+const pathname = Astro.url.pathname;
+
+interface NavLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+const navLinks: NavLink[] = [
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'CV', href: '/cv' },
+  { label: 'GitHub', href: siteConfig.githubUrl, external: true },
+  { label: 'LinkedIn', href: '/social' }
+];
+
+const isActive = (href: string) => {
+  if (href === '/') {
+    return pathname === '/';
+  }
+
+  return pathname.startsWith(href);
+};
+---
+
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/" aria-label="Go to homepage">
+      <span class="brand__name">{siteConfig.name}</span>
+      <span class="brand__meta">Engineering Portfolio</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="nav-list">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                class:list={{
+                  'nav-link': true,
+                  'nav-link--active': !link.external && isActive(link.href)
+                }}
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noreferrer noopener' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

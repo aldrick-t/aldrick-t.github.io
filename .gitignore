@@ -1,2 +1,10 @@
-# MacOS
+# macOS
 .DS_Store
+
+# Node / Astro
+node_modules/
+.astro/
+dist/
+
+# Logs
+npm-debug.log*
