@@ -35,11 +35,13 @@ This repository hosts a responsive personal engineering portfolio built for GitH
 
 ## CV workflow
 
-- Edit Typst source at `cv/main.typ`.
-- CI compiles it to `public/cv/aldrick-tadeo-cv.pdf`.
+- Edit Typst source at `cv/aldrick_tadeo_cv.typ`.
+- CI compiles it to `public/cv/aldrick_tadeo_cv.pdf`.
 - The `/cv` page always serves that file for preview and download.
 
 ## Deploy
 
 - Push to `main` to trigger `.github/workflows/deploy.yml`.
 - GitHub Actions builds CV + site and publishes to GitHub Pages.
+- In GitHub repo settings, set `Settings > Pages > Build and deployment > Source` to `GitHub Actions`.
+- If you see a workflow named `pages build and deployment`, GitHub is still trying to run Jekyll and Astro files will fail to build.
