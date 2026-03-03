@@ -21,10 +21,10 @@ jobs:
       - name: Compile CV PDF
         run: |
           mkdir -p public/cv
-          typst compile cv/main.typ public/cv/aldrick-tadeo-cv.pdf
+          typst compile cv/aldrick_tadeo_cv.typ public/cv/aldrick_tadeo_cv.pdf
 
       - name: Upload CV artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aldrick-tadeo-cv
-          path: public/cv/aldrick-tadeo-cv.pdf
+          name: aldrick_tadeo_cv
+          path: public/cv/aldrick_tadeo_cv.pdf
