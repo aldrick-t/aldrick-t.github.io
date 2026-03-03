@@ -1,0 +1,23 @@
+---
+interface Props {
+  pdfPath: string;
+}
+
+const { pdfPath } = Astro.props;
+---
+
+<section class="cv-panel" aria-label="Curriculum vitae preview">
+  <div class="cv-panel__header">
+    <h2>CV Preview</h2>
+    <a class="btn btn--primary" href={pdfPath} download>
+      Download PDF
+    </a>
+  </div>
+
+  <object data={pdfPath} type="application/pdf" class="cv-embed">
+    <p>
+      Your browser cannot display inline PDFs.
+      <a href={pdfPath} download>Download the CV directly.</a>
+    </p>
+  </object>
+</section>

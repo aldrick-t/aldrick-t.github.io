@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import HeroIntro from '../components/HeroIntro.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import QuickAccessGrid from '../components/QuickAccessGrid.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((project) => project.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const quickActions = [
+  {
+    label: 'Portfolio',
+    description: 'Review engineering projects with architecture and impact details.',
+    href: '/portfolio'
+  },
+  {
+    label: 'CV',
+    description: 'Preview the latest CV and download the ATS-ready PDF.',
+    href: '/cv'
+  },
+  {
+    label: 'GitHub',
+    description: 'Explore repositories, commits, and implementation depth.',
+    href: siteConfig.githubUrl,
+    external: true
+  },
+  {
+    label: 'LinkedIn',
+    description: 'Open the social profile page and professional highlights.',
+    href: '/social'
+  }
+];
+---
+
+<BaseLayout title={`${siteConfig.name} | Engineering Portfolio`} description={siteConfig.tagline}>
+  <div class="shell home-layout">
+    <HeroIntro />
+    <QuickAccessGrid actions={quickActions} />
+
+    <section aria-labelledby="featured-projects-title">
+      <div class="section-title-row">
+        <h2 id="featured-projects-title">Featured Engineering Projects</h2>
+        <a href="/portfolio">See all projects</a>
+      </div>
+      <div class="project-grid">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    <section class="credibility-placeholder" aria-labelledby="credibility-title">
+      <h2 id="credibility-title">Credibility Snapshot</h2>
+      <p>
+        This section is prepared for certifications, talks, and awards. It can be expanded
+        without changing the site structure.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

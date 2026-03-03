@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Portfolio | Aldrick Tadeo"
+  description="Engineering project portfolio with architecture, implementation, and impact."
+>
+  <div class="shell flow-layout">
+    <section>
+      <p class="eyebrow">Portfolio</p>
+      <h1>Engineering Projects</h1>
+      <p>
+        Selected projects focused on software architecture, delivery quality, and measurable outcomes.
+      </p>
+    </section>
+
+    <section class="project-grid" aria-label="Portfolio projects">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </section>
+  </div>
+</BaseLayout>

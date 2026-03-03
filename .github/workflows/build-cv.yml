@@ -1,0 +1,30 @@
+name: Build Typst CV
+
+on:
+  push:
+    paths:
+      - 'cv/**'
+      - '.github/workflows/build-cv.yml'
+  workflow_dispatch:
+
+jobs:
+  build-cv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v4
+
+      - name: Compile CV PDF
+        run: |
+          mkdir -p public/cv
+          typst compile cv/main.typ public/cv/aldrick-tadeo-cv.pdf
+
+      - name: Upload CV artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aldrick-tadeo-cv
+          path: public/cv/aldrick-tadeo-cv.pdf
