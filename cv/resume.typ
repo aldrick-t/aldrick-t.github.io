@@ -16,8 +16,9 @@
   font: "New Computer Modern",
   paper: "us-letter",
   author-font-size: 20pt,
-  font-size: 10pt,
+  font-size: 9pt,
   lang: "en",
+  marginxy: (x: 0.3in, y: 0.25in),
   body,
 ) = {
 
@@ -36,7 +37,7 @@
 
   // Reccomended to have 0.5in margin on all sides
   set page(
-    margin: (x: 0.5in, y: 0.25in),
+    margin: marginxy,
     paper: paper,
   )
 
@@ -104,7 +105,7 @@
   )
 
   // Main body.
-  set par(justify: true, leading: 0.5em, spacing: 0.75em)
+  set par(justify: true, leading: 0.6em, spacing: 1em)
   body
 }
 
@@ -191,27 +192,51 @@
 }
 
 #let project(
-  role: "",
-  name: "",
-  url: "",
-  dates: "",
+  role: "", // The role you had in the project (e.g. "Lead Developer", "Research Assistant", "Team Member", etc.) if applicable
+  name: "", // The name of the project or research work
+  org: "", // The corresponding organization for the project, if applicable (e.g. conference, company, school, etc.)
+  url: "", // A URL to the project, paper, or any relevant link. Can be left empty if not applicable
+  dates: "", // The dates you worked on the project or research (e.g. "Jan 2023 - May 2023", "2022", etc.)
+  one-liner: true,
 ) = {
-  generic-one-by-two(
-    left: {
-      if role == "" {
-        [*#name* #if url != "" and dates != "" [ (#link("https://" + url)[#url])]]
-      } else {
-        [*#role*, #name #if url != "" and dates != ""  [ (#link("https://" + url)[#url])]]
-      }
-    },
-    right: {
-      if dates == "" and url != "" {
-        link("https://" + url)[#url]
-      } else {
-        dates
-      }
-    },
-  )
+  if one-liner {
+    generic-one-by-two(
+      left: {
+        if org != "" and role == "" {
+          strong(name) + ", " + emph(org)
+        } else if role != "" and org == "" {
+          strong(role) + ", " + emph(name)
+        } else {
+          strong(name)
+        }
+      },
+      right: dates,
+    )
+  } else {
+    generic-two-by-two(
+      top-left: {
+        if org != "" and role == "" {
+          strong(name)
+        } else if role != "" and org == "" {
+          strong(role)
+        } else {
+          strong(name)
+        }
+      },
+      top-right: dates,
+      bottom-left: {
+        if org != "" and role == "" {
+          emph(org)
+        } else if role != "" and org == "" {
+          emph(name)
+        } else {
+          emph(name)
+        }
+      },
+      bottom-right: "",
+    )
+  }
+
 }
 
 #let certificates(
@@ -223,14 +248,14 @@
 ) = {
   set par(spacing: 0.5em)
   [
-    *#name*, #issuer
+    *#name*, #issuer #h(1fr)
     #if url != "" {
       [ (#link("https://" + url)[#url])]
     }
     #if id != "" {
       "Credential ID: " + id
     }
-    #h(1fr) #date
+    #date
   ]
 }
 
@@ -242,4 +267,37 @@
     left: strong(activity),
     right: dates,
   )
+}
+
+#let skills(
+  category: "",
+  items: "",
+) = {
+  set par(spacing: 0.5em)
+  [
+    #strong(category):
+    #items
+  ]
+}
+
+#let language(
+  language: "",
+  proficiency: "",
+  url: "",
+  date: "",
+  cert: "",
+  score: "",
+  level: "",
+) = {
+  set par(spacing: 0.5em)
+  [
+    *#language*, #proficiency #h(1fr)
+    #if url != "" {
+      [ (#link("https://" + url)[#url])]
+    }
+    #if cert != "" {
+      cert + ": " + score + " (" + level + ")"
+    }
+    #date
+  ]
 }

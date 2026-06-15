@@ -1,0 +1,27 @@
+[
+  {
+    "id": "engineering",
+    "label": "One Page Engineering",
+    "entryTypst": "cv/engineering.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_cv.pdf",
+    "publicPath": "/cv/aldrick_tadeo_cv.pdf",
+    "available": true,
+    "default": true
+  },
+  {
+    "id": "academic",
+    "label": "One Page Academic",
+    "entryTypst": "cv/academic.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_academic_one_page.pdf",
+    "publicPath": "/cv/aldrick_tadeo_academic_one_page.pdf",
+    "available": false
+  },
+  {
+    "id": "full",
+    "label": "Full Length",
+    "entryTypst": "cv/full.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_full_length.pdf",
+    "publicPath": "/cv/aldrick_tadeo_full_length.pdf",
+    "available": false
+  }
+]
