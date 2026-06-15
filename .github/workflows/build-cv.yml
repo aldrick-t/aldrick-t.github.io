@@ -18,13 +18,20 @@ jobs:
       - name: Setup Typst
         uses: typst-community/setup-typst@v4
 
-      - name: Compile CV PDF
-        run: |
-          mkdir -p public/cv
-          typst compile cv/aldrick_tadeo_cv.typ public/cv/aldrick_tadeo_cv.pdf
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile CV PDFs
+        run: npm run build:cv
 
       - name: Upload CV artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aldrick_tadeo_cv
-          path: public/cv/aldrick_tadeo_cv.pdf
+          name: aldrick_tadeo_cvs
+          path: public/cv
