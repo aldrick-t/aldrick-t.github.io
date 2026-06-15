@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseStudySection from '../../components/CaseStudySection.astro';
+import ContributorsList from '../../components/ContributorsList.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -18,7 +19,19 @@ interface Props {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
-const { title, summary, role, stack, githubUrl, demoUrl, problem, approach, impact, lessons } = project.data;
+const {
+  title,
+  summary,
+  role,
+  stack,
+  githubUrl,
+  demoUrl,
+  problem,
+  approach,
+  impact,
+  lessons,
+  contributors
+} = project.data;
 ---
 
 <BaseLayout title={`${title} | Portfolio`} description={summary}>
@@ -44,6 +57,17 @@ const { title, summary, role, stack, githubUrl, demoUrl, problem, approach, impa
       <ul class="stack-list" aria-label="Technology stack">
         {stack.map((item) => <li>{item}</li>)}
       </ul>
+
+      {
+        contributors?.length ? (
+          <section class="contributors-section glass-panel" aria-labelledby="contributors-title">
+            <div class="section-title-row section-title-row--compact">
+              <h2 id="contributors-title">Contributors</h2>
+            </div>
+            <ContributorsList contributors={contributors} />
+          </section>
+        ) : null
+      }
     </article>
 
     <CaseStudySection title="Problem" content={problem} />

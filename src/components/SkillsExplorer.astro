@@ -1,0 +1,215 @@
+---
+import type { SkillGroup } from '../data/profile';
+import SkillBadge from './SkillBadge.astro';
+
+interface Props {
+  skillGroups: SkillGroup[];
+}
+
+const { skillGroups } = Astro.props;
+
+const getBadgeText = (label: string) =>
+  label
+    .split(/[^A-Za-z0-9#+]+/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
+
+const allSkills = skillGroups.flatMap((group) =>
+  group.items.map((item) => ({
+    ...item,
+    groupTitle: group.title,
+    groupId: group.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    badgeText: getBadgeText(item.label)
+  }))
+);
+
+const initialSkill = allSkills[0];
+---
+
+<div class="skills-explorer" data-skills-explorer>
+  <div class="skills-groups">
+    {
+      skillGroups.map((group) => (
+        <section
+          class="skill-group"
+          aria-labelledby={`skill-group-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+        >
+          <div class="section-title-row section-title-row--compact">
+            <h3 id={`skill-group-${group.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>
+              {group.title}
+            </h3>
+          </div>
+          <div class="skill-chip-list">
+            {
+              group.items.map((skill) => {
+                const badgeText = getBadgeText(skill.label);
+                const isActive = skill.id === initialSkill.id;
+
+                return (
+                  <button
+                    class:list={{ 'skill-chip': true, 'is-active': isActive }}
+                    type="button"
+                    data-skill-id={skill.id}
+                    data-skill-label={skill.label}
+                    data-skill-group={group.title}
+                    data-skill-description={skill.description}
+                    data-skill-badge={badgeText}
+                    data-skill-related={JSON.stringify(skill.related)}
+                    aria-pressed={isActive ? 'true' : 'false'}
+                  >
+                    <SkillBadge label={skill.label} icon={skill.icon} />
+                    <span>{skill.label}</span>
+                  </button>
+                );
+              })
+            }
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <aside class="skill-detail glass-panel" aria-live="polite">
+    <div class="skill-detail__head">
+      <span class="skill-detail__badge" data-skill-panel-badge>{initialSkill.badgeText}</span>
+      <div>
+        <p class="eyebrow">Skill focus</p>
+        <h3 data-skill-panel-title>{initialSkill.label}</h3>
+        <p class="skill-detail__group" data-skill-panel-group>{initialSkill.groupTitle}</p>
+      </div>
+    </div>
+    <p class="skill-detail__description" data-skill-panel-description>{initialSkill.description}</p>
+    <div class="skill-detail__related">
+      <p class="skill-detail__label">Related projects, academics, and work</p>
+      <ul class="skill-related-list" data-skill-panel-related>
+        {
+          initialSkill.related.map((item) => (
+            <li>
+              <span class={`skill-related__type skill-related__type--${item.type}`}>{item.type}</span>
+              {
+                item.href ? (
+                  <a href={item.href}>{item.label}</a>
+                ) : (
+                  <span>{item.label}</span>
+                )
+              }
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<script>
+  type SkillRelatedItem = {
+    label: string;
+    type: string;
+    href?: string;
+  };
+
+  const explorerRoots = document.querySelectorAll('[data-skills-explorer]');
+
+  const createRelatedItem = (item: SkillRelatedItem) => {
+    const li = document.createElement('li');
+    const type = document.createElement('span');
+    type.className = `skill-related__type skill-related__type--${item.type}`;
+    type.textContent = item.type;
+    li.append(type);
+
+    if (item.href) {
+      const target = document.createElement('a');
+      target.href = item.href;
+      target.textContent = item.label;
+      li.append(target);
+    } else {
+      const target = document.createElement('span');
+      target.textContent = item.label;
+      li.append(target);
+    }
+    return li;
+  };
+
+  explorerRoots.forEach((root) => {
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-skill-id]'));
+    const badge = root.querySelector<HTMLElement>('[data-skill-panel-badge]');
+    const title = root.querySelector<HTMLElement>('[data-skill-panel-title]');
+    const group = root.querySelector<HTMLElement>('[data-skill-panel-group]');
+    const description = root.querySelector<HTMLElement>('[data-skill-panel-description]');
+    const relatedList = root.querySelector<HTMLElement>('[data-skill-panel-related]');
+
+    if (!(badge && title && group && description && relatedList && chips.length)) {
+      return;
+    }
+
+    let pinnedId = chips[0].dataset.skillId ?? '';
+
+    const renderSkill = (skillId: string, persist = false) => {
+      const source = chips.find((chip) => chip.dataset.skillId === skillId);
+      if (!source) {
+        return;
+      }
+
+      if (persist) {
+        pinnedId = skillId;
+      }
+
+      badge.textContent = source.dataset.skillBadge ?? '';
+      title.textContent = source.dataset.skillLabel ?? '';
+      group.textContent = source.dataset.skillGroup ?? '';
+      description.textContent = source.dataset.skillDescription ?? '';
+      relatedList.textContent = '';
+
+      const relatedItems = JSON.parse(source.dataset.skillRelated ?? '[]') as SkillRelatedItem[];
+      relatedItems.forEach((item) => {
+        relatedList.append(createRelatedItem(item));
+      });
+
+      chips.forEach((chip) => {
+        const isDisplayed = chip.dataset.skillId === skillId;
+        const isPinned = chip.dataset.skillId === pinnedId;
+        chip.classList.toggle('is-active', isDisplayed);
+        chip.setAttribute('aria-pressed', String(isPinned));
+      });
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('mouseenter', () => {
+        const skillId = chip.dataset.skillId;
+        if (skillId) {
+          renderSkill(skillId);
+        }
+      });
+
+      chip.addEventListener('focus', () => {
+        const skillId = chip.dataset.skillId;
+        if (skillId) {
+          renderSkill(skillId);
+        }
+      });
+
+      chip.addEventListener('click', () => {
+        const skillId = chip.dataset.skillId;
+        if (skillId) {
+          renderSkill(skillId, true);
+        }
+      });
+    });
+
+    root.addEventListener('mouseleave', () => {
+      if (pinnedId) {
+        renderSkill(pinnedId, true);
+      }
+    });
+
+    root.addEventListener('focusout', (event) => {
+      const next = (event as FocusEvent).relatedTarget;
+      if (!(next instanceof HTMLElement) || !root.contains(next)) {
+        renderSkill(pinnedId, true);
+      }
+    });
+  });
+</script>

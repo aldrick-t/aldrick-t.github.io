@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../config/site';
+import Icon from './Icon.astro';
 
 const pathname = Astro.url.pathname;
 
@@ -7,13 +8,15 @@ interface NavLink {
   label: string;
   href: string;
   external?: boolean;
+  icon?: 'external';
 }
 
 const navLinks: NavLink[] = [
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'CV', href: '/cv' },
-  { label: 'GitHub', href: siteConfig.githubUrl, external: true },
-  { label: 'LinkedIn', href: '/social' }
+  { label: 'CV', href: siteConfig.cvRoute },
+  { label: 'Contact', href: '/contact' },
+  { label: 'GitHub', href: siteConfig.githubUrl, external: true, icon: 'external' },
+  { label: 'LinkedIn', href: siteConfig.linkedinUrl, external: true, icon: 'external' }
 ];
 
 const isActive = (href: string) => {
@@ -29,7 +32,6 @@ const isActive = (href: string) => {
   <div class="shell site-header__inner">
     <a class="brand" href="/" aria-label="Go to homepage">
       <span class="brand__name">{siteConfig.name}</span>
-      <span class="brand__meta">Engineering Portfolio</span>
     </a>
     <nav aria-label="Primary navigation">
       <ul class="nav-list">
@@ -44,8 +46,20 @@ const isActive = (href: string) => {
                 href={link.href}
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noreferrer noopener' : undefined}
+                aria-label={
+                  link.external
+                    ? `${link.label} (opens in a new tab)`
+                    : undefined
+                }
               >
-                {link.label}
+                <span>{link.label}</span>
+                {
+                  link.icon ? (
+                    <span class="nav-link__icon" aria-hidden="true">
+                      <Icon name={link.icon} />
+                    </span>
+                  ) : null
+                }
               </a>
             </li>
           ))

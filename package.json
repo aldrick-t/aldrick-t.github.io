@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "build:cv": "node ./scripts/build-cvs.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check"

@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+
+interface ContributorLink {
+  href: string;
+  label: string;
+  icon: 'email' | 'github' | 'linkedin' | 'website';
+}
+
+interface Contributor {
+  name: string;
+  role?: string;
+  email?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  websiteUrl?: string;
+}
+
+interface Props {
+  contributors: Contributor[];
+  compact?: boolean;
+}
+
+const { contributors, compact = false } = Astro.props;
+
+const getLinks = (contributor: Contributor): ContributorLink[] => {
+  const links: ContributorLink[] = [];
+
+  if (contributor.email) {
+    links.push({
+      href: `mailto:${contributor.email}`,
+      label: `Email ${contributor.name}`,
+      icon: 'email'
+    });
+  }
+
+  if (contributor.githubUrl) {
+    links.push({
+      href: contributor.githubUrl,
+      label: `${contributor.name} GitHub`,
+      icon: 'github'
+    });
+  }
+
+  if (contributor.linkedinUrl) {
+    links.push({
+      href: contributor.linkedinUrl,
+      label: `${contributor.name} LinkedIn`,
+      icon: 'linkedin'
+    });
+  }
+
+  if (contributor.websiteUrl) {
+    links.push({
+      href: contributor.websiteUrl,
+      label: `${contributor.name} website`,
+      icon: 'website'
+    });
+  }
+
+  return links;
+};
+---
+
+<div class:list={{ contributors: true, 'contributors--compact': compact }}>
+  {
+    contributors.map((contributor) => {
+      const links = getLinks(contributor);
+
+      return (
+        <article class="contributor-card">
+          <div class="contributor-card__body">
+            <p class="contributor-card__name">{contributor.name}</p>
+            {contributor.role ? <p class="contributor-card__role">{contributor.role}</p> : null}
+          </div>
+          {
+            links.length ? (
+              <div class="contributor-card__links">
+                {
+                  links.map((link) => (
+                    <a
+                      class="contributor-card__link"
+                      href={link.href}
+                      target={link.href.startsWith('http') ? '_blank' : undefined}
+                      rel={link.href.startsWith('http') ? 'noreferrer noopener' : undefined}
+                      aria-label={link.label}
+                    >
+                      <Icon name={link.icon} />
+                      {!compact ? <span>{link.label.replace(`${contributor.name} `, '')}</span> : null}
+                    </a>
+                  ))
+                }
+              </div>
+            ) : null
+          }
+        </article>
+      );
+    })
+  }
+</div>

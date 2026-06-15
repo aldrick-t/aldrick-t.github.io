@@ -1,12 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import ContributorsList from './ContributorsList.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;
-const { title, summary, role, stack, dateStart, dateEnd } = project.data;
+const { title, summary, role, stack, dateStart, dateEnd, contributors } = project.data;
 ---
 
 <article class="project-card">
@@ -21,4 +22,12 @@ const { title, summary, role, stack, dateStart, dateEnd } = project.data;
   <ul class="stack-list" aria-label={`${title} technology stack`}>
     {stack.map((item) => <li>{item}</li>)}
   </ul>
+  {
+    contributors?.length ? (
+      <div class="project-card__contributors">
+        <p class="project-card__supporting-label">Contributors</p>
+        <ContributorsList contributors={contributors} compact />
+      </div>
+    ) : null
+  }
 </article>

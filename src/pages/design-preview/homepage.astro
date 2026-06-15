@@ -1,0 +1,12 @@
+---
+import HomePageContent from '../../components/HomePageContent.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Homepage Design Preview | Aldrick Tadeo"
+  description="Hidden homepage design-preview route prepared for Figma capture."
+>
+  <script is:inline src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <HomePageContent showSectionIndex={false} />
+</BaseLayout>

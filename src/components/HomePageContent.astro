@@ -1,0 +1,218 @@
+---
+import { getCollection } from 'astro:content';
+import {
+  credentials,
+  heroIntro,
+  latestItems,
+  skillGroups,
+  timelineEntries
+} from '../data/profile';
+import HeroIntro from './HeroIntro.astro';
+import ProjectCard from './ProjectCard.astro';
+import SectionIndexWidget from './SectionIndexWidget.astro';
+import SkillsExplorer from './SkillsExplorer.astro';
+
+interface Props {
+  showSectionIndex?: boolean;
+}
+
+const { showSectionIndex = true } = Astro.props;
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((project) => project.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const latestCards = latestItems.map((item) => {
+  const href = item.projectSlug ? `/portfolio/${item.projectSlug}` : item.href;
+  return {
+    ...item,
+    href,
+    external: Boolean(href?.startsWith('http'))
+  };
+});
+
+const workEntries = timelineEntries.filter((entry) => entry.track === 'work');
+const educationEntries = timelineEntries.filter((entry) => entry.track === 'education');
+
+const sectionIndexLinks = [
+  { id: 'latest', label: 'Latest', shortLabel: 'L' },
+  { id: 'featured', label: 'Featured', shortLabel: 'F' },
+  { id: 'trajectory', label: 'Trajectory', shortLabel: 'T' },
+  { id: 'skills', label: 'Skills', shortLabel: 'S' },
+  { id: 'credentials', label: 'Courses & Certifications', shortLabel: 'C' }
+];
+---
+
+<div class="shell home-layout home-page">
+  <section class="home-masthead">
+    <HeroIntro intro={heroIntro} />
+
+    <section id="latest" class="home-section home-section--latest glass-panel" aria-labelledby="latest-title">
+      <div class="section-heading">
+        <p class="eyebrow">Landing</p>
+        <div class="section-title-row">
+          <h2 id="latest-title">Latest</h2>
+          <a href="/portfolio">See all projects</a>
+        </div>
+        <p>
+          A curated snapshot of the work, study, and active builds that currently define the
+          direction of the portfolio.
+        </p>
+      </div>
+      <div class="latest-grid">
+        {
+          latestCards.map((item) => {
+            const content = (
+              <>
+                <div class="latest-card__meta">
+                  <span class="eyebrow">{item.category}</span>
+                  <span class="status-pill">{item.status}</span>
+                </div>
+                <h3>{item.title}</h3>
+                <p class="latest-card__timeframe">{item.timeframe}</p>
+                <p>{item.summary}</p>
+                {
+                  item.tags?.length ? (
+                    <ul class="stack-list" aria-label={`${item.title} topics`}>
+                      {item.tags.map((tag) => <li>{tag}</li>)}
+                    </ul>
+                  ) : null
+                }
+              </>
+            );
+
+            return item.href ? (
+              <a
+                class="latest-card"
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noreferrer noopener' : undefined}
+              >
+                {content}
+              </a>
+            ) : (
+              <article class="latest-card">{content}</article>
+            );
+          })
+        }
+      </div>
+    </section>
+  </section>
+
+  <section id="featured" class="home-section" aria-labelledby="featured-projects-title">
+    <div class="section-heading">
+      <p class="eyebrow">Portfolio Highlights</p>
+      <div class="section-title-row">
+        <h2 id="featured-projects-title">Featured</h2>
+        <a href="/portfolio">See all projects</a>
+      </div>
+      <p>Selected case studies focused on systems reliability, developer experience, and delivery quality.</p>
+    </div>
+    <div class="project-grid">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section id="trajectory" class="home-section trajectory-section" aria-labelledby="trajectory-title">
+    <div class="section-heading">
+      <p class="eyebrow">Experience Map</p>
+      <h2 id="trajectory-title">Trajectory</h2>
+      <p>A two-lane timeline of the academic and professional milestones shaping the portfolio.</p>
+    </div>
+    <div class="trajectory-grid">
+      <section class="timeline-lane glass-panel" aria-labelledby="trajectory-work-title">
+        <div class="section-title-row section-title-row--compact">
+          <h3 id="trajectory-work-title">Work</h3>
+        </div>
+        <div class="timeline-stack">
+          {
+            workEntries.map((entry) => (
+              <article class="timeline-entry">
+                <p class="eyebrow">{entry.timeframe}</p>
+                <h3>{entry.title}</h3>
+                <p class="timeline-entry__org">{entry.organization}</p>
+                <p>{entry.summary}</p>
+                <ul>
+                  {entry.highlights.map((highlight) => <li>{highlight}</li>)}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="timeline-lane glass-panel" aria-labelledby="trajectory-education-title">
+        <div class="section-title-row section-title-row--compact">
+          <h3 id="trajectory-education-title">Academic</h3>
+        </div>
+        <div class="timeline-stack">
+          {
+            educationEntries.map((entry) => (
+              <article class="timeline-entry">
+                <p class="eyebrow">{entry.timeframe}</p>
+                <h3>{entry.title}</h3>
+                <p class="timeline-entry__org">{entry.organization}</p>
+                <p>{entry.summary}</p>
+                <ul>
+                  {entry.highlights.map((highlight) => <li>{highlight}</li>)}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section id="skills" class="home-section" aria-labelledby="skills-title">
+    <div class="section-heading">
+      <p class="eyebrow">Capabilities</p>
+      <h2 id="skills-title">Skills</h2>
+      <p>
+        Skill groups mirror the CV structure while adding an interactive view into where each
+        capability has been applied.
+      </p>
+    </div>
+    <SkillsExplorer skillGroups={skillGroups} />
+  </section>
+
+  <section id="credentials" class="home-section" aria-labelledby="credentials-title">
+    <div class="section-heading">
+      <p class="eyebrow">Verified Learning</p>
+      <h2 id="credentials-title">Courses & Certifications</h2>
+      <p>Credentialed study areas pulled from the CV and presented as quick visual references.</p>
+    </div>
+    <div class="credentials-grid">
+      {
+        credentials.map((credential) => (
+          <article class="credential-card glass-panel">
+            <div class="credential-card__meta">
+              <p class="eyebrow">{credential.type ?? 'Credential'}</p>
+              {credential.issued ? <span>{credential.issued}</span> : null}
+            </div>
+            <h3>{credential.name}</h3>
+            <p class="credential-card__issuer">{credential.issuer}</p>
+            {
+              credential.credentialId ? (
+                <p class="credential-card__id">Credential ID: {credential.credentialId}</p>
+              ) : (
+                <p class="credential-card__id">Credential link or ID can be added later.</p>
+              )
+            }
+            {
+              credential.url ? (
+                <a href={credential.url} target="_blank" rel="noreferrer noopener">
+                  View credential
+                </a>
+              ) : null
+            }
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</div>
+
+{showSectionIndex ? <SectionIndexWidget sections={sectionIndexLinks} /> : null}

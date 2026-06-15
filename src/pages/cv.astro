@@ -1,20 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CvPreviewPanel from '../components/CvPreviewPanel.astro';
-import { siteConfig } from '../config/site';
+import { cvVariants, defaultCvVariant } from '../data/cv';
 ---
 
 <BaseLayout title="CV | Aldrick Tadeo" description="Preview and download Aldrick Tadeo's engineering CV.">
   <div class="shell flow-layout">
     <section>
       <p class="eyebrow">Curriculum Vitae</p>
-      <h1>CV Preview and Download</h1>
+      <h1>CV Preview</h1>
       <p>
-        The CV is authored in Typst and exported as an ATS-friendly PDF through CI to keep the
-        published file in sync with the source.
+        Each CV variant is authored in Typst and exported to PDF through GitHub Actions. The
+        embedded preview below always reflects the currently selected variant.
       </p>
     </section>
 
-    <CvPreviewPanel pdfPath={siteConfig.cvPdfPath} />
+    <CvPreviewPanel variants={cvVariants} defaultVariant={defaultCvVariant} />
   </div>
 </BaseLayout>

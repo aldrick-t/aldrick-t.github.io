@@ -1,13 +1,45 @@
 ---
-import { siteConfig } from '../config/site';
+import type { HeroIntroData } from '../data/profile';
+import Icon from './Icon.astro';
+
+interface Props {
+  intro: HeroIntroData;
+}
+
+const { intro } = Astro.props;
 ---
 
-<section class="hero">
-  <p class="eyebrow">Software Engineering</p>
-  <h1>{siteConfig.name}</h1>
-  <p class="hero__lead">{siteConfig.tagline}</p>
+<section class="hero glass-panel" aria-labelledby="hero-title">
+  <p class="eyebrow">{intro.eyebrow}</p>
+  <h1 id="hero-title">{intro.title}</h1>
+  <p class="hero__lead">{intro.lead}</p>
+  <p class="hero__summary">{intro.summary}</p>
+
+  <div class="hero__meta" aria-label="Current location and availability">
+    <span class="meta-pill">
+    <span class="meta-pill">
+      <Icon name="status" />
+      <span>{intro.availability}</span>
+    </span>
+  </div>
+
+  <ul class="hero__chips" aria-label="Current focus areas">
+    {intro.statusChips.map((item) => <li>{item}</li>)}
+  </ul>
+
   <div class="hero__actions">
-    <a class="btn btn--primary" href="/portfolio">View Portfolio</a>
-    <a class="btn" href="/cv">Open CV</a>
+    {
+      intro.ctas.map((cta, index) => (
+        <a
+          class:list={{ btn: true, 'btn--primary': index === 0 }}
+          href={cta.href}
+          download={cta.download ? true : undefined}
+          target={cta.external ? '_blank' : undefined}
+          rel={cta.external ? 'noreferrer noopener' : undefined}
+        >
+          {cta.label}
+        </a>
+      ))
+    }
   </div>
 </section>

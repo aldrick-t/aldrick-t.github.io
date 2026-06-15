@@ -1,0 +1,21 @@
+---
+import { type UiIconName, uiIconRegistry } from '../data/iconRegistry';
+
+interface Props {
+  name: UiIconName;
+  className?: string;
+  title?: string;
+}
+
+const { name, className = '', title } = Astro.props;
+const svg = uiIconRegistry[name];
+---
+
+<span
+  class:list={{ icon: true, [className]: Boolean(className) }}
+  role={title ? 'img' : 'presentation'}
+  aria-hidden={title ? undefined : 'true'}
+  aria-label={title}
+  set:html={svg}
+>
+</span>
