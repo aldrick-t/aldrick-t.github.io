@@ -2,16 +2,16 @@
   {
     "id": "engineering",
     "label": "Engineering",
-    "entryTypst": "cv/engineering.typ",
-    "outputPdf": "public/cv/aldrick_tadeo_engineering.pdf",
-    "publicPath": "/cv/aldrick_tadeo_engineering.pdf",
+    "entryTypst": "cv/aldrick_tadeo_resume.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_resume.pdf",
+    "publicPath": "/cv/aldrick_tadeo_resume.pdf",
     "published": true,
     "default": true
   },
   {
     "id": "academic",
     "label": "Academic",
-    "entryTypst": "cv/academic.typ",
+    "entryTypst": "cv/aldrick_tadeo_acad.typ",
     "outputPdf": "public/cv/aldrick_tadeo_academic.pdf",
     "publicPath": "/cv/aldrick_tadeo_academic.pdf",
     "published": false
@@ -19,9 +19,9 @@
   {
     "id": "full",
     "label": "Full length",
-    "entryTypst": "cv/full.typ",
-    "outputPdf": "public/cv/aldrick_tadeo_full.pdf",
-    "publicPath": "/cv/aldrick_tadeo_full.pdf",
-    "published": false
+    "entryTypst": "cv/aldrick_tadeo_cv.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_cv.pdf",
+    "publicPath": "/cv/aldrick_tadeo_cv.pdf",
+    "published": true
   }
 ]
