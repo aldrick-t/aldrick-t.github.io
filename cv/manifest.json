@@ -11,14 +11,14 @@
   {
     "id": "academic",
     "label": "Academic",
-    "entryTypst": "cv/aldrick_tadeo_acad.typ",
+    "entryTypst": "cv/aldrick_tadeo_cv.typ",
     "outputPdf": "public/cv/aldrick_tadeo_academic.pdf",
     "publicPath": "/cv/aldrick_tadeo_academic.pdf",
     "published": false
   },
   {
     "id": "full",
-    "label": "Full length",
+    "label": "Full Length",
     "entryTypst": "cv/aldrick_tadeo_cv.typ",
     "outputPdf": "public/cv/aldrick_tadeo_cv.pdf",
     "publicPath": "/cv/aldrick_tadeo_cv.pdf",
