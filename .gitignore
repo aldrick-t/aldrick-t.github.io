@@ -6,6 +6,13 @@ node_modules/
 .astro/
 dist/
 
+# Generated CV artifacts
+cv/*.pdf
+public/cv/*.pdf
+
+# Local agent onboarding and task memory
+.agent/
+
 # Logs
 npm-debug.log*
 node_modules

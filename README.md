@@ -1,47 +1,41 @@
-# Engineering Portfolio (Astro + TypeScript)
+# Aldrick Tadeo — portfolio
 
-This repository hosts a responsive personal engineering portfolio built for GitHub Pages.
+A static Astro portfolio with hand-authored Typst CVs. Website facts live in one Markdown file per item; the CV variants remain manually edited and are compiled in CI.
 
-## Stack
+## Commands
 
-- Astro + TypeScript for static-site structure and maintainability
-- Markdown Content Collections for portfolio project content
-- Typst for CV source, compiled to PDF in CI
-- GitHub Actions for CV build and GitHub Pages deployment
+```bash
+npm install
+npm run dev
+npm run content:check
+npm run check
+npm run build
+npm run build:cv       # requires Typst
+npm run build:all      # content validation, all CVs, and Astro
+```
 
-## Pages
+Create a draft item:
 
-- `/` landing page with immediate access to Portfolio, CV, GitHub, and LinkedIn
-- `/portfolio` project index
-- `/portfolio/[slug]` project case studies
-- `/cv` inline CV preview + quick download
-- `/social` LinkedIn-focused page with official badge + fallback CTA links
-- `/404` not found page
+```bash
+npm run new:item -- lidar-mapping-project project
+```
 
-## Local development
+See `docs/item-template.md` for all fields and the CV synchronization checklist.
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Start dev server:
-   ```bash
-   npm run dev
-   ```
-3. Build production output:
-   ```bash
-   npm run build
-   ```
+## Content model
+
+- `src/content/items/*.md` — canonical projects, work, education, publications, conferences, awards, courses, certifications, volunteering, and news.
+- `src/data/skills.ts` — canonical skill IDs and groups. Item-to-skill relationships are derived from each item's `skills` field.
+- `src/config/site.ts` — personal introduction and public contact links.
+- `cv/*.typ` — manually authored CV sources. These are never generated from website content.
+- `cv/manifest.json` — CV entrypoints, PDF outputs, and public visibility.
+
+The homepage, timeline, skill evidence, featured content, credentials, portfolio groups, and related items are generated from the item collection at build time.
 
 ## CV workflow
 
-- Edit Typst source at `cv/aldrick_tadeo_cv.typ`.
-- CI compiles it to `public/cv/aldrick_tadeo_cv.pdf`.
-- The `/cv` page always serves that file for preview and download.
+All three manifest variants compile in CI, including variants that are not yet shown on `/cv`. `published` controls public visibility; it does not skip compilation. Preserve and manually edit the Typst sources, then inspect their PDFs before changing a variant to public.
 
-## Deploy
+## Deployment
 
-- Push to `main` to trigger `.github/workflows/deploy.yml`.
-- GitHub Actions builds CV + site and publishes to GitHub Pages.
-- In GitHub repo settings, set `Settings > Pages > Build and deployment > Source` to `GitHub Actions`.
-- If you see a workflow named `pages build and deployment`, GitHub is still trying to run Jekyll and Astro files will fail to build.
+Pushes to `main` run content validation, compile every CV, build Astro, and publish the resulting static artifact to GitHub Pages.

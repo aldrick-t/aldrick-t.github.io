@@ -26,11 +26,6 @@ jobs:
       - name: Setup Typst
         uses: typst-community/setup-typst@v4
 
-      - name: Compile CV PDF
-        run: |
-          mkdir -p public/cv
-          typst compile cv/aldrick_tadeo_cv.typ public/cv/aldrick_tadeo_cv.pdf
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -40,8 +35,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate content
+        run: npm run content:check
+
+      - name: Compile CV PDFs
+        run: npm run build:cv
+
       - name: Build site
-        run: npm run build
+        run: npx astro build
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

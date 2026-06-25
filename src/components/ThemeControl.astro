@@ -1,0 +1,25 @@
+<div class="theme-control" data-theme-control aria-label="Color theme">
+  <button type="button" data-theme-value="light" aria-label="Use light theme">Light</button>
+  <button type="button" data-theme-value="dark" aria-label="Use dark theme">Dark</button>
+  <button type="button" data-theme-value="system" aria-label="Follow system theme">System</button>
+</div>
+
+<script>
+  const controls = document.querySelectorAll<HTMLElement>('[data-theme-control]');
+
+  controls.forEach((control) => {
+    const buttons = Array.from(control.querySelectorAll<HTMLButtonElement>('[data-theme-value]'));
+    const applyTheme = (theme: string) => {
+      const safeTheme = theme === 'light' || theme === 'dark' ? theme : 'system';
+      document.documentElement.dataset.theme = safeTheme;
+      localStorage.setItem('site-theme', safeTheme);
+      buttons.forEach((button) => {
+        const active = button.dataset.themeValue === safeTheme;
+        button.setAttribute('aria-pressed', String(active));
+      });
+    };
+
+    buttons.forEach((button) => button.addEventListener('click', () => applyTheme(button.dataset.themeValue ?? 'system')));
+    applyTheme(document.documentElement.dataset.theme ?? 'system');
+  });
+</script>

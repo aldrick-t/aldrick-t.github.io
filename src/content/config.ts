@@ -1,26 +1,56 @@
 import { defineCollection, z } from 'astro:content';
 
-const projects = defineCollection({
+const itemLinkSchema = z.object({
+  kind: z.enum(['site', 'repository', 'publication', 'credential', 'video', 'other']),
+  label: z.string().min(1),
+  url: z.string().url()
+});
+
+const itemAssetSchema = z.object({
+  path: z.string().min(1),
+  alt: z.string().min(1),
+  caption: z.string().optional(),
+  credit: z.string().optional()
+});
+
+const itemRelationSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1)
+});
+
+const items = defineCollection({
   type: 'content',
   schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    role: z.string(),
-    stack: z.array(z.string()).min(1),
-    dateStart: z.string(),
-    dateEnd: z.union([z.literal('Present'), z.string()]),
-    githubUrl: z.string().url(),
-    demoUrl: z.string().url().optional(),
-    featured: z.boolean(),
-    order: z.number().int(),
-    coverImage: z.string().optional(),
-    problem: z.string(),
-    approach: z.string(),
-    impact: z.array(z.string()).min(1),
-    lessons: z.array(z.string()).min(1)
+    title: z.string().min(1),
+    type: z.enum([
+      'project',
+      'work',
+      'education',
+      'publication',
+      'conference',
+      'award',
+      'course',
+      'certification',
+      'volunteering',
+      'news'
+    ]),
+    summary: z.string().min(1),
+    organization: z.string().optional(),
+    location: z.string().optional(),
+    dateStart: z.string().regex(/^\d{4}(-\d{2})?$/),
+    dateEnd: z.union([z.literal('Present'), z.string().regex(/^\d{4}(-\d{2})?$/)]),
+    highlights: z.array(z.string().min(1)).default([]),
+    skills: z.array(z.string().min(1)).default([]),
+    tags: z.array(z.string().min(1)).default([]),
+    published: z.boolean().default(true),
+    portfolio: z.boolean().default(true),
+    timeline: z.boolean().default(false),
+    featuredRank: z.number().int().min(1).max(3).optional(),
+    links: z.array(itemLinkSchema).default([]),
+    assets: z.array(itemAssetSchema).default([]),
+    relations: z.array(itemRelationSchema).default([]),
+    cvReview: z.array(z.enum(['engineering', 'academic', 'full'])).default([])
   })
 });
 
-export const collections = {
-  projects
-};
+export const collections = { items };

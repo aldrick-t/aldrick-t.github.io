@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+
+const contacts = [
+  { label: 'Email', value: siteConfig.email, href: `mailto:${siteConfig.email}`, external: false },
+  { label: 'GitHub', value: 'github.com/aldrick-t', href: siteConfig.githubUrl, external: true },
+  { label: 'LinkedIn', value: 'linkedin.com/in/aldrick-t', href: siteConfig.linkedinUrl, external: true }
+];
+---
+
+<BaseLayout title="Contact — Aldrick Tadeo" description="Professional contact links for Aldrick Tadeo.">
+  <div class="shell page-stack contact-page">
+    <header class="page-header"><p class="mono-label">Direct channels</p><h1>Contact</h1><p>Email is the best way to reach me. Professional profiles are linked below.</p></header>
+    <div class="contact-list">
+      {contacts.map((contact) => (
+        <article class="contact-row">
+          <div><span class="mono-label">{contact.label}</span><h2><a href={contact.href} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer noopener' : undefined}>{contact.value}{contact.external ? ' ↗' : ''}</a></h2></div>
+          <button type="button" class="copy-control" data-copy={contact.value}>Copy</button>
+        </article>
+      ))}
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? '');
+        button.textContent = 'Copied';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1400);
+      } catch { button.textContent = 'Select and copy'; }
+    }));
+  </script>
+</BaseLayout>

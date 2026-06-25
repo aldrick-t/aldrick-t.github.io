@@ -5,15 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "content:check": "node ./scripts/validate-content.mjs",
+    "new:item": "node ./scripts/new-item.mjs",
+    "build:cv": "node ./scripts/build-cvs.mjs",
+    "build": "npm run content:check && astro build",
+    "build:all": "npm run content:check && npm run build:cv && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "npm run content:check && astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "astro": "^5.4.0"
   },
   "devDependencies": {
+    "js-yaml": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }

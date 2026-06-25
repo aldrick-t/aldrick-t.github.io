@@ -1,0 +1,27 @@
+[
+  {
+    "id": "engineering",
+    "label": "Engineering",
+    "entryTypst": "cv/aldrick_tadeo_resume.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_resume.pdf",
+    "publicPath": "/cv/aldrick_tadeo_resume.pdf",
+    "published": true,
+    "default": true
+  },
+  {
+    "id": "academic",
+    "label": "Academic",
+    "entryTypst": "cv/aldrick_tadeo_acad.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_academic.pdf",
+    "publicPath": "/cv/aldrick_tadeo_academic.pdf",
+    "published": false
+  },
+  {
+    "id": "full",
+    "label": "Full length",
+    "entryTypst": "cv/aldrick_tadeo_cv.typ",
+    "outputPdf": "public/cv/aldrick_tadeo_cv.pdf",
+    "publicPath": "/cv/aldrick_tadeo_cv.pdf",
+    "published": true
+  }
+]

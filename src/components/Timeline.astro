@@ -1,0 +1,39 @@
+---
+import type { ItemEntry } from '../lib/items';
+import { buildTimeline, formatDateRange, itemTypeLabels } from '../lib/items';
+
+interface Props { items: ItemEntry[] }
+const { items } = Astro.props;
+const timeline = buildTimeline(items);
+---
+
+<div class="timeline" style={`--timeline-months:${timeline.totalMonths};--timeline-lanes:${timeline.laneCount}`}>
+  <div class="timeline__years" aria-hidden="true">
+    {timeline.years.map(({ year, offset }) => (
+      <span style={`--year-offset:${offset}`}>{year}</span>
+    ))}
+  </div>
+  <ol class="timeline__items">
+    {timeline.placements.map(({ item, lane, rowStart, rowSpan, concurrent }) => (
+      <li
+        class:list={{ 'timeline-item': true, 'timeline-item--compact': rowSpan < 5 }}
+        style={`--lane:${lane + 1};--row-start:${rowStart};--row-span:${rowSpan}`}
+      >
+        <a href={`/items/${item.slug}`}>
+          <span class="timeline-item__type">{itemTypeLabels[item.data.type].replace(/s$/, '')}</span>
+          <strong>{item.data.title}</strong>
+          {rowSpan >= 5 ? <time>{formatDateRange(item)}</time> : null}
+          {rowSpan >= 5 && item.data.organization ? <span>{item.data.organization}</span> : null}
+        </a>
+        {concurrent.length ? (
+          <span class="timeline-item__concurrent">
+            Concurrent with {concurrent.slice(0, 3).map((entry, index) => (
+              <><a href={`/items/${entry.slug}`}>{entry.data.title}</a>{index < Math.min(concurrent.length, 3) - 1 ? ', ' : ''}</>
+            ))}
+            {concurrent.length > 3 ? ` and ${concurrent.length - 3} more` : ''}
+          </span>
+        ) : null}
+      </li>
+    ))}
+  </ol>
+</div>

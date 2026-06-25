@@ -2,11 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="404 | Page Not Found" description="The requested page could not be found.">
-  <div class="shell flow-layout not-found">
-    <p class="eyebrow">404</p>
+<BaseLayout title="404 — Aldrick Tadeo" description="The requested page could not be found.">
+  <div class="shell page-stack not-found">
+    <p class="mono-label">Error 404</p>
     <h1>Page not found</h1>
-    <p>The page you requested does not exist or may have moved.</p>
-    <a class="btn btn--primary" href="/">Return to homepage</a>
+    <p>The address may be outdated or the page may have moved.</p>
+    <div class="action-row"><a class="button button--primary" href="/">Home</a><a class="button" href="/portfolio">Portfolio</a></div>
   </div>
 </BaseLayout>
