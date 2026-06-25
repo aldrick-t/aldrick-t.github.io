@@ -9,9 +9,8 @@ if (!defaultCvVariant) throw new Error('At least one CV variant must be publishe
 <BaseLayout title="CV — Aldrick Tadeo" description="Preview and download Aldrick Tadeo's hand-authored Typst CV.">
   <div class="shell page-stack">
     <header class="page-header">
-      <p class="mono-label">Hand-authored in Typst</p>
-      <h1>Curriculum vitae</h1>
-      <p>Each available version is manually edited for its purpose, compiled in CI, and published here as a PDF.</p>
+      <h1>Curriculum Vitae</h1>
+      <p>Multiple scopes available, a full length CV, a engineering focused one-page resume and an academic focused one-page resume.</p>
     </header>
     <CvPreviewPanel variants={publishedCvVariants} defaultVariant={defaultCvVariant} />
   </div>
