@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from '../config/site';
-import ThemeControl from './ThemeControl.astro';
+// import ThemeControl from './ThemeControl.astro';
 
 const pathname = Astro.url.pathname;
 const navLinks = [
@@ -17,7 +17,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
   <div class="site-header__inner shell shell--wide">
     <div class="site-header__identity">
       <a class="brand" href="/">{siteConfig.name}</a>
-      <ThemeControl />
+      <!-- <ThemeControl /> -->
     </div>
     <nav aria-label="Primary navigation">
       <ul class="primary-nav">
