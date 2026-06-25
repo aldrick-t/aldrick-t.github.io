@@ -5,7 +5,7 @@ interface Props { variants: CvVariant[]; defaultVariant: CvVariant }
 const { variants, defaultVariant } = Astro.props;
 ---
 
-<section class="cv-viewer" aria-label="Curriculum vitae preview">
+<section class="cv-viewer" aria-label="Curriculum Vitae Preview">
   <div class="cv-viewer__toolbar" data-cv-panel data-default-variant={defaultVariant.id} data-variants={JSON.stringify(variants)}>
     <div class="cv-viewer__variants" role="tablist" aria-label="CV variants">
       {variants.map((variant) => (

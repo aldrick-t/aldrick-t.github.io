@@ -12,14 +12,13 @@ if (featured.length !== 3) throw new Error(`Expected exactly three featured item
 const credentials = sortItems(items.filter((item) => item.data.type === 'course' || item.data.type === 'certification'));
 ---
 
-<div class="shell page-stack home-page">
-  <nav class="section-nav" aria-label="On this page">
+<div class="shell page-stack page-stack--sticky-section-nav home-page">
+  <nav class="section-nav section-nav--sticky" aria-label="On this page">
     {landingSections.map((section) => <a href={`#${section.id}`}>{section.label}</a>)}
   </nav>
 
   <section id="intro" class="intro-panel" aria-labelledby="intro-title">
     <div>
-      <p class="mono-label">{profile.location}</p>
       <h1 id="intro-title">{profile.name}</h1>
       <p class="intro-panel__title">{profile.title}</p>
       <p class="intro-panel__summary">{profile.introduction}</p>
@@ -35,7 +34,7 @@ const credentials = sortItems(items.filter((item) => item.data.type === 'course'
 
   <section id="featured" class="page-section" aria-labelledby="featured-title">
     <header class="section-heading">
-      <div><p class="mono-label">Selected work</p><h2 id="featured-title">Featured</h2></div>
+      <div><h2 id="featured-title">Featured</h2></div>
       <a href="/portfolio">All items →</a>
     </header>
     <div class="featured-rail">{featured.map((item) => <ItemCard item={item} featured />)}</div>
@@ -43,14 +42,14 @@ const credentials = sortItems(items.filter((item) => item.data.type === 'course'
 
   <section id="timeline" class="page-section" aria-labelledby="timeline-title">
     <header class="section-heading">
-      <div><p class="mono-label">Concurrent activity</p><h2 id="timeline-title">Timeline</h2></div>
+      <div><h2 id="timeline-title">Timeline</h2></div>
     </header>
     <p class="section-intro">Time runs from newest to oldest. Parallel lanes show work that happened concurrently.</p>
     <Timeline items={items} />
   </section>
 
   <section id="skills" class="page-section" aria-labelledby="skills-title">
-    <header class="section-heading"><div><p class="mono-label">Evidence, not keywords</p><h2 id="skills-title">Skills</h2></div></header>
+    <header class="section-heading"><div><h2 id="skills-title">Skills</h2></div></header>
     <div class="skill-groups">
       {skillGroups.map(({ group, skills }) => {
         const rows = skills.map((skill) => ({ skill, related: sortItems(items.filter((item) => item.data.skills.includes(skill.id))) })).filter(({ related }) => related.length);
@@ -67,7 +66,7 @@ const credentials = sortItems(items.filter((item) => item.data.type === 'course'
   </section>
 
   <section id="credentials" class="page-section" aria-labelledby="credentials-title">
-    <header class="section-heading"><div><p class="mono-label">Continued learning</p><h2 id="credentials-title">Courses & certifications</h2></div></header>
+    <header class="section-heading"><div><h2 id="credentials-title">Courses & certifications</h2></div></header>
     <div class="row-list">
       {credentials.map((item) => (
         <article class="content-row">

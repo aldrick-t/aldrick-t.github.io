@@ -7,14 +7,13 @@ const items = (await getCollection('items')).filter((item) => item.data.publishe
 const groups = groupItemsByType(items);
 ---
 
-<BaseLayout title="Portfolio — Aldrick Tadeo" description="All of Aldrick Tadeo's projects, experience, education, recognition, service, and continued learning.">
-  <div class="shell page-stack">
+<BaseLayout title="Portfolio — Aldrick Tadeo" description="All projects, experience, education, recognition, service, and continued learning.">
+  <div class="shell page-stack page-stack--sticky-section-nav">
     <header class="page-header">
-      <p class="mono-label">Complete index</p>
       <h1>Portfolio</h1>
-      <p>Projects, experience, education, recognition, service, and continued learning.</p>
+      <p>Complete index of projects, experience, education, recognition, service and more.</p>
     </header>
-    <nav class="section-nav" aria-label="Portfolio sections">
+    <nav class="section-nav section-nav--sticky" aria-label="Portfolio sections">
       {groups.map((group) => <a href={`#${group.type}`}>{group.label} <span>{group.items.length}</span></a>)}
     </nav>
     {groups.map((group) => (
