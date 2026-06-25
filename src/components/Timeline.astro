@@ -19,7 +19,7 @@ const timeline = buildTimeline(items);
         class:list={{ 'timeline-item': true, 'timeline-item--compact': rowSpan < 5 }}
         style={`--lane:${lane + 1};--row-start:${rowStart};--row-span:${rowSpan}`}
       >
-        <a href={`/items/${item.slug}`}>
+        <a href={`/items/${item.id}`}>
           <span class="timeline-item__type">{itemTypeLabels[item.data.type].replace(/s$/, '')}</span>
           <strong>{item.data.title}</strong>
           {rowSpan >= 5 ? <time>{formatDateRange(item)}</time> : null}
@@ -28,7 +28,7 @@ const timeline = buildTimeline(items);
         {concurrent.length ? (
           <span class="timeline-item__concurrent">
             Concurrent with {concurrent.slice(0, 3).map((entry, index) => (
-              <><a href={`/items/${entry.slug}`}>{entry.data.title}</a>{index < Math.min(concurrent.length, 3) - 1 ? ', ' : ''}</>
+              <><a href={`/items/${entry.id}`}>{entry.data.title}</a>{index < Math.min(concurrent.length, 3) - 1 ? ', ' : ''}</>
             ))}
             {concurrent.length > 3 ? ` and ${concurrent.length - 3} more` : ''}
           </span>

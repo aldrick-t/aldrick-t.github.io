@@ -23,8 +23,8 @@ const groups = groupItemsByType(items);
           {group.items.map((item) => (
             <article class="portfolio-row">
               <div class="portfolio-row__date"><time>{formatDateRange(item)}</time></div>
-              <div><h3><a href={`/items/${item.slug}`}>{item.data.title}</a></h3>{item.data.organization ? <p>{item.data.organization}</p> : null}<p>{item.data.summary}</p></div>
-              <a class="portfolio-row__arrow" href={`/items/${item.slug}`} aria-label={`Open ${item.data.title}`}>→</a>
+              <div><h3><a href={`/items/${item.id}`}>{item.data.title}</a></h3>{item.data.organization ? <p>{item.data.organization}</p> : null}<p>{item.data.summary}</p></div>
+              <a class="portfolio-row__arrow" href={`/items/${item.id}`} aria-label={`Open ${item.data.title}`}>→</a>
             </article>
           ))}
         </div>

@@ -71,11 +71,11 @@ export function getSkillLabel(id: string): string {
 export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 4): ItemEntry[] {
   const explicitIds = new Set(item.data.relations.map((relation) => relation.id));
   return allItems
-    .filter((candidate) => candidate.slug !== item.slug && candidate.data.published)
+    .filter((candidate) => candidate.id !== item.id && candidate.data.published)
     .map((candidate) => ({
       candidate,
       score:
-        (explicitIds.has(candidate.slug) ? 100 : 0) +
+        (explicitIds.has(candidate.id) ? 100 : 0) +
         candidate.data.skills.filter((skill) => item.data.skills.includes(skill)).length
     }))
     .filter(({ score }) => score > 0)
@@ -108,7 +108,7 @@ export function buildTimeline(items: ItemEntry[]) {
     }
     laneIntervals[lane].push([start, end]);
     const concurrent = sorted.filter((candidate) => {
-      if (candidate.slug === item.slug) return false;
+      if (candidate.id === item.id) return false;
       const candidateStart = monthIndex(candidate.data.dateStart);
       const candidateEnd = monthIndex(candidate.data.dateEnd);
       return start <= candidateEnd && end >= candidateStart;

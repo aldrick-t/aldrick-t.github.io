@@ -1,4 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const itemLinkSchema = z.object({
   kind: z.enum(['site', 'repository', 'publication', 'credential', 'video', 'other']),
@@ -19,7 +21,7 @@ const itemRelationSchema = z.object({
 });
 
 const items = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/items' }),
   schema: z.object({
     title: z.string().min(1),
     type: z.enum([
