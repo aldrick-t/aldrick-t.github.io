@@ -1,9 +1,9 @@
 ---
-import HomePageContent from '../components/HomePageContent.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HomePageContent from '../components/HomePageContent.astro';
 import { siteConfig } from '../config/site';
 ---
 
-<BaseLayout title={`${siteConfig.name} | Engineering Portfolio`} description={siteConfig.tagline}>
+<BaseLayout title={`${siteConfig.name} — ${siteConfig.title}`} description={siteConfig.description}>
   <HomePageContent />
 </BaseLayout>

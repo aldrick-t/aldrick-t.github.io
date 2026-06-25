@@ -73,7 +73,7 @@ Robotics and Digital Systems Engineering undergraduate focused on autonomous rob
 #project(
   name: "Autonomous Harvesting Robot",
   org: "Cyberphysical Systems Specialization Project ",  
-  dates: dates-helper(start-date: "Aug 2025", end-date: "Nov 2026"),
+  dates: dates-helper(start-date: "Aug 2025", end-date: "Nov 2025"),
   url: "",
   one-liner: false,
 )

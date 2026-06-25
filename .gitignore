@@ -6,5 +6,9 @@ node_modules/
 .astro/
 dist/
 
+# Generated CV artifacts
+cv/*.pdf
+public/cv/*.pdf
+
 # Logs
 npm-debug.log*

@@ -1,126 +1,33 @@
 ---
-import Icon from '../components/Icon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../config/site';
 
-const contactMethods = [
-  {
-    label: 'Email',
-    value: siteConfig.contact.primaryEmail,
-    href: `mailto:${siteConfig.contact.primaryEmail}`,
-    icon: 'email' as const,
-    external: false
-  },
-  {
-    label: 'Academic Email',
-    value: siteConfig.contact.academicEmail,
-    href: `mailto:${siteConfig.contact.academicEmail}`,
-    icon: 'email' as const,
-    external: false
-  },
-  {
-    label: 'Phone',
-    value: siteConfig.contact.phone,
-    href: `tel:${siteConfig.contact.phone.replace(/[^\d+]/g, '')}`,
-    icon: 'phone' as const,
-    external: false
-  },
-  {
-    label: 'GitHub',
-    value: siteConfig.githubUrl,
-    href: siteConfig.githubUrl,
-    icon: 'github' as const,
-    external: true
-  },
-  {
-    label: 'LinkedIn',
-    value: siteConfig.linkedinUrl,
-    href: siteConfig.linkedinUrl,
-    icon: 'linkedin' as const,
-    external: true
-  }
+const contacts = [
+  { label: 'Email', value: siteConfig.email, href: `mailto:${siteConfig.email}`, external: false },
+  { label: 'GitHub', value: 'github.com/aldrick-t', href: siteConfig.githubUrl, external: true },
+  { label: 'LinkedIn', value: 'linkedin.com/in/aldrick-t', href: siteConfig.linkedinUrl, external: true }
 ];
 ---
 
-<BaseLayout title="Contact | Aldrick Tadeo" description="Direct contact links and quick-copy details.">
-  <div class="shell flow-layout">
-    <section>
-      <p class="eyebrow">Contact</p>
-      <h1>Reach Out</h1>
-      <p>
-        I'm always open to discussing new projects, work opportunities, or just connecting with like-minded professionals. Feel free to reach out through any of the methods below!
-      </p>
-    </section>
-
-    <section class="contact-list" aria-label="Contact methods">
-      {
-        contactMethods.map((item) => (
-          <article class="contact-card glass-panel">
-            <div class="contact-card__identity">
-              <span class="contact-card__icon" aria-hidden="true">
-                <Icon name={item.icon} />
-              </span>
-              <div>
-                <p class="eyebrow">{item.label}</p>
-                <h2>{item.value}</h2>
-              </div>
-            </div>
-            <div class="contact-card__actions">
-              <a
-                class="btn"
-                href={item.href}
-                target={item.external ? '_blank' : undefined}
-                rel={item.external ? 'noreferrer noopener' : undefined}
-              >
-                Open {item.label}
-              </a>
-              <button
-                class="copy-button"
-                type="button"
-                data-copy-value={item.value}
-                aria-label={`Copy ${item.label}`}
-              >
-                <Icon name="copy" />
-                <span class="copy-button__label">Copy</span>
-              </button>
-            </div>
-          </article>
-        ))
-      }
-    </section>
+<BaseLayout title="Contact — Aldrick Tadeo" description="Professional contact links for Aldrick Tadeo.">
+  <div class="shell page-stack contact-page">
+    <header class="page-header"><p class="mono-label">Direct channels</p><h1>Contact</h1><p>Email is the best way to reach me. Professional profiles are linked below.</p></header>
+    <div class="contact-list">
+      {contacts.map((contact) => (
+        <article class="contact-row">
+          <div><span class="mono-label">{contact.label}</span><h2><a href={contact.href} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer noopener' : undefined}>{contact.value}{contact.external ? ' ↗' : ''}</a></h2></div>
+          <button type="button" class="copy-control" data-copy={contact.value}>Copy</button>
+        </article>
+      ))}
+    </div>
   </div>
-
   <script>
-    const copyButtons = document.querySelectorAll<HTMLButtonElement>('[data-copy-value]');
-
-    copyButtons.forEach((button) => {
-      button.addEventListener('click', async () => {
-        const value = button.dataset.copyValue;
-        if (!value) {
-          return;
-        }
-
-        try {
-          await navigator.clipboard.writeText(value);
-          const label = button.querySelector<HTMLElement>('.copy-button__label');
-          const originalText = label?.textContent ?? 'Copy';
-          if (label) {
-            label.textContent = 'Copied';
-          }
-          button.classList.add('is-copied');
-          window.setTimeout(() => {
-            if (label) {
-              label.textContent = originalText;
-            }
-            button.classList.remove('is-copied');
-          }, 1600);
-        } catch {
-          button.classList.add('is-copy-error');
-          window.setTimeout(() => {
-            button.classList.remove('is-copy-error');
-          }, 1600);
-        }
-      });
-    });
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? '');
+        button.textContent = 'Copied';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1400);
+      } catch { button.textContent = 'Select and copy'; }
+    }));
   </script>
 </BaseLayout>

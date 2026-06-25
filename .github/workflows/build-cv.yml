@@ -25,7 +25,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Validate content and manifest
+        run: npm run content:check
 
       - name: Compile CV PDFs
         run: npm run build:cv

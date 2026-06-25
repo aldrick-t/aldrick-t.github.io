@@ -1,6 +1,7 @@
 ---
 import StickyNav from '../components/StickyNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { siteConfig } from '../config/site';
 import '../styles/global.css';
 
 interface Props {
@@ -8,10 +9,8 @@ interface Props {
   description?: string;
 }
 
-const {
-  title,
-  description = 'Engineering portfolio website built with Astro and TypeScript.'
-} = Astro.props;
+const { title, description = siteConfig.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -19,17 +18,24 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem('site-theme');
+        const theme = saved === 'light' || saved === 'dark' ? saved : 'system';
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
-    <div class="site-shell">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="site-frame">
       <StickyNav />
-      <main id="main-content" class="main-content">
-        <slot />
-      </main>
+      <main id="main-content"><slot /></main>
       <SiteFooter />
     </div>
   </body>

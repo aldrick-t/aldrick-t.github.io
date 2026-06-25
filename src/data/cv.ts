@@ -6,13 +6,11 @@ export interface CvVariant {
   entryTypst: string;
   outputPdf: string;
   publicPath: string;
-  available: boolean;
+  published: boolean;
   default?: boolean;
 }
 
 export const cvVariants = manifest as CvVariant[];
+export const publishedCvVariants = cvVariants.filter((variant) => variant.published);
 export const defaultCvVariant =
-  cvVariants.find((variant) => variant.default) ?? cvVariants[0];
-
-export const getCvVariantById = (id: string | null | undefined) =>
-  cvVariants.find((variant) => variant.id === id);
+  publishedCvVariants.find((variant) => variant.default) ?? publishedCvVariants[0];

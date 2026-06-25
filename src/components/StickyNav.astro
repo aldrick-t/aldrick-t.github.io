@@ -1,69 +1,31 @@
 ---
 import { siteConfig } from '../config/site';
-import Icon from './Icon.astro';
+import ThemeControl from './ThemeControl.astro';
 
 const pathname = Astro.url.pathname;
-
-interface NavLink {
-  label: string;
-  href: string;
-  external?: boolean;
-  icon?: 'external';
-}
-
-const navLinks: NavLink[] = [
+const navLinks = [
+  { label: 'Home', href: '/' },
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'CV', href: siteConfig.cvRoute },
-  { label: 'Contact', href: '/contact' },
-  { label: 'GitHub', href: siteConfig.githubUrl, external: true, icon: 'external' },
-  { label: 'LinkedIn', href: siteConfig.linkedinUrl, external: true, icon: 'external' }
+  { label: 'CV', href: '/cv' },
+  { label: 'Contact', href: '/contact' }
 ];
 
-const isActive = (href: string) => {
-  if (href === '/') {
-    return pathname === '/';
-  }
-
-  return pathname.startsWith(href);
-};
+const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href) || (href === '/portfolio' && pathname.startsWith('/items/'));
 ---
 
 <header class="site-header">
-  <div class="shell site-header__inner">
-    <a class="brand" href="/" aria-label="Go to homepage">
-      <span class="brand__name">{siteConfig.name}</span>
-    </a>
+  <div class="site-header__inner shell shell--wide">
+    <div class="site-header__identity">
+      <a class="brand" href="/">{siteConfig.name}</a>
+      <ThemeControl />
+    </div>
     <nav aria-label="Primary navigation">
-      <ul class="nav-list">
-        {
-          navLinks.map((link) => (
-            <li>
-              <a
-                class:list={{
-                  'nav-link': true,
-                  'nav-link--active': !link.external && isActive(link.href)
-                }}
-                href={link.href}
-                target={link.external ? '_blank' : undefined}
-                rel={link.external ? 'noreferrer noopener' : undefined}
-                aria-label={
-                  link.external
-                    ? `${link.label} (opens in a new tab)`
-                    : undefined
-                }
-              >
-                <span>{link.label}</span>
-                {
-                  link.icon ? (
-                    <span class="nav-link__icon" aria-hidden="true">
-                      <Icon name={link.icon} />
-                    </span>
-                  ) : null
-                }
-              </a>
-            </li>
-          ))
-        }
+      <ul class="primary-nav">
+        {navLinks.map((link) => (
+          <li>
+            <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+          </li>
+        ))}
       </ul>
     </nav>
   </div>

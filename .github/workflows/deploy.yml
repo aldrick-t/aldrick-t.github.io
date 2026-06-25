@@ -33,13 +33,16 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Validate content
+        run: npm run content:check
 
       - name: Compile CV PDFs
         run: npm run build:cv
 
       - name: Build site
-        run: npm run build
+        run: npx astro build
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

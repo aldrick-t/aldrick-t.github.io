@@ -1,17 +1,14 @@
 ---
 import { siteConfig } from '../config/site';
-
-const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="shell site-footer__inner">
-    <p>{year} {siteConfig.name}</p>
-    <div class="site-footer__links">
-      <a href="/contact">Contact</a>
-      <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer noopener">GitHub</a>
-      <a href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer noopener">LinkedIn</a>
-      <a href={`mailto:${siteConfig.contact.primaryEmail}`}>Email</a>
-    </div>
+  <div class="shell shell--wide site-footer__inner">
+    <p>© {new Date().getFullYear()} {siteConfig.name}</p>
+    <nav aria-label="Footer links">
+      <a href={`mailto:${siteConfig.email}`}>Email</a>
+      <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer noopener">GitHub ↗</a>
+      <a href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer noopener">LinkedIn ↗</a>
+    </nav>
   </div>
 </footer>

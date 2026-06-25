@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDateRange, getRelatedItems, getSkillLabel, itemTypeLabels, sortItems } from '../../lib/items';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('items')).filter((item) => item.data.published);
+  return items.map((item) => ({ params: { slug: item.slug }, props: { item, allItems: items } }));
+}
+
+interface Props { item: CollectionEntry<'items'>; allItems: CollectionEntry<'items'>[] }
+const { item, allItems } = Astro.props;
+const { Content } = await item.render();
+const relatedItems = getRelatedItems(item, allItems);
+const portfolioItems = sortItems(allItems.filter((entry) => entry.data.portfolio));
+const index = portfolioItems.findIndex((entry) => entry.slug === item.slug);
+const previous = index > 0 ? portfolioItems[index - 1] : undefined;
+const next = index >= 0 && index < portfolioItems.length - 1 ? portfolioItems[index + 1] : undefined;
+---
+
+<BaseLayout title={`${item.data.title} — Aldrick Tadeo`} description={item.data.summary}>
+  <article class="shell page-stack item-page">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/portfolio">Portfolio</a><span>/</span><span>{itemTypeLabels[item.data.type].replace(/s$/, '')}</span></nav>
+    <header class="item-header">
+      <div>
+        <p class="mono-label">{itemTypeLabels[item.data.type].replace(/s$/, '')} · {formatDateRange(item)}</p>
+        <h1>{item.data.title}</h1>
+        {item.data.organization ? <p class="item-header__organization">{item.data.organization}{item.data.location ? ` · ${item.data.location}` : ''}</p> : null}
+        <p class="item-header__summary">{item.data.summary}</p>
+      </div>
+      {item.data.links.length ? <div class="item-links">{item.data.links.map((link, index) => <a class:list={{ button: true, 'button--primary': index === 0 }} href={link.url} target="_blank" rel="noreferrer noopener">{link.label} ↗</a>)}</div> : null}
+    </header>
+
+    {item.data.highlights.length ? <section class="item-section" aria-labelledby="highlights-title"><h2 id="highlights-title">Highlights</h2><ul class="highlight-list">{item.data.highlights.map((highlight) => <li>{highlight}</li>)}</ul></section> : null}
+    <section class="item-section prose" aria-labelledby="details-title"><h2 id="details-title">Details</h2><Content /></section>
+    {item.data.skills.length ? <section class="item-section" aria-labelledby="skills-title"><h2 id="skills-title">Skills</h2><ul class="plain-tags">{item.data.skills.map((skill) => <li>{getSkillLabel(skill)}</li>)}</ul></section> : null}
+    {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">Related items</h2><div class="related-grid">{relatedItems.map((related) => <a href={`/items/${related.slug}`}><span>{itemTypeLabels[related.data.type].replace(/s$/, '')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
+    <nav class="item-pagination" aria-label="Adjacent portfolio items">
+      {previous ? <a href={`/items/${previous.slug}`}><span>Previous</span><strong>{previous.data.title}</strong></a> : <span />}
+      {next ? <a href={`/items/${next.slug}`}><span>Next</span><strong>{next.data.title}</strong></a> : <span />}
+    </nav>
+  </article>
+</BaseLayout>

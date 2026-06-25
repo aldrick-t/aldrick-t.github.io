@@ -1,144 +1,53 @@
 ---
 import type { CvVariant } from '../data/cv';
-import Icon from './Icon.astro';
 
-interface Props {
-  variants: CvVariant[];
-  defaultVariant: CvVariant;
-}
-
+interface Props { variants: CvVariant[]; defaultVariant: CvVariant }
 const { variants, defaultVariant } = Astro.props;
 ---
 
-<section class="cv-panel" aria-label="Curriculum vitae preview">
-  <div class="cv-panel__header cv-panel__header--stacked">
-    <div class="cv-panel__intro">
-      <h2>CV Preview</h2>
-      <p class="cv-panel__description">
-        Select a CV format below. The current preview and the circular download action always follow
-        the active selection.
-      </p>
+<section class="cv-viewer" aria-label="Curriculum vitae preview">
+  <div class="cv-viewer__toolbar" data-cv-panel data-default-variant={defaultVariant.id} data-variants={JSON.stringify(variants)}>
+    <div class="cv-viewer__variants" role="tablist" aria-label="CV variants">
+      {variants.map((variant) => (
+        <button type="button" role="tab" data-cv-variant={variant.id} aria-selected={variant.id === defaultVariant.id ? 'true' : 'false'}>{variant.label}</button>
+      ))}
     </div>
-    <div
-      class="cv-selector"
-      data-cv-panel
-      data-default-variant={defaultVariant.id}
-      data-variants={JSON.stringify(variants)}
-    >
-      <div class="cv-selector__controls" role="tablist" aria-label="CV variants">
-        {
-          variants.map((variant) => (
-            <button
-              class:list={{
-                'cv-selector__option': true,
-                'is-active': variant.id === defaultVariant.id,
-                'is-disabled': !variant.available
-              }}
-              type="button"
-              role="tab"
-              data-cv-variant={variant.id}
-              data-available={variant.available ? 'true' : 'false'}
-              aria-selected={variant.id === defaultVariant.id ? 'true' : 'false'}
-              aria-disabled={variant.available ? undefined : 'true'}
-              disabled={!variant.available}
-            >
-              <span>{variant.label}</span>
-              {!variant.available ? <small>Coming soon</small> : null}
-            </button>
-          ))
-        }
-      </div>
-      <div class="cv-selector__meta">
-        <p class="cv-selector__status" data-cv-status>
-          Currently previewing: {defaultVariant.label}
-        </p>
-        <a
-          class="cv-download-button"
-          href={defaultVariant.publicPath}
-          download
-          aria-label={`Download ${defaultVariant.label}`}
-          data-cv-download
-        >
-          <Icon name="download" />
-        </a>
-      </div>
-    </div>
+    <a class="button button--primary" href={defaultVariant.publicPath} download data-cv-download>Download PDF</a>
   </div>
-
-  <object data={defaultVariant.publicPath} type="application/pdf" class="cv-embed" data-cv-embed>
-    <p>
-      Your browser cannot display inline PDFs.
-      <a href={defaultVariant.publicPath} download data-cv-fallback-download>
-        Download the selected CV directly.
-      </a>
-    </p>
+  <p class="cv-viewer__status" aria-live="polite" data-cv-status>Previewing {defaultVariant.label}</p>
+  <object data={defaultVariant.publicPath} type="application/pdf" class="cv-viewer__embed" data-cv-embed>
+    <div class="cv-viewer__fallback">
+      <p>Your browser cannot display the PDF inline.</p>
+      <a href={defaultVariant.publicPath} download data-cv-fallback>Download the selected CV</a>
+    </div>
   </object>
 </section>
 
 <script>
-  type CvVariant = {
-    id: string;
-    label: string;
-    publicPath: string;
-    available: boolean;
-  };
-
-  const panels = document.querySelectorAll<HTMLElement>('[data-cv-panel]');
-
-  panels.forEach((panel) => {
-    const rawVariants = panel.dataset.variants ?? '[]';
-    const variants = JSON.parse(rawVariants) as CvVariant[];
-    const defaultVariantId = panel.dataset.defaultVariant ?? variants[0]?.id;
+  type BrowserCvVariant = { id: string; label: string; publicPath: string };
+  document.querySelectorAll<HTMLElement>('[data-cv-panel]').forEach((panel) => {
+    const variants = JSON.parse(panel.dataset.variants ?? '[]') as BrowserCvVariant[];
+    const defaultId = panel.dataset.defaultVariant;
+    const root = panel.closest('.cv-viewer');
     const buttons = Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-cv-variant]'));
-    const downloadLink = panel.querySelector<HTMLAnchorElement>('[data-cv-download]');
-    const status = panel.querySelector<HTMLElement>('[data-cv-status]');
-    const panelRoot = panel.closest('.cv-panel');
-    const embed = panelRoot?.querySelector<HTMLObjectElement>('[data-cv-embed]');
-    const fallbackDownload = panelRoot?.querySelector<HTMLAnchorElement>('[data-cv-fallback-download]');
+    const download = panel.querySelector<HTMLAnchorElement>('[data-cv-download]');
+    const status = root?.querySelector<HTMLElement>('[data-cv-status]');
+    const embed = root?.querySelector<HTMLObjectElement>('[data-cv-embed]');
+    const fallback = root?.querySelector<HTMLAnchorElement>('[data-cv-fallback]');
+    if (!(variants.length && download && status && embed && fallback)) return;
 
-    if (!(buttons.length && downloadLink && status && embed && fallbackDownload)) {
-      return;
-    }
-
-    const setVariant = (requestedId: string | null) => {
-      const nextVariant =
-        variants.find((variant) => variant.id === requestedId && variant.available) ??
-        variants.find((variant) => variant.id === defaultVariantId) ??
-        variants[0];
-
-      if (!nextVariant) {
-        return;
-      }
-
+    const select = (id: string | null) => {
+      const variant = variants.find((entry) => entry.id === id) ?? variants.find((entry) => entry.id === defaultId) ?? variants[0];
+      status.textContent = `Previewing ${variant.label}`;
+      download.href = variant.publicPath;
+      embed.data = variant.publicPath;
+      fallback.href = variant.publicPath;
+      buttons.forEach((button) => button.setAttribute('aria-selected', String(button.dataset.cvVariant === variant.id)));
       const url = new URL(window.location.href);
-      if (nextVariant.id === defaultVariantId) {
-        url.searchParams.delete('variant');
-      } else {
-        url.searchParams.set('variant', nextVariant.id);
-      }
+      variant.id === defaultId ? url.searchParams.delete('variant') : url.searchParams.set('variant', variant.id);
       window.history.replaceState({}, '', `${url.pathname}${url.search}`);
-
-      status.textContent = `Currently previewing: ${nextVariant.label}`;
-      downloadLink.href = nextVariant.publicPath;
-      downloadLink.setAttribute('aria-label', `Download ${nextVariant.label}`);
-      fallbackDownload.href = nextVariant.publicPath;
-      embed.data = nextVariant.publicPath;
-
-      buttons.forEach((button) => {
-        const active = button.dataset.cvVariant === nextVariant.id;
-        button.classList.toggle('is-active', active);
-        button.setAttribute('aria-selected', String(active));
-      });
     };
-
-    buttons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const variantId = button.dataset.cvVariant ?? null;
-        setVariant(variantId);
-      });
-    });
-
-    const initialVariant = new URL(window.location.href).searchParams.get('variant');
-    setVariant(initialVariant);
+    buttons.forEach((button) => button.addEventListener('click', () => select(button.dataset.cvVariant ?? null)));
+    select(new URL(window.location.href).searchParams.get('variant'));
   });
 </script>
