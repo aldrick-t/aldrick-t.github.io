@@ -77,13 +77,13 @@ const languages = profile.languages.map((language) => ({
           </a>
         ))}
       </div>
-      <section class="intro-panel__research" aria-labelledby="intro-research-title">
-        <h2 id="intro-research-title" class="intro-panel__label">{labels.home.researchInterests}</h2>
-        <ul class="intro-chip-list">
-          {profile.researchInterests.map((interest) => <li>{interest}</li>)}
-        </ul>
-      </section>
     </div>
+    <section class="intro-panel__research" aria-labelledby="intro-research-title">
+      <h2 id="intro-research-title" class="intro-panel__label">{labels.home.researchInterests}</h2>
+      <ul class="intro-chip-list">
+        {profile.researchInterests.map((interest) => <li>{interest}</li>)}
+      </ul>
+    </section>
   </section>
 
   <section id="featured" class="page-section" aria-labelledby="featured-title">
