@@ -5,11 +5,28 @@ import { skillGroups } from '../data/skills';
 import { sortItems } from '../lib/items';
 import ItemCard from './ItemCard.astro';
 import Timeline from './Timeline.astro';
+import githubIcon from '../assets/icons/ui/github.svg?raw';
+import linkedinIcon from '../assets/icons/ui/linkedin.svg?raw';
+import emailIcon from '../assets/icons/ui/email.svg?raw';
 
 const items = (await getCollection('items')).filter((item) => item.data.published);
 const featured = items.filter((item) => item.data.featuredRank).sort((a, b) => (a.data.featuredRank ?? 0) - (b.data.featuredRank ?? 0));
 if (featured.length !== 3) throw new Error(`Expected exactly three featured items, found ${featured.length}.`);
 const credentials = sortItems(items.filter((item) => item.data.type === 'course' || item.data.type === 'certification'));
+const toInlineIcon = (icon: string) =>
+  icon
+    .replace(/<\?xml[^>]*>\s*/g, '')
+    .replace(/<!DOCTYPE[^>]*>\s*/g, '')
+    .replaceAll('#000000', 'currentColor');
+const contactIcons = {
+  github: toInlineIcon(githubIcon),
+  linkedin: toInlineIcon(linkedinIcon),
+  email: toInlineIcon(emailIcon)
+} satisfies Record<(typeof profile.contactLinks)[number]['icon'], string>;
+const languages = profile.languages.map((language) => ({
+  ...language,
+  detail: 'detail' in language ? language.detail : undefined
+}));
 ---
 
 <div class="shell page-stack page-stack--sticky-section-nav home-page">
@@ -19,16 +36,36 @@ const credentials = sortItems(items.filter((item) => item.data.type === 'course'
 
   <section id="intro" class="intro-panel" aria-labelledby="intro-title">
     <div>
-      <h1 id="intro-title">{profile.name}</h1>
+      <h1 id="intro-title">{profile.fullName}</h1>
       <p class="intro-panel__title">{profile.title}</p>
       <p class="intro-panel__summary">{profile.introduction}</p>
     </div>
     <div class="intro-panel__aside">
       <p>{profile.availability}</p>
       <div class="action-row">
-        <a class="button button--primary" href="/portfolio">Portfolio</a>
-        <a class="button" href="/cv">CV</a>
+        <a class="button button--primary" href={profile.portfolioRoute}>Portfolio</a>
+        <a class="button" href={profile.cvRoute}>CV</a>
       </div>
+      <div class="intro-contact-row" aria-label="Contact links">
+        {profile.contactLinks.map((link) => (
+          <a
+            class="icon-button"
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noreferrer noopener' : undefined}
+            aria-label={link.mail ? `Email ${profile.name}` : `Open ${link.label}`}
+            title={link.label}
+          >
+            <span set:html={contactIcons[link.icon]} />
+          </a>
+        ))}
+      </div>
+      <section class="intro-panel__research" aria-labelledby="intro-research-title">
+        <h2 id="intro-research-title" class="intro-panel__label">Research Interests</h2>
+        <ul class="intro-chip-list">
+          {profile.researchInterests.map((interest) => <li>{interest}</li>)}
+        </ul>
+      </section>
     </div>
   </section>
 
@@ -62,6 +99,21 @@ const credentials = sortItems(items.filter((item) => item.data.type === 'course'
           </section>
         ) : null;
       })}
+    </div>
+  </section>
+
+  <section id="languages" class="page-section" aria-labelledby="languages-title">
+    <header class="section-heading"><div><h2 id="languages-title">Languages</h2></div></header>
+    <div class="language-list">
+      {languages.map((language) => (
+        <article class="language-row">
+          <h3>{language.language}</h3>
+          <p>
+            <span>{language.proficiency}</span>
+            {language.detail ? <small>{language.detail}</small> : null}
+          </p>
+        </article>
+      ))}
     </div>
   </section>
 
