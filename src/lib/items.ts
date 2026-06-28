@@ -1,21 +1,11 @@
 import type { CollectionEntry } from 'astro:content';
-import { skillMap } from '../data/skills';
+import { getLocalizedSkillLabel, skillMap } from '../data/skills';
+import { formatDate as formatLocalizedDate, formatDateRange as formatLocalizedDateRange, getItemTypeLabels, type Language } from './i18n';
 
 export type ItemEntry = CollectionEntry<'items'>;
 export type ItemType = ItemEntry['data']['type'];
 
-export const itemTypeLabels: Record<ItemType, string> = {
-  project: 'Projects',
-  work: 'Work',
-  education: 'Education',
-  publication: 'Publications',
-  conference: 'Conferences',
-  award: 'Awards',
-  course: 'Courses',
-  certification: 'Certifications',
-  volunteering: 'Volunteering',
-  news: 'News'
-};
+export const itemTypeLabels: Record<ItemType, string> = getItemTypeLabels('en');
 
 export const itemTypeOrder: ItemType[] = [
   'project',
@@ -38,17 +28,12 @@ export function monthIndex(value: string): number {
   return Number(year) * 12 + Number(month) - 1;
 }
 
-export function formatDate(value: string): string {
-  if (value === 'Present') return value;
-  const [year, month] = value.split('-');
-  if (!month) return year;
-  return new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
-    new Date(Date.UTC(Number(year), Number(month) - 1, 1))
-  );
+export function formatDate(value: string, language: Language = 'en'): string {
+  return formatLocalizedDate(value, language);
 }
 
-export function formatDateRange(item: ItemEntry): string {
-  return `${formatDate(item.data.dateStart)} — ${formatDate(item.data.dateEnd)}`;
+export function formatDateRange(item: ItemEntry, language: Language = 'en'): string {
+  return formatLocalizedDateRange(item.data.dateStart, item.data.dateEnd, language);
 }
 
 export function sortItems(items: ItemEntry[]): ItemEntry[] {
@@ -58,14 +43,15 @@ export function sortItems(items: ItemEntry[]): ItemEntry[] {
   });
 }
 
-export function groupItemsByType(items: ItemEntry[]) {
+export function groupItemsByType(items: ItemEntry[], language: Language = 'en') {
+  const labels = getItemTypeLabels(language);
   return itemTypeOrder
-    .map((type) => ({ type, label: itemTypeLabels[type], items: sortItems(items.filter((item) => item.data.type === type)) }))
+    .map((type) => ({ type, label: labels[type], items: sortItems(items.filter((item) => item.data.type === type)) }))
     .filter((group) => group.items.length);
 }
 
-export function getSkillLabel(id: string): string {
-  return skillMap.get(id)?.label ?? id;
+export function getSkillLabel(id: string, language: Language = 'en'): string {
+  return getLocalizedSkillLabel(id, language) ?? skillMap.get(id)?.label ?? id;
 }
 
 export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 4): ItemEntry[] {

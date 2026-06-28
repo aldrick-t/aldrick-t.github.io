@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import ItemPageContent from '../../../components/ItemPageContent.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../../config/site';
+import { localizedLanguages, type LocalizedLanguage } from '../../../lib/i18n';
+import { getItemTranslations, localizeItem, localizeItems } from '../../../lib/localized-items';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('items')).filter((item) => item.data.published);
+  return localizedLanguages.flatMap((lang) =>
+    items.map((item) => ({ params: { lang, slug: item.id }, props: { item, allItems: items } }))
+  );
+}
+
+const { item, allItems } = Astro.props;
+const lang = Astro.params.lang as LocalizedLanguage;
+const translations = await getItemTranslations(lang);
+const localizedItem = localizeItem(item, translations, lang);
+const localizedItems = localizeItems(allItems, translations, lang);
+const { Content } = await render(localizedItem.translation ?? item);
+---
+
+<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/items/${item.id}`}>
+  <ItemPageContent item={localizedItem} allItems={localizedItems} Content={Content} lang={lang} />
+</BaseLayout>

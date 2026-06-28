@@ -1,34 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatDateRange, groupItemsByType } from '../../lib/items';
+import PortfolioPageContent from '../../components/PortfolioPageContent.astro';
+import { siteConfig } from '../../config/site';
+import { ui } from '../../lib/i18n';
 
-const items = (await getCollection('items')).filter((item) => item.data.published && item.data.portfolio);
-const groups = groupItemsByType(items);
+const lang = 'en';
+const labels = ui[lang];
 ---
 
-<BaseLayout title="Portfolio — Aldrick Tadeo" description="All projects, experience, education, recognition, service, and continued learning.">
-  <div class="shell page-stack page-stack--sticky-section-nav">
-    <header class="page-header">
-      <h1>Portfolio</h1>
-      <p>Complete index of projects, experience, education, recognition, service and more.</p>
-    </header>
-    <nav class="section-nav section-nav--sticky" aria-label="Portfolio sections">
-      {groups.map((group) => <a href={`#${group.type}`}>{group.label} <span>{group.items.length}</span></a>)}
-    </nav>
-    {groups.map((group) => (
-      <section id={group.type} class="page-section portfolio-group" aria-labelledby={`${group.type}-title`}>
-        <header class="section-heading"><h2 id={`${group.type}-title`}>{group.label}</h2><span>{group.items.length}</span></header>
-        <div class="row-list">
-          {group.items.map((item) => (
-            <article class="portfolio-row">
-              <div class="portfolio-row__date"><time>{formatDateRange(item)}</time></div>
-              <div><h3><a href={`/items/${item.id}`}>{item.data.title}</a></h3>{item.data.organization ? <p>{item.data.organization}</p> : null}<p>{item.data.summary}</p></div>
-              <a class="portfolio-row__arrow" href={`/items/${item.id}`} aria-label={`Open ${item.data.title}`}>→</a>
-            </article>
-          ))}
-        </div>
-      </section>
-    ))}
-  </div>
+<BaseLayout title={`${labels.portfolioPage.title} — ${siteConfig.name}`} description={labels.portfolioPage.description} lang={lang} path="/portfolio">
+  <PortfolioPageContent lang={lang} />
 </BaseLayout>

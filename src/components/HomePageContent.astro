@@ -1,7 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
-import { profile, landingSections } from '../data/profile';
-import { skillGroups } from '../data/skills';
+import { siteConfig } from '../config/site';
+import { getLocalizedSkillGroups } from '../data/skills';
+import { ui, localizePath, itemPath, type Language } from '../lib/i18n';
+import { getPublishedLocalizedItems } from '../lib/localized-items';
 import { sortItems } from '../lib/items';
 import ItemCard from './ItemCard.astro';
 import Timeline from './Timeline.astro';
@@ -9,7 +10,23 @@ import githubIcon from '../assets/icons/ui/github.svg?raw';
 import linkedinIcon from '../assets/icons/ui/linkedin.svg?raw';
 import emailIcon from '../assets/icons/ui/email.svg?raw';
 
-const items = (await getCollection('items')).filter((item) => item.data.published);
+interface Props {
+  lang?: Language;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const profile = { ...siteConfig, ...labels.site };
+const landingSections = [
+  { id: 'intro', label: labels.home.sections.intro },
+  { id: 'featured', label: labels.home.sections.featured },
+  { id: 'timeline', label: labels.home.sections.timeline },
+  { id: 'skills', label: labels.home.sections.skills },
+  { id: 'languages', label: labels.home.sections.languages },
+  { id: 'credentials', label: labels.home.sections.credentials }
+] as const;
+const skillGroups = getLocalizedSkillGroups(lang);
+const items = await getPublishedLocalizedItems(lang);
 const featured = items.filter((item) => item.data.featuredRank).sort((a, b) => (a.data.featuredRank ?? 0) - (b.data.featuredRank ?? 0));
 if (featured.length !== 3) throw new Error(`Expected exactly three featured items, found ${featured.length}.`);
 const credentials = sortItems(items.filter((item) => item.data.type === 'course' || item.data.type === 'certification'));
@@ -30,7 +47,7 @@ const languages = profile.languages.map((language) => ({
 ---
 
 <div class="shell page-stack page-stack--sticky-section-nav home-page">
-  <nav class="section-nav section-nav--sticky" aria-label="On this page">
+  <nav class="section-nav section-nav--sticky" aria-label={labels.home.onThisPage}>
     {landingSections.map((section) => <a href={`#${section.id}`}>{section.label}</a>)}
   </nav>
 
@@ -43,17 +60,17 @@ const languages = profile.languages.map((language) => ({
     <div class="intro-panel__aside">
       <p>{profile.availability}</p>
       <div class="action-row">
-        <a class="button button--primary" href={profile.portfolioRoute}>Portfolio</a>
-        <a class="button" href={profile.cvRoute}>CV</a>
+        <a class="button button--primary" href={localizePath(profile.portfolioRoute, lang)}>{labels.common.portfolio}</a>
+        <a class="button" href={localizePath(profile.cvRoute, lang)}>{labels.common.cv}</a>
       </div>
-      <div class="intro-contact-row" aria-label="Contact links">
+      <div class="intro-contact-row" aria-label={labels.common.contactLinks}>
         {profile.contactLinks.map((link) => (
           <a
             class="icon-button"
             href={link.href}
             target={link.external ? '_blank' : undefined}
             rel={link.external ? 'noreferrer noopener' : undefined}
-            aria-label={link.mail ? `Email ${profile.name}` : `Open ${link.label}`}
+            aria-label={link.mail ? `${labels.footer.email} ${profile.name}` : `${labels.common.open} ${link.label}`}
             title={link.label}
           >
             <span set:html={contactIcons[link.icon]} />
@@ -61,7 +78,7 @@ const languages = profile.languages.map((language) => ({
         ))}
       </div>
       <section class="intro-panel__research" aria-labelledby="intro-research-title">
-        <h2 id="intro-research-title" class="intro-panel__label">Research Interests</h2>
+        <h2 id="intro-research-title" class="intro-panel__label">{labels.home.researchInterests}</h2>
         <ul class="intro-chip-list">
           {profile.researchInterests.map((interest) => <li>{interest}</li>)}
         </ul>
@@ -71,22 +88,22 @@ const languages = profile.languages.map((language) => ({
 
   <section id="featured" class="page-section" aria-labelledby="featured-title">
     <header class="section-heading">
-      <div><h2 id="featured-title">Featured</h2></div>
-      <a href="/portfolio">All items →</a>
+      <div><h2 id="featured-title">{labels.home.sections.featured}</h2></div>
+      <a href={localizePath('/portfolio', lang)}>{labels.common.allItems} →</a>
     </header>
-    <div class="featured-rail">{featured.map((item) => <ItemCard item={item} featured />)}</div>
+    <div class="featured-rail">{featured.map((item) => <ItemCard item={item} lang={lang} featured />)}</div>
   </section>
 
   <section id="timeline" class="page-section" aria-labelledby="timeline-title">
     <header class="section-heading">
-      <div><h2 id="timeline-title">Timeline</h2></div>
+      <div><h2 id="timeline-title">{labels.home.sections.timeline}</h2></div>
     </header>
-    <p class="section-intro">Time runs from newest to oldest. Parallel lanes show work that happened concurrently.</p>
-    <Timeline items={items} />
+    <p class="section-intro">{labels.home.timelineIntro}</p>
+    <Timeline items={items} lang={lang} />
   </section>
 
   <section id="skills" class="page-section" aria-labelledby="skills-title">
-    <header class="section-heading"><div><h2 id="skills-title">Skills</h2></div></header>
+    <header class="section-heading"><div><h2 id="skills-title">{labels.home.sections.skills}</h2></div></header>
     <div class="skill-groups">
       {skillGroups.map(({ group, skills }) => {
         const rows = skills.map((skill) => ({ skill, related: sortItems(items.filter((item) => item.data.skills.includes(skill.id))) })).filter(({ related }) => related.length);
@@ -94,7 +111,7 @@ const languages = profile.languages.map((language) => ({
           <section class="skill-group" aria-labelledby={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>
             <h3 id={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>{group}</h3>
             <dl>{rows.map(({ skill, related }) => (
-              <div><dt>{skill.label}</dt><dd>{related.map((item, index) => <><a href={`/items/${item.id}`}>{item.data.title}</a>{index < related.length - 1 ? ', ' : ''}</>)}</dd></div>
+              <div><dt>{skill.label}</dt><dd>{related.map((item, index) => <><a href={itemPath(item.id, lang)}>{item.data.title}</a>{index < related.length - 1 ? ', ' : ''}</>)}</dd></div>
             ))}</dl>
           </section>
         ) : null;
@@ -103,7 +120,7 @@ const languages = profile.languages.map((language) => ({
   </section>
 
   <section id="languages" class="page-section" aria-labelledby="languages-title">
-    <header class="section-heading"><div><h2 id="languages-title">Languages</h2></div></header>
+    <header class="section-heading"><div><h2 id="languages-title">{labels.home.sections.languages}</h2></div></header>
     <div class="language-list">
       {languages.map((language) => (
         <article class="language-row">
@@ -118,14 +135,14 @@ const languages = profile.languages.map((language) => ({
   </section>
 
   <section id="credentials" class="page-section" aria-labelledby="credentials-title">
-    <header class="section-heading"><div><h2 id="credentials-title">Courses & certifications</h2></div></header>
+    <header class="section-heading"><div><h2 id="credentials-title">{labels.home.sections.credentials}</h2></div></header>
     <div class="row-list">
       {credentials.map((item) => (
         <article class="content-row">
-          <div><h3><a href={`/items/${item.id}`}>{item.data.title}</a></h3><p>{item.data.organization}</p></div>
+          <div><h3><a href={itemPath(item.id, lang)}>{item.data.title}</a></h3><p>{item.data.organization}</p></div>
           <div class="content-row__actions">
             <time>{item.data.dateEnd}</time>
-            {item.data.links[0] ? <a href={item.data.links[0].url} target="_blank" rel="noreferrer noopener">Verify ↗</a> : null}
+            {item.data.links[0] ? <a href={item.data.links[0].url} target="_blank" rel="noreferrer noopener">{labels.common.verify} {labels.common.externalSuffix}</a> : null}
           </div>
         </article>
       ))}

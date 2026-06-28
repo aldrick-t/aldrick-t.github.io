@@ -1,13 +1,22 @@
 ---
 import { siteConfig } from '../config/site';
+import { localizePath, ui, type Language } from '../lib/i18n';
+import LanguageSelect from './LanguageSelect.astro';
 // import ThemeControl from './ThemeControl.astro';
 
-const pathname = Astro.url.pathname;
+interface Props {
+  lang?: Language;
+  path?: string;
+}
+
+const { lang = 'en', path = Astro.url.pathname } = Astro.props;
+const labels = ui[lang];
+const pathname = path;
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'CV', href: '/cv' },
-  { label: 'Contact', href: '/contact' }
+  { label: labels.nav.home, href: '/' },
+  { label: labels.nav.portfolio, href: '/portfolio' },
+  { label: labels.nav.cv, href: '/cv' },
+  { label: labels.nav.contact, href: '/contact' }
 ];
 
 const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href) || (href === '/portfolio' && pathname.startsWith('/items/'));
@@ -16,17 +25,20 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
 <header class="site-header">
   <div class="site-header__inner shell shell--wide">
     <div class="site-header__identity">
-      <a class="brand" href="/">{siteConfig.name}</a>
+      <a class="brand" href={localizePath('/', lang)}>{siteConfig.name}</a>
       <!-- <ThemeControl /> -->
     </div>
-    <nav aria-label="Primary navigation">
-      <ul class="primary-nav">
-        {navLinks.map((link) => (
-          <li>
-            <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div class="site-header__actions">
+      <nav aria-label={labels.nav.aria}>
+        <ul class="primary-nav">
+          {navLinks.map((link) => (
+            <li>
+              <a href={localizePath(link.href, lang)} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <LanguageSelect lang={lang} path={path} />
+    </div>
   </div>
 </header>

@@ -1,0 +1,22 @@
+---
+import CvPreviewPanel from './CvPreviewPanel.astro';
+import { defaultCvVariant, publishedCvVariants } from '../data/cv';
+import { ui, type Language } from '../lib/i18n';
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = ui[lang];
+
+if (!defaultCvVariant) throw new Error('At least one CV variant must be published.');
+---
+
+<div class="shell page-stack">
+  <header class="page-header">
+    <h1>{labels.cvPage.title}</h1>
+    <p>{labels.cvPage.intro}</p>
+  </header>
+  <CvPreviewPanel variants={publishedCvVariants} defaultVariant={defaultCvVariant} lang={lang} />
+</div>

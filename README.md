@@ -25,6 +25,7 @@ See `docs/item-template.md` for all fields and the CV synchronization checklist.
 ## Content model
 
 - `src/content/items/*.md` — canonical projects, work, education, publications, conferences, awards, courses, certifications, volunteering, and news.
+- `src/content/item-translations/{es,ja}/*.md` — localized item titles, summaries, highlights, tags, link labels, and body copy. Missing translations fall back to English.
 - `src/data/skills.ts` — canonical skill IDs and groups. Item-to-skill relationships are derived from each item's `skills` field.
 - `src/config/site.ts` — personal introduction and public contact links.
 - `cv/*.typ` — manually authored CV sources. These are never generated from website content.

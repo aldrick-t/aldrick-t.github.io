@@ -4,8 +4,10 @@ import { load } from 'js-yaml';
 
 const root = process.cwd();
 const itemsDir = path.join(root, 'src', 'content', 'items');
+const itemTranslationsDir = path.join(root, 'src', 'content', 'item-translations');
 const errors = [];
 const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news']);
+const allowedLanguages = new Set(['es', 'ja']);
 const datePattern = /^\d{4}(-\d{2})?$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
@@ -28,6 +30,7 @@ function parseItem(file) {
 const files = readdirSync(itemsDir).filter((file) => file.endsWith('.md')).sort();
 const items = files.map(parseItem).filter(Boolean);
 const ids = new Set(items.map((item) => item.id));
+const itemById = new Map(items.map((item) => [item.id, item]));
 const featuredRanks = new Map();
 
 for (const item of items) {
@@ -58,6 +61,39 @@ for (const item of items) {
   }
 }
 
+if (existsSync(itemTranslationsDir)) {
+  for (const language of readdirSync(itemTranslationsDir).sort()) {
+    const languageDir = path.join(itemTranslationsDir, language);
+    if (!allowedLanguages.has(language)) {
+      errors.push(`src/content/item-translations/${language}: unsupported language directory`);
+      continue;
+    }
+    for (const file of readdirSync(languageDir).filter((entry) => entry.endsWith('.md')).sort()) {
+      const source = readFileSync(path.join(languageDir, file), 'utf8');
+      const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      if (!match) {
+        errors.push(`${language}/${file}: missing YAML frontmatter`);
+        continue;
+      }
+      const id = file.replace(/\.md$/, '');
+      const canonical = itemById.get(id);
+      if (!canonical) errors.push(`${language}/${file}: translation does not match a canonical item`);
+      let data;
+      try {
+        data = load(match[1]) ?? {};
+      } catch (error) {
+        errors.push(`${language}/${file}: invalid YAML (${error.message})`);
+        continue;
+      }
+      for (const field of ['title', 'summary']) if (!data[field]) errors.push(`${language}/${file}: missing ${field}`);
+      if (canonical?.data?.published !== false && !match[2].trim()) errors.push(`${language}/${file}: published item translations require body content`);
+      if (canonical && (data.links ?? []).length > (canonical.data.links ?? []).length) {
+        errors.push(`${language}/${file}: translation defines more link labels than canonical links`);
+      }
+    }
+  }
+}
+
 if (featuredRanks.size !== 3) errors.push(`Expected exactly three published featured items; found ${featuredRanks.size}`);
 
 const manifest = JSON.parse(readFileSync(path.join(root, 'cv', 'manifest.json'), 'utf8'));
@@ -78,4 +114,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${items.length} items, ${skillIds.size} skills, and ${manifest.length} CV variants.`);
+console.log(`Validated ${items.length} items, ${skillIds.size} skills, ${allowedLanguages.size} translation locales, and ${manifest.length} CV variants.`);

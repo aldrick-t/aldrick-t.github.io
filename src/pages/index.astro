@@ -2,8 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomePageContent from '../components/HomePageContent.astro';
 import { siteConfig } from '../config/site';
+import { ui } from '../lib/i18n';
+
+const lang = 'en';
+const labels = ui[lang];
 ---
 
-<BaseLayout title={`${siteConfig.name} — ${siteConfig.title}`} description={siteConfig.description}>
-  <HomePageContent />
+<BaseLayout title={`${siteConfig.name} — ${labels.site.title}`} description={labels.site.description} lang={lang} path="/">
+  <HomePageContent lang={lang} />
 </BaseLayout>

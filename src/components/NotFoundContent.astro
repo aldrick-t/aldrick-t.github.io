@@ -1,0 +1,20 @@
+---
+import { localizePath, ui, type Language } from '../lib/i18n';
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = ui[lang];
+---
+
+<div class="shell page-stack not-found">
+  <p class="mono-label">{labels.notFound.eyebrow}</p>
+  <h1>{labels.notFound.title}</h1>
+  <p>{labels.notFound.intro}</p>
+  <div class="action-row">
+    <a class="button button--primary" href={localizePath('/', lang)}>{labels.nav.home}</a>
+    <a class="button" href={localizePath('/portfolio', lang)}>{labels.nav.portfolio}</a>
+  </div>
+</div>

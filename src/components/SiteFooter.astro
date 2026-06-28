@@ -1,16 +1,24 @@
 ---
 import { siteConfig } from '../config/site';
+import { ui, type Language } from '../lib/i18n';
 import ThemeControl from './ThemeControl.astro';
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = ui[lang];
 ---
 
 <footer class="site-footer">
   <div class="shell shell--wide site-footer__inner">
     <p>© {new Date().getFullYear()} {siteConfig.name}</p>
     <ThemeControl />
-    <nav aria-label="Footer links">
-      <a href={`mailto:${siteConfig.email}`}>Email</a>
-      <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer noopener">GitHub ↗</a>
-      <a href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer noopener">LinkedIn ↗</a>
+    <nav aria-label={labels.footer.aria}>
+      <a href={`mailto:${siteConfig.email}`}>{labels.footer.email}</a>
+      <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer noopener">GitHub {labels.common.externalSuffix}</a>
+      <a href={siteConfig.linkedinUrl} target="_blank" rel="noreferrer noopener">LinkedIn {labels.common.externalSuffix}</a>
     </nav>
   </div>
 </footer>

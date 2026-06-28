@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomePageContent from '../../components/HomePageContent.astro';
+import { siteConfig } from '../../config/site';
+import { localizedLanguages, ui, type LocalizedLanguage } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return localizedLanguages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as LocalizedLanguage;
+const labels = ui[lang];
+---
+
+<BaseLayout title={`${siteConfig.name} — ${labels.site.title}`} description={labels.site.description} lang={lang} path="/">
+  <HomePageContent lang={lang} />
+</BaseLayout>

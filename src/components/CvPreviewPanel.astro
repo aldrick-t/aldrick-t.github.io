@@ -1,24 +1,31 @@
 ---
 import type { CvVariant } from '../data/cv';
+import { ui, type Language } from '../lib/i18n';
 
-interface Props { variants: CvVariant[]; defaultVariant: CvVariant }
-const { variants, defaultVariant } = Astro.props;
+interface Props { variants: CvVariant[]; defaultVariant: CvVariant; lang?: Language }
+const { variants, defaultVariant, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const localizedVariants = variants.map((variant) => ({
+  ...variant,
+  label: labels.cvPage.variants[variant.id]
+}));
+const localizedDefaultVariant = localizedVariants.find((variant) => variant.id === defaultVariant.id) ?? localizedVariants[0];
 ---
 
-<section class="cv-viewer" aria-label="Curriculum Vitae Preview">
-  <div class="cv-viewer__toolbar" data-cv-panel data-default-variant={defaultVariant.id} data-variants={JSON.stringify(variants)}>
-    <div class="cv-viewer__variants" role="tablist" aria-label="CV variants">
-      {variants.map((variant) => (
+<section class="cv-viewer" aria-label={labels.cvPage.previewAria}>
+  <div class="cv-viewer__toolbar" data-cv-panel data-default-variant={defaultVariant.id} data-variants={JSON.stringify(localizedVariants)} data-previewing-label={labels.cvPage.previewing}>
+    <div class="cv-viewer__variants" role="tablist" aria-label={labels.cvPage.variantsAria}>
+      {localizedVariants.map((variant) => (
         <button type="button" role="tab" data-cv-variant={variant.id} aria-selected={variant.id === defaultVariant.id ? 'true' : 'false'}>{variant.label}</button>
       ))}
     </div>
-    <a class="button button--primary" href={defaultVariant.publicPath} download data-cv-download>Download PDF</a>
+    <a class="button button--primary" href={defaultVariant.publicPath} download data-cv-download>{labels.common.downloadPdf}</a>
   </div>
-  <p class="cv-viewer__status" aria-live="polite" data-cv-status>Previewing {defaultVariant.label}</p>
+  <p class="cv-viewer__status" aria-live="polite" data-cv-status>{labels.cvPage.previewing} {localizedDefaultVariant.label}</p>
   <object data={defaultVariant.publicPath} type="application/pdf" class="cv-viewer__embed" data-cv-embed>
     <div class="cv-viewer__fallback">
-      <p>Your browser cannot display the PDF inline.</p>
-      <a href={defaultVariant.publicPath} download data-cv-fallback>Download the selected CV</a>
+      <p>{labels.cvPage.fallback}</p>
+      <a href={defaultVariant.publicPath} download data-cv-fallback>{labels.cvPage.fallbackDownload}</a>
     </div>
   </object>
 </section>
@@ -28,6 +35,7 @@ const { variants, defaultVariant } = Astro.props;
   document.querySelectorAll<HTMLElement>('[data-cv-panel]').forEach((panel) => {
     const variants = JSON.parse(panel.dataset.variants ?? '[]') as BrowserCvVariant[];
     const defaultId = panel.dataset.defaultVariant;
+    const previewingLabel = panel.dataset.previewingLabel ?? 'Previewing';
     const root = panel.closest('.cv-viewer');
     const buttons = Array.from(panel.querySelectorAll<HTMLButtonElement>('[data-cv-variant]'));
     const download = panel.querySelector<HTMLAnchorElement>('[data-cv-download]');
@@ -38,7 +46,7 @@ const { variants, defaultVariant } = Astro.props;
 
     const select = (id: string | null) => {
       const variant = variants.find((entry) => entry.id === id) ?? variants.find((entry) => entry.id === defaultId) ?? variants[0];
-      status.textContent = `Previewing ${variant.label}`;
+      status.textContent = `${previewingLabel} ${variant.label}`;
       download.href = variant.publicPath;
       embed.data = variant.publicPath;
       fallback.href = variant.publicPath;

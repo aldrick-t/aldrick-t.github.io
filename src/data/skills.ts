@@ -1,3 +1,5 @@
+import { skillGroupsByLanguage, skillLabelsByLanguage, type Language } from '../lib/i18n';
+
 export interface SkillDefinition {
   id: string;
   label: string;
@@ -46,3 +48,14 @@ export const skillGroups = Array.from(new Set(skills.map((skill) => skill.group)
   group,
   skills: skills.filter((skill) => skill.group === group)
 }));
+
+export function getLocalizedSkillLabel(id: string, language: Language): string {
+  return skillLabelsByLanguage[language][id] ?? skillMap.get(id)?.label ?? id;
+}
+
+export function getLocalizedSkillGroups(language: Language) {
+  return skillGroups.map(({ group, skills }) => ({
+    group: skillGroupsByLanguage[language][group] ?? group,
+    skills: skills.map((skill) => ({ ...skill, label: getLocalizedSkillLabel(skill.id, language) }))
+  }));
+}
