@@ -7,5 +7,6 @@ export const landingSections = [
   { id: 'featured', label: 'Featured' },
   { id: 'timeline', label: 'Timeline' },
   { id: 'skills', label: 'Skills' },
+  { id: 'languages', label: 'Languages' },
   { id: 'credentials', label: 'Courses & certifications' }
 ] as const;
