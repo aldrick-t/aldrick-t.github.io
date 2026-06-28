@@ -1,0 +1,40 @@
+---
+import { languageMeta, languages, localizePath, ui, type Language } from '../lib/i18n';
+import translateIcon from '../assets/icons/ui/translate.svg?raw';
+
+interface Props {
+  lang: Language;
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const labels = ui[lang];
+const icon = translateIcon
+  .replace(/<\?xml[^>]*>\s*/g, '')
+  .replace(/<!DOCTYPE[^>]*>\s*/g, '')
+  .replaceAll('width="800px"', '')
+  .replaceAll('height="800px"', '');
+---
+
+<label class="language-select" aria-label={labels.language.label}>
+  <span class="language-select__icon" set:html={icon} />
+  <span class="sr-only">{labels.language.select}</span>
+  <select data-language-select>
+    {languages.map((language) => (
+      <option value={localizePath(path, language)} selected={language === lang}>
+        {languageMeta[language].nativeLabel}
+      </option>
+    ))}
+  </select>
+</label>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('[data-language-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      const target = new URL(select.value, window.location.origin);
+      target.search = window.location.search;
+      target.hash = window.location.hash;
+      window.location.assign(`${target.pathname}${target.search}${target.hash}`);
+    });
+  });
+</script>

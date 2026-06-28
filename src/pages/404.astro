@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import NotFoundContent from '../components/NotFoundContent.astro';
+import { siteConfig } from '../config/site';
+import { ui } from '../lib/i18n';
+
+const lang = 'en';
+const labels = ui[lang];
 ---
 
-<BaseLayout title="404 — Aldrick Tadeo" description="The requested page could not be found.">
-  <div class="shell page-stack not-found">
-    <p class="mono-label">Error 404</p>
-    <h1>Page not found</h1>
-    <p>The address may be outdated or the page may have moved.</p>
-    <div class="action-row"><a class="button button--primary" href="/">Home</a><a class="button" href="/portfolio">Portfolio</a></div>
-  </div>
+<BaseLayout title={`404 — ${siteConfig.name}`} description={labels.notFound.description} lang={lang} path="/404">
+  <NotFoundContent lang={lang} />
 </BaseLayout>

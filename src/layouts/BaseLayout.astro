@@ -2,19 +2,32 @@
 import StickyNav from '../components/StickyNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { siteConfig } from '../config/site';
+import { getLanguageFromPath, getPathWithoutLanguage, languageMeta, languages, localizePath, ui, type Language } from '../lib/i18n';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  lang?: Language;
+  path?: string;
 }
 
-const { title, description = siteConfig.description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const {
+  title,
+  description = siteConfig.description,
+  lang = getLanguageFromPath(Astro.url.pathname),
+  path = getPathWithoutLanguage(Astro.url.pathname)
+} = Astro.props;
+const canonical = new URL(localizePath(path, lang), Astro.site);
+const alternateLinks = languages.map((language) => ({
+  language,
+  href: new URL(localizePath(path, language), Astro.site)
+}));
+const labels = ui[lang];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={languageMeta[lang].htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +35,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {alternateLinks.map((link) => <link rel="alternate" hreflang={languageMeta[link.language].htmlLang} href={link.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, 'en'), Astro.site)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script is:inline>
       (() => {
@@ -32,11 +47,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{labels.skipLink}</a>
     <div class="site-frame">
-      <StickyNav />
+      <StickyNav lang={lang} path={path} />
       <main id="main-content"><slot /></main>
-      <SiteFooter />
+      <SiteFooter lang={lang} />
     </div>
   </body>
 </html>

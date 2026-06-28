@@ -1,9 +1,11 @@
 ---
 import type { ItemEntry } from '../lib/items';
-import { buildTimeline, formatDateRange, itemTypeLabels } from '../lib/items';
+import { buildTimeline, formatDateRange } from '../lib/items';
+import { getItemTypeLabel, itemPath, ui, type Language } from '../lib/i18n';
 
-interface Props { items: ItemEntry[] }
-const { items } = Astro.props;
+interface Props { items: ItemEntry[]; lang?: Language }
+const { items, lang = 'en' } = Astro.props;
+const labels = ui[lang];
 const timeline = buildTimeline(items);
 ---
 
@@ -19,18 +21,18 @@ const timeline = buildTimeline(items);
         class:list={{ 'timeline-item': true, 'timeline-item--compact': rowSpan < 5 }}
         style={`--lane:${lane + 1};--row-start:${rowStart};--row-span:${rowSpan}`}
       >
-        <a href={`/items/${item.id}`}>
-          <span class="timeline-item__type">{itemTypeLabels[item.data.type].replace(/s$/, '')}</span>
+        <a href={itemPath(item.id, lang)}>
+          <span class="timeline-item__type">{getItemTypeLabel(item.data.type, lang, 'singular')}</span>
           <strong>{item.data.title}</strong>
-          {rowSpan >= 5 ? <time>{formatDateRange(item)}</time> : null}
+          {rowSpan >= 5 ? <time>{formatDateRange(item, lang)}</time> : null}
           {rowSpan >= 5 && item.data.organization ? <span>{item.data.organization}</span> : null}
         </a>
         {concurrent.length ? (
           <span class="timeline-item__concurrent">
-            Concurrent with {concurrent.slice(0, 3).map((entry, index) => (
-              <><a href={`/items/${entry.id}`}>{entry.data.title}</a>{index < Math.min(concurrent.length, 3) - 1 ? ', ' : ''}</>
+            {labels.timeline.concurrentWith} {concurrent.slice(0, 3).map((entry, index) => (
+              <><a href={itemPath(entry.id, lang)}>{entry.data.title}</a>{index < Math.min(concurrent.length, 3) - 1 ? ', ' : ''}</>
             ))}
-            {concurrent.length > 3 ? ` and ${concurrent.length - 3} more` : ''}
+            {concurrent.length > 3 ? ` ${concurrent.length - 3} ${labels.timeline.more}` : ''}
           </span>
         ) : null}
       </li>

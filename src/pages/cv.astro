@@ -1,17 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CvPreviewPanel from '../components/CvPreviewPanel.astro';
-import { defaultCvVariant, publishedCvVariants } from '../data/cv';
+import CvPageContent from '../components/CvPageContent.astro';
+import { siteConfig } from '../config/site';
+import { ui } from '../lib/i18n';
 
-if (!defaultCvVariant) throw new Error('At least one CV variant must be published.');
+const lang = 'en';
+const labels = ui[lang];
 ---
 
-<BaseLayout title="CV — Aldrick Tadeo" description="Preview and download Aldrick Tadeo's hand-authored Typst CV.">
-  <div class="shell page-stack">
-    <header class="page-header">
-      <h1>Curriculum Vitae</h1>
-      <p>Multiple scopes available, a full length CV, a engineering focused one-page resume and an academic focused one-page resume.</p>
-    </header>
-    <CvPreviewPanel variants={publishedCvVariants} defaultVariant={defaultCvVariant} />
-  </div>
+<BaseLayout title={`${labels.cvPage.title} — ${siteConfig.name}`} description={labels.cvPage.description} lang={lang} path="/cv">
+  <CvPageContent lang={lang} />
 </BaseLayout>

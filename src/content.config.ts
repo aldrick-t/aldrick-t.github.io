@@ -55,4 +55,15 @@ const items = defineCollection({
   })
 });
 
-export const collections = { items };
+const itemTranslations = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/item-translations' }),
+  schema: z.object({
+    title: z.string().min(1),
+    summary: z.string().min(1),
+    highlights: z.array(z.string().min(1)).default([]),
+    tags: z.array(z.string().min(1)).default([]),
+    links: z.array(z.object({ label: z.string().min(1) })).default([])
+  })
+});
+
+export const collections = { items, itemTranslations };

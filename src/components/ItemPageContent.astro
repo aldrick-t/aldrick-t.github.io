@@ -1,0 +1,47 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import type { ItemEntry } from '../lib/items';
+import { formatDateRange, getRelatedItems, getSkillLabel, sortItems } from '../lib/items';
+import { getItemTypeLabel, itemPath, localizePath, ui, type Language } from '../lib/i18n';
+
+interface Props {
+  item: ItemEntry;
+  allItems: ItemEntry[];
+  Content: AstroComponentFactory;
+  lang?: Language;
+}
+
+const { item, allItems, Content, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const relatedItems = getRelatedItems(item, allItems);
+const portfolioItems = sortItems(allItems.filter((entry) => entry.data.portfolio));
+const index = portfolioItems.findIndex((entry) => entry.id === item.id);
+const previous = index > 0 ? portfolioItems[index - 1] : undefined;
+const next = index >= 0 && index < portfolioItems.length - 1 ? portfolioItems[index + 1] : undefined;
+---
+
+<article class="shell page-stack item-page">
+  <nav class="breadcrumb" aria-label={labels.itemPage.breadcrumbAria}>
+    <a href={localizePath('/portfolio', lang)}>{labels.common.portfolio}</a>
+    <span>/</span>
+    <span>{getItemTypeLabel(item.data.type, lang, 'singular')}</span>
+  </nav>
+  <header class="item-header">
+    <div>
+      <p class="mono-label">{getItemTypeLabel(item.data.type, lang, 'singular')} · {formatDateRange(item, lang)}</p>
+      <h1>{item.data.title}</h1>
+      {item.data.organization ? <p class="item-header__organization">{item.data.organization}{item.data.location ? ` · ${item.data.location}` : ''}</p> : null}
+      <p class="item-header__summary">{item.data.summary}</p>
+    </div>
+    {item.data.links.length ? <div class="item-links">{item.data.links.map((link, index) => <a class:list={{ button: true, 'button--primary': index === 0 }} href={link.url} target="_blank" rel="noreferrer noopener">{link.label} {labels.common.externalSuffix}</a>)}</div> : null}
+  </header>
+
+  {item.data.highlights.length ? <section class="item-section" aria-labelledby="highlights-title"><h2 id="highlights-title">{labels.itemPage.highlights}</h2><ul class="highlight-list">{item.data.highlights.map((highlight) => <li>{highlight}</li>)}</ul></section> : null}
+  <section class="item-section prose" aria-labelledby="details-title"><h2 id="details-title">{labels.itemPage.details}</h2><Content /></section>
+  {item.data.skills.length ? <section class="item-section" aria-labelledby="skills-title"><h2 id="skills-title">{labels.itemPage.skills}</h2><ul class="plain-tags">{item.data.skills.map((skill) => <li>{getSkillLabel(skill, lang)}</li>)}</ul></section> : null}
+  {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(related.id, lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
+  <nav class="item-pagination" aria-label={labels.itemPage.adjacentAria}>
+    {previous ? <a href={itemPath(previous.id, lang)}><span>{labels.itemPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
+    {next ? <a href={itemPath(next.id, lang)}><span>{labels.itemPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
+  </nav>
+</article>
