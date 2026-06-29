@@ -10,8 +10,10 @@ dist/
 cv/*.pdf
 public/cv/*.pdf
 
-# Local agent onboarding and task memory
-.agent/
+# Local agent task memory; keep project onboarding docs versioned
+.agent/*
+!.agent/
+!.agent/*.md
 
 # Logs
 npm-debug.log*
