@@ -10,7 +10,7 @@ export type LocalizedLanguage = (typeof localizedLanguages)[number];
 export const languageMeta: Record<Language, { label: string; nativeLabel: string; htmlLang: string; locale: string }> = {
   en: { label: 'English', nativeLabel: 'English', htmlLang: 'en', locale: 'en' },
   es: { label: 'Spanish', nativeLabel: 'Español', htmlLang: 'es', locale: 'es-MX' },
-  ja: { label: 'Japanese', nativeLabel: '日本語', htmlLang: 'ja', locale: 'ja-JP' }
+  ja: { label: 'Japanese', nativeLabel: '日本語 (BETA)', htmlLang: 'ja', locale: 'ja-JP' }
 };
 
 export function isLanguage(value: string | undefined): value is Language {
