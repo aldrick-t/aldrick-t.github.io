@@ -44,7 +44,10 @@ export function sortItems(items: ItemEntry[]): ItemEntry[] {
 }
 
 function hasGalleryMedia(item: ItemEntry): boolean {
-  return Boolean(item.data.thumbnail || item.data.media.length || item.data.assets.length || item.data.links.some((link) => link.kind === 'video'));
+  const media = item.data.media ?? [];
+  const assets = item.data.assets ?? [];
+  const links = item.data.links ?? [];
+  return Boolean(item.data.thumbnail || media.length || assets.length || links.some((link) => link.kind === 'video'));
 }
 
 function baselineRelevanceDifference(a: ItemEntry, b: ItemEntry): number {
@@ -79,14 +82,15 @@ export function getSkillLabel(id: string, language: Language = 'en'): string {
 }
 
 export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 4): ItemEntry[] {
-  const explicitIds = new Set(item.data.relations.map((relation) => relation.id));
+  const itemSkills = item.data.skills ?? [];
+  const explicitIds = new Set((item.data.relations ?? []).map((relation) => relation.id));
   return allItems
     .filter((candidate) => candidate.id !== item.id && candidate.data.published)
     .map((candidate) => ({
       candidate,
       score:
         (explicitIds.has(candidate.id) ? 100 : 0) +
-        candidate.data.skills.filter((skill) => item.data.skills.includes(skill)).length
+        (candidate.data.skills ?? []).filter((skill) => itemSkills.includes(skill)).length
     }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || monthIndex(b.candidate.data.dateEnd) - monthIndex(a.candidate.data.dateEnd))

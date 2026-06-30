@@ -106,7 +106,7 @@ const languages = profile.languages.map((language) => ({
     <header class="section-heading"><div><h2 id="skills-title">{labels.home.sections.skills}</h2></div></header>
     <div class="skill-groups">
       {skillGroups.map(({ group, skills }) => {
-        const rows = skills.map((skill) => ({ skill, related: sortItems(items.filter((item) => item.data.skills.includes(skill.id))) })).filter(({ related }) => related.length);
+        const rows = skills.map((skill) => ({ skill, related: sortItems(items.filter((item) => (item.data.skills ?? []).includes(skill.id))) })).filter(({ related }) => related.length);
         return rows.length ? (
           <section class="skill-group" aria-labelledby={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>
             <h3 id={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>{group}</h3>
@@ -137,15 +137,18 @@ const languages = profile.languages.map((language) => ({
   <section id="credentials" class="page-section" aria-labelledby="credentials-title">
     <header class="section-heading"><div><h2 id="credentials-title">{labels.home.sections.credentials}</h2></div></header>
     <div class="row-list">
-      {credentials.map((item) => (
-        <article class="content-row">
-          <div><h3><a href={itemPath(item.id, lang)}>{item.data.title}</a></h3><p>{item.data.organization}</p></div>
-          <div class="content-row__actions">
-            <time>{item.data.dateEnd}</time>
-            {item.data.links[0] ? <a href={item.data.links[0].url} target="_blank" rel="noreferrer noopener">{labels.common.verify} {labels.common.externalSuffix}</a> : null}
-          </div>
-        </article>
-      ))}
+      {credentials.map((item) => {
+        const link = (item.data.links ?? [])[0];
+        return (
+          <article class="content-row">
+            <div><h3><a href={itemPath(item.id, lang)}>{item.data.title}</a></h3><p>{item.data.organization}</p></div>
+            <div class="content-row__actions">
+              <time>{item.data.dateEnd}</time>
+              {link ? <a href={link.url} target="_blank" rel="noreferrer noopener">{labels.common.verify} {labels.common.externalSuffix}</a> : null}
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
 </div>

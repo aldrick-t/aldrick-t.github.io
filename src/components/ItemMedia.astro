@@ -7,9 +7,11 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const assetMedia = item.data.assets.map((asset) => ({ kind: 'image' as const, ...asset }));
-const explicitMedia = item.data.media;
-const videoLinkMedia = item.data.links
+const assets = item.data.assets ?? [];
+const explicitMedia = item.data.media ?? [];
+const links = item.data.links ?? [];
+const assetMedia = assets.map((asset) => ({ kind: 'image' as const, ...asset }));
+const videoLinkMedia = links
   .filter((link) => link.kind === 'video')
   .map((link) => ({ kind: 'youtube' as const, url: link.url, title: link.label, caption: undefined }));
 const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];

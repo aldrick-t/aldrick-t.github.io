@@ -23,9 +23,15 @@ export function localizeItem(item: ItemEntry, translations: Map<string, ItemTran
   const translation = language === defaultLanguage ? undefined : translations.get(item.id);
   if (!translation) return item as LocalizedItemEntry;
 
-  const translatedLinks = item.data.links.map((link, index) => ({
+  const links = item.data.links ?? [];
+  const translationLinks = translation.data.links ?? [];
+  const highlights = item.data.highlights ?? [];
+  const translationHighlights = translation.data.highlights ?? [];
+  const tags = item.data.tags ?? [];
+  const translationTags = translation.data.tags ?? [];
+  const translatedLinks = links.map((link, index) => ({
     ...link,
-    label: translation.data.links[index]?.label ?? link.label
+    label: translationLinks[index]?.label ?? link.label
   }));
 
   return {
@@ -34,8 +40,8 @@ export function localizeItem(item: ItemEntry, translations: Map<string, ItemTran
       ...item.data,
       title: translation.data.title,
       summary: translation.data.summary,
-      highlights: translation.data.highlights.length ? translation.data.highlights : item.data.highlights,
-      tags: translation.data.tags.length ? translation.data.tags : item.data.tags,
+      highlights: translationHighlights.length ? translationHighlights : highlights,
+      tags: translationTags.length ? translationTags : tags,
       links: translatedLinks
     },
     translation

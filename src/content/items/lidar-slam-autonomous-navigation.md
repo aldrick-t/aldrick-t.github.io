@@ -4,7 +4,7 @@ type: "project"
 summary: "Developing a ROS 2 LiDAR SLAM pipeline for real-time autonomous navigation on embedded mobile-robot hardware."
 organization: "Manchester Robotics, Tecnológico de Monterrey"
 dateStart: "2026-03"
-dateEnd: "Present"
+dateEnd: "2026-06"
 highlights:
   - "Implementing scan matching and map-generation workflows for robust localization."
   - "Integrating Gazebo simulation with physical MCR2 Puzzlebot testing."
