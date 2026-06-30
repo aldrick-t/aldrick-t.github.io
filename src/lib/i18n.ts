@@ -268,7 +268,7 @@ export const ui = {
     contactPage: {
       title: 'Contact',
       description: 'Professional contact links for Aldrick Tadeo.',
-      eyebrow: 'Direct channels',
+      eyebrow: '',
       intro: 'Email is the best way to reach me. Professional profiles are linked below.'
     },
     notFound: {
