@@ -44,7 +44,7 @@ const hasMedia = media.length || assets.length || links.some((link) => link.kind
   </header>
 
   {highlights.length ? <section class="item-section" aria-labelledby="highlights-title"><h2 id="highlights-title">{labels.itemPage.highlights}</h2><ul class="highlight-list">{highlights.map((highlight) => <li>{highlight}</li>)}</ul></section> : null}
-  <section class="item-section prose" aria-labelledby="details-title"><h2 id="details-title">{labels.itemPage.details}</h2><Content /></section>
+  <section class="item-section" aria-labelledby="details-title"><h2 id="details-title">{labels.itemPage.details}</h2><div class="item-section__body prose"><Content /></div></section>
   {hasMedia ? <section class="item-section" aria-labelledby="media-title"><h2 id="media-title">{labels.itemPage.media}</h2><ItemMedia item={item} /></section> : null}
   {skills.length ? <section class="item-section" aria-labelledby="skills-title"><h2 id="skills-title">{labels.itemPage.skills}</h2><ul class="plain-tags">{skills.map((skill) => <li>{getSkillLabel(skill, lang)}</li>)}</ul></section> : null}
   {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(related.id, lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
