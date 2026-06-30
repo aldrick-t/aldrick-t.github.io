@@ -15,6 +15,28 @@ const itemAssetSchema = z.object({
   credit: z.string().optional()
 });
 
+const itemThumbnailSchema = z.object({
+  path: z.string().min(1),
+  alt: z.string().min(1),
+  objectPosition: z.string().optional()
+});
+
+const itemMediaSchema = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('image'),
+    path: z.string().min(1),
+    alt: z.string().min(1),
+    caption: z.string().optional(),
+    credit: z.string().optional()
+  }),
+  z.object({
+    kind: z.literal('youtube'),
+    url: z.string().url(),
+    title: z.string().min(1),
+    caption: z.string().optional()
+  })
+]);
+
 const itemRelationSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1)
@@ -48,8 +70,11 @@ const items = defineCollection({
     portfolio: z.boolean().default(true),
     timeline: z.boolean().default(false),
     featuredRank: z.number().int().min(1).max(3).optional(),
+    relevanceRank: z.number().int().min(1).optional(),
     links: z.array(itemLinkSchema).default([]),
     assets: z.array(itemAssetSchema).default([]),
+    thumbnail: itemThumbnailSchema.optional(),
+    media: z.array(itemMediaSchema).default([]),
     relations: z.array(itemRelationSchema).default([]),
     cvReview: z.array(z.enum(['engineering', 'academic', 'full'])).default([])
   })

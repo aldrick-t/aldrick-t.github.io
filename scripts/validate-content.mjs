@@ -32,6 +32,38 @@ const items = files.map(parseItem).filter(Boolean);
 const ids = new Set(items.map((item) => item.id));
 const itemById = new Map(items.map((item) => [item.id, item]));
 const featuredRanks = new Map();
+const relevanceRanks = new Map();
+
+function resolvePublicItemAsset(item, assetPath, label) {
+  if (!assetPath?.startsWith(`/items/${item.id}/`)) {
+    errors.push(`${item.file}: ${label} must live under /items/${item.id}/`);
+    return;
+  }
+  const fullPath = path.join(root, 'public', assetPath);
+  if (!existsSync(fullPath)) errors.push(`${item.file}: missing ${label} ${assetPath}`);
+}
+
+function getYouTubeEmbedUrl(url) {
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return undefined;
+  }
+
+  const hostname = parsed.hostname.replace(/^www\./, '');
+  let videoId;
+  if (hostname === 'youtu.be') {
+    videoId = parsed.pathname.split('/').filter(Boolean)[0];
+  } else if (hostname === 'youtube.com' || hostname === 'm.youtube.com') {
+    const [, route, id] = parsed.pathname.split('/');
+    if (parsed.pathname === '/watch') videoId = parsed.searchParams.get('v') ?? undefined;
+    if (route === 'embed' || route === 'shorts') videoId = id;
+  }
+
+  if (!videoId || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) return undefined;
+  return `https://www.youtube-nocookie.com/embed/${videoId}`;
+}
 
 for (const item of items) {
   const data = item.data ?? {};
@@ -54,10 +86,30 @@ for (const item of items) {
     const assetPath = asset.path?.startsWith('/') ? path.join(root, 'public', asset.path) : path.resolve(itemsDir, asset.path ?? '');
     if (!existsSync(assetPath)) errors.push(`${item.file}: missing asset ${asset.path}`);
   }
+  if (data.thumbnail) {
+    if (!data.thumbnail.alt?.trim()) errors.push(`${item.file}: thumbnail requires alt text`);
+    resolvePublicItemAsset(item, data.thumbnail.path, 'thumbnail');
+  }
+  for (const media of data.media ?? []) {
+    if (media.kind === 'image') {
+      if (!media.alt?.trim()) errors.push(`${item.file}: image media requires alt text`);
+      resolvePublicItemAsset(item, media.path, 'image media');
+    } else if (media.kind === 'youtube') {
+      if (!media.title?.trim()) errors.push(`${item.file}: YouTube media requires title`);
+      if (!getYouTubeEmbedUrl(media.url ?? '')) errors.push(`${item.file}: unsupported YouTube URL ${media.url}`);
+    } else {
+      errors.push(`${item.file}: unsupported media kind ${media.kind}`);
+    }
+  }
   if (data.published !== false && data.featuredRank !== undefined) {
     if (![1, 2, 3].includes(data.featuredRank)) errors.push(`${item.file}: featuredRank must be 1, 2, or 3`);
     if (featuredRanks.has(data.featuredRank)) errors.push(`${item.file}: featuredRank ${data.featuredRank} duplicates ${featuredRanks.get(data.featuredRank)}`);
     featuredRanks.set(data.featuredRank, item.file);
+  }
+  if (data.published !== false && data.portfolio !== false && data.relevanceRank !== undefined) {
+    if (!Number.isInteger(data.relevanceRank) || data.relevanceRank < 1) errors.push(`${item.file}: relevanceRank must be a positive integer`);
+    if (relevanceRanks.has(data.relevanceRank)) errors.push(`${item.file}: relevanceRank ${data.relevanceRank} duplicates ${relevanceRanks.get(data.relevanceRank)}`);
+    relevanceRanks.set(data.relevanceRank, item.file);
   }
 }
 

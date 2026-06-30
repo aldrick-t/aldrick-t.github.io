@@ -1,0 +1,45 @@
+---
+import type { ItemEntry } from '../lib/items';
+import { getYouTubeEmbedUrl } from '../lib/media';
+
+interface Props {
+  item: ItemEntry;
+}
+
+const { item } = Astro.props;
+const assetMedia = item.data.assets.map((asset) => ({ kind: 'image' as const, ...asset }));
+const explicitMedia = item.data.media;
+const videoLinkMedia = item.data.links
+  .filter((link) => link.kind === 'video')
+  .map((link) => ({ kind: 'youtube' as const, url: link.url, title: link.label, caption: undefined }));
+const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
+---
+
+{media.length ? (
+  <div class="item-media-grid">
+    {media.map((entry) => {
+      if (entry.kind === 'image') {
+        return (
+          <figure class="item-media-card">
+            <img src={entry.path} alt={entry.alt} loading="lazy" decoding="async" />
+            {entry.caption || entry.credit ? <figcaption>{entry.caption}{entry.caption && entry.credit ? ' · ' : ''}{entry.credit}</figcaption> : null}
+          </figure>
+        );
+      }
+
+      const embedUrl = getYouTubeEmbedUrl(entry.url);
+      return embedUrl ? (
+        <figure class="item-media-card item-media-card--video">
+          <iframe
+            src={embedUrl}
+            title={entry.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+          {entry.caption ? <figcaption>{entry.caption}</figcaption> : null}
+        </figure>
+      ) : null;
+    })}
+  </div>
+) : null}
