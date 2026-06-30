@@ -19,11 +19,25 @@ published: false
 portfolio: true
 timeline: true
 featuredRank: 1
+relevanceRank: 1
 links:
   - kind: "site"
     label: "Project website"
     url: "https://example.com"
 assets: []
+thumbnail:
+  path: "/items/my-item/thumbnail.webp"
+  alt: "Short description of the thumbnail image."
+  objectPosition: "50% 50%"
+media:
+  - kind: "image"
+    path: "/items/my-item/detail.webp"
+    alt: "Short description of the detail image."
+    caption: "Optional caption."
+  - kind: "youtube"
+    url: "https://www.youtube.com/watch?v=exampleid12"
+    title: "Video title for accessibility"
+    caption: "Optional caption."
 relations:
   - id: "another-item-slug"
     label: "Related project"
@@ -32,6 +46,10 @@ cvReview: ["engineering", "academic", "full"]
 ```
 
 Write the complete item narrative after the frontmatter. Remove `featuredRank` unless the item is one of the three homepage features.
+
+Use `relevanceRank` only when manually curating Portfolio Gallery relevance. Lower numbers appear first. Omit `relevanceRank` to let the baseline relevance sort use featured rank, item type, media availability, recency, and title.
+
+Store gallery thumbnails and media under `public/items/<item-slug>/`. Use `/items/<item-slug>/thumbnail.webp` for the main card image and descriptive names such as `/items/<item-slug>/prototype-test.webp` for supporting media. Content validation rejects missing thumbnail/media paths, empty alt/title text, duplicate published relevance ranks, and unsupported YouTube URLs.
 
 ## Translations
 

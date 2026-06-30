@@ -43,6 +43,30 @@ export function sortItems(items: ItemEntry[]): ItemEntry[] {
   });
 }
 
+function hasGalleryMedia(item: ItemEntry): boolean {
+  return Boolean(item.data.thumbnail || item.data.media.length || item.data.assets.length || item.data.links.some((link) => link.kind === 'video'));
+}
+
+function baselineRelevanceDifference(a: ItemEntry, b: ItemEntry): number {
+  const featuredDifference = (a.data.featuredRank ?? 999) - (b.data.featuredRank ?? 999);
+  const typeDifference = itemTypeOrder.indexOf(a.data.type) - itemTypeOrder.indexOf(b.data.type);
+  const mediaDifference = Number(hasGalleryMedia(b)) - Number(hasGalleryMedia(a));
+  const latestDifference = monthIndex(b.data.dateEnd) - monthIndex(a.data.dateEnd);
+  const startDifference = monthIndex(b.data.dateStart) - monthIndex(a.data.dateStart);
+  return featuredDifference || typeDifference || mediaDifference || latestDifference || startDifference || a.data.title.localeCompare(b.data.title);
+}
+
+export function sortItemsByRelevance(items: ItemEntry[]): ItemEntry[] {
+  return [...items].sort((a, b) => {
+    const aRank = a.data.relevanceRank;
+    const bRank = b.data.relevanceRank;
+    if (aRank !== undefined && bRank !== undefined) return aRank - bRank || baselineRelevanceDifference(a, b);
+    if (aRank !== undefined) return -1;
+    if (bRank !== undefined) return 1;
+    return baselineRelevanceDifference(a, b);
+  });
+}
+
 export function groupItemsByType(items: ItemEntry[], language: Language = 'en') {
   const labels = getItemTypeLabels(language);
   return itemTypeOrder

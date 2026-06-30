@@ -21,8 +21,14 @@ tags: []
 published: false
 portfolio: true
 timeline: false
+# relevanceRank: 1
 links: []
 assets: []
+# thumbnail:
+#   path: "/items/${slug}/thumbnail.webp"
+#   alt: "Describe the thumbnail image."
+#   objectPosition: "50% 50%"
+media: []
 relations: []
 cvReview: []
 ---

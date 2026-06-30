@@ -1,0 +1,47 @@
+---
+import type { ItemType } from '../lib/items';
+import { ui, type Language } from '../lib/i18n';
+
+interface TypeFilter {
+  type: ItemType;
+  label: string;
+  count: number;
+}
+
+interface Props {
+  filters: TypeFilter[];
+  total: number;
+  lang?: Language;
+}
+
+const { filters, total, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+---
+
+<nav class="portfolio-controls" data-portfolio-controls aria-label={labels.portfolioPage.controlsAria}>
+  <div class="portfolio-controls__group" role="group" aria-label={labels.portfolioPage.viewMode}>
+    <button class="portfolio-control portfolio-control--active" type="button" data-view-control="timeline" aria-pressed="true">
+      {labels.portfolioPage.timelineView}
+    </button>
+    <button class="portfolio-control" type="button" data-view-control="gallery" aria-pressed="false">
+      {labels.portfolioPage.galleryView}
+    </button>
+  </div>
+  <div class="portfolio-controls__filters" role="group" aria-label={labels.portfolioPage.filterByType}>
+    <button class="portfolio-filter portfolio-filter--active" type="button" data-type-filter="all" aria-pressed="true">
+      {labels.portfolioPage.allTypes} <span>{total}</span>
+    </button>
+    {filters.map((filter) => (
+      <button class="portfolio-filter" type="button" data-type-filter={filter.type} aria-pressed="false">
+        {filter.label} <span>{filter.count}</span>
+      </button>
+    ))}
+  </div>
+  <label class="portfolio-sort">
+    <span>{labels.portfolioPage.sortBy}</span>
+    <select data-sort-control>
+      <option value="latest">{labels.portfolioPage.latestSort}</option>
+      <option value="relevance">{labels.portfolioPage.relevanceSort}</option>
+    </select>
+  </label>
+</nav>

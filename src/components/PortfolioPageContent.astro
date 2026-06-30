@@ -1,7 +1,9 @@
 ---
 import { itemPath, ui, type Language } from '../lib/i18n';
 import { getPublishedLocalizedItems } from '../lib/localized-items';
-import { formatDateRange, groupItemsByType } from '../lib/items';
+import { formatDateRange, groupItemsByType, itemTypeOrder, sortItems, sortItemsByRelevance } from '../lib/items';
+import PortfolioControls from './PortfolioControls.astro';
+import PortfolioGallery from './PortfolioGallery.astro';
 
 interface Props {
   lang?: Language;
@@ -11,28 +13,132 @@ const { lang = 'en' } = Astro.props;
 const labels = ui[lang];
 const items = await getPublishedLocalizedItems(lang, (item) => item.data.portfolio);
 const groups = groupItemsByType(items, lang);
+const latestItems = sortItems(items);
+const relevanceItems = sortItemsByRelevance(items);
+const latestOrderById = new Map(latestItems.map((item, index) => [item.id, index]));
+const relevanceOrderById = new Map(relevanceItems.map((item, index) => [item.id, index]));
+const filters = itemTypeOrder
+  .map((type) => {
+    const group = groups.find((entry) => entry.type === type);
+    return group ? { type, label: group.label, count: group.items.length } : undefined;
+  })
+  .filter((entry) => entry !== undefined);
 ---
 
-<div class="shell page-stack page-stack--sticky-section-nav">
+<div class="shell page-stack" data-portfolio-root>
   <header class="page-header">
     <h1>{labels.portfolioPage.title}</h1>
     <p>{labels.portfolioPage.intro}</p>
   </header>
-  <nav class="section-nav section-nav--sticky" aria-label={labels.portfolioPage.sectionsAria}>
-    {groups.map((group) => <a href={`#${group.type}`}>{group.label} <span>{group.items.length}</span></a>)}
-  </nav>
-  {groups.map((group) => (
-    <section id={group.type} class="page-section portfolio-group" aria-labelledby={`${group.type}-title`}>
-      <header class="section-heading"><h2 id={`${group.type}-title`}>{group.label}</h2><span>{group.items.length}</span></header>
-      <div class="row-list">
-        {group.items.map((item) => (
-          <article class="portfolio-row">
-            <div class="portfolio-row__date"><time>{formatDateRange(item, lang)}</time></div>
-            <div><h3><a href={itemPath(item.id, lang)}>{item.data.title}</a></h3>{item.data.organization ? <p>{item.data.organization}</p> : null}<p>{item.data.summary}</p></div>
-            <a class="portfolio-row__arrow" href={itemPath(item.id, lang)} aria-label={`${labels.common.open} ${item.data.title}`}>→</a>
-          </article>
-        ))}
-      </div>
-    </section>
-  ))}
+  <PortfolioControls filters={filters} total={items.length} lang={lang} />
+  <div data-portfolio-view="timeline">
+    {groups.map((group) => (
+      <section id={group.type} class="page-section portfolio-group" aria-labelledby={`${group.type}-title`} data-portfolio-group data-type={group.type}>
+        <header class="section-heading"><h2 id={`${group.type}-title`}>{group.label}</h2><span>{group.items.length}</span></header>
+        <div class="row-list" data-sortable-list>
+          {group.items.map((item) => (
+            <article
+              class="portfolio-row"
+              data-portfolio-item
+              data-type={item.data.type}
+              data-latest-order={latestOrderById.get(item.id) ?? 0}
+              data-relevance-order={relevanceOrderById.get(item.id) ?? 0}
+            >
+              <div class="portfolio-row__date"><time>{formatDateRange(item, lang)}</time></div>
+              <div><h3><a href={itemPath(item.id, lang)}>{item.data.title}</a></h3>{item.data.organization ? <p>{item.data.organization}</p> : null}<p>{item.data.summary}</p></div>
+              <a class="portfolio-row__arrow" href={itemPath(item.id, lang)} aria-label={`${labels.common.open} ${item.data.title}`}>→</a>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <div data-portfolio-view="gallery" hidden>
+    <PortfolioGallery items={items} latestOrderById={latestOrderById} relevanceOrderById={relevanceOrderById} lang={lang} />
+  </div>
 </div>
+
+<script>
+  const portfolioRoots = document.querySelectorAll('[data-portfolio-root]');
+
+  portfolioRoots.forEach((rootElement) => {
+    const root = rootElement as HTMLElement;
+    const params = new URLSearchParams(window.location.search);
+    const viewButtons = Array.from(root.querySelectorAll('[data-view-control]')) as HTMLButtonElement[];
+    const typeButtons = Array.from(root.querySelectorAll('[data-type-filter]')) as HTMLButtonElement[];
+    const sortControl = root.querySelector('[data-sort-control]');
+    const allowedTypes = new Set(typeButtons.map((button) => button.dataset.typeFilter));
+    const requestedType = params.get('type') ?? '';
+
+    let view = params.get('view') === 'gallery' ? 'gallery' : 'timeline';
+    let type = allowedTypes.has(requestedType) ? requestedType : 'all';
+    let sort = params.get('sort') === 'relevance' ? 'relevance' : 'latest';
+
+    const sortList = (list: Element) => {
+      const orderKey = sort === 'relevance' ? 'relevanceOrder' : 'latestOrder';
+      (Array.from(list.querySelectorAll(':scope > [data-portfolio-item]')) as HTMLElement[])
+        .sort((a, b) => Number(a.dataset[orderKey] ?? 0) - Number(b.dataset[orderKey] ?? 0))
+        .forEach((item) => list.append(item));
+    };
+
+    const writeUrlState = () => {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set('view', view);
+      nextUrl.searchParams.set('type', type ?? 'all');
+      nextUrl.searchParams.set('sort', sort);
+      window.history.replaceState({}, '', nextUrl);
+    };
+
+    const applyState = (updateUrl = false) => {
+      (Array.from(root.querySelectorAll('[data-portfolio-view]')) as HTMLElement[]).forEach((section) => {
+        section.hidden = section.dataset.portfolioView !== view;
+      });
+
+      viewButtons.forEach((button) => {
+        const active = button.dataset.viewControl === view;
+        button.classList.toggle('portfolio-control--active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      typeButtons.forEach((button) => {
+        const active = button.dataset.typeFilter === type;
+        button.classList.toggle('portfolio-filter--active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      if (sortControl instanceof HTMLSelectElement) sortControl.value = sort;
+
+      (Array.from(root.querySelectorAll('[data-portfolio-item]')) as HTMLElement[]).forEach((item) => {
+        item.hidden = type !== 'all' && item.dataset.type !== type;
+      });
+
+      (Array.from(root.querySelectorAll('[data-portfolio-group]')) as HTMLElement[]).forEach((group) => {
+        group.hidden = type !== 'all' && group.dataset.type !== type;
+      });
+
+      root.querySelectorAll('[data-sortable-list]').forEach(sortList);
+      if (updateUrl) writeUrlState();
+    };
+
+    viewButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        view = button.dataset.viewControl === 'gallery' ? 'gallery' : 'timeline';
+        applyState(true);
+      });
+    });
+
+    typeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        type = button.dataset.typeFilter ?? 'all';
+        applyState(true);
+      });
+    });
+
+    sortControl?.addEventListener('change', () => {
+      if (sortControl instanceof HTMLSelectElement) sort = sortControl.value === 'relevance' ? 'relevance' : 'latest';
+      applyState(true);
+    });
+
+    applyState(false);
+  });
+</script>

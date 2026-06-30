@@ -1,0 +1,27 @@
+---
+import type { ItemEntry } from '../lib/items';
+import { sortItems } from '../lib/items';
+import type { Language } from '../lib/i18n';
+import PortfolioGalleryCard from './PortfolioGalleryCard.astro';
+
+interface Props {
+  items: ItemEntry[];
+  latestOrderById: Map<string, number>;
+  relevanceOrderById: Map<string, number>;
+  lang?: Language;
+}
+
+const { items, latestOrderById, relevanceOrderById, lang = 'en' } = Astro.props;
+const sortedItems = sortItems(items);
+---
+
+<div class="portfolio-gallery" data-portfolio-gallery data-sortable-list>
+  {sortedItems.map((item) => (
+    <PortfolioGalleryCard
+      item={item}
+      lang={lang}
+      latestOrder={latestOrderById.get(item.id) ?? 0}
+      relevanceOrder={relevanceOrderById.get(item.id) ?? 0}
+    />
+  ))}
+</div>
