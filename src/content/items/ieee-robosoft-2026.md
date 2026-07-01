@@ -14,10 +14,14 @@ tags: ["Conference", "Competition", "Soft robotics"]
 published: true
 portfolio: true
 timeline: true
+thumbnail:
+  path: "/items/ieee-robosoft-2026/thumbnail.png"
+  alt: "Short description of the thumbnail image."
+  objectPosition: "50% 50%"
 relations:
   - id: "robosoft-2026-harvesting-robot"
     label: "Competition project"
 cvReview: ["academic", "full"]
 ---
 
-The conference visit centered on the Manipulation Challenge and the presentation of a complete robotic harvesting system developed by a four-member team.
+The conference visit centered on the Manipulation Challenge and the presentation of a complete robotic harvesting system developed by a four-member team with two participating members. The challenge involved picking raspberries from an artificial bush and placing them in a basket, with a scoring system based on the number of fruits collected and the accuracy of placement.
