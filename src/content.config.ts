@@ -18,7 +18,10 @@ const itemAssetSchema = z.object({
 const itemThumbnailSchema = z.object({
   path: z.string().min(1),
   alt: z.string().min(1),
-  objectPosition: z.string().optional()
+  objectFit: z.enum(['cover', 'contain', 'fill', 'scale-down']).optional(),
+  objectPosition: z.string().optional(),
+  backgroundColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+  aspectRatio: z.string().regex(/^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/).optional()
 });
 
 const itemMediaSchema = z.discriminatedUnion('kind', [

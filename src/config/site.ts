@@ -5,7 +5,7 @@ const linkedinUrl = 'https://www.linkedin.com/in/aldrick-t/';
 export const siteConfig = {
   name: 'Aldrick Tadeo',
   fullName: 'Aldrick Victor Tadeo Arellano',
-  title: 'Robotics and Digital Systems Engineer',
+  title: 'B.S. Robotics and Digital Systems Engineering',
   description:
     'Robotics and digital systems engineer working across autonomous systems, perception, embedded software, and engineering tooling.',
   introduction:

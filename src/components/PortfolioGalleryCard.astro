@@ -12,7 +12,39 @@ interface Props {
 
 const { item, latestOrder, relevanceOrder, lang = 'en' } = Astro.props;
 const labels = ui[lang];
-const thumbnail = item.data.thumbnail;
+type Thumbnail = NonNullable<ItemEntry['data']['thumbnail']>;
+const thumbnailObjectFits = ['cover', 'contain', 'fill', 'scale-down'] as const;
+
+const isThumbnail = (value: unknown): value is Thumbnail => {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as {
+    path?: unknown;
+    alt?: unknown;
+    objectFit?: unknown;
+    objectPosition?: unknown;
+    backgroundColor?: unknown;
+    aspectRatio?: unknown;
+  };
+  return (
+    typeof candidate.path === 'string' &&
+    typeof candidate.alt === 'string' &&
+    (candidate.objectFit === undefined || thumbnailObjectFits.includes(candidate.objectFit as (typeof thumbnailObjectFits)[number])) &&
+    (candidate.objectPosition === undefined || typeof candidate.objectPosition === 'string') &&
+    (candidate.backgroundColor === undefined || /^#[0-9a-fA-F]{6}$/.test(String(candidate.backgroundColor))) &&
+    (candidate.aspectRatio === undefined || /^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/.test(String(candidate.aspectRatio)))
+  );
+};
+
+const renderedFrontmatter = item.rendered?.metadata?.frontmatter as { thumbnail?: unknown } | undefined;
+const thumbnail = item.data.thumbnail ?? (isThumbnail(renderedFrontmatter?.thumbnail) ? renderedFrontmatter.thumbnail : undefined);
+const thumbnailMediaStyle = [
+  thumbnail?.backgroundColor ? `background-color:${thumbnail.backgroundColor}` : undefined,
+  thumbnail?.aspectRatio ? `aspect-ratio:${thumbnail.aspectRatio}` : undefined
+].filter(Boolean).join(';');
+const thumbnailImageStyle = [
+  thumbnail?.objectFit ? `object-fit:${thumbnail.objectFit}` : undefined,
+  thumbnail?.objectPosition ? `object-position:${thumbnail.objectPosition}` : undefined
+].filter(Boolean).join(';');
 const itemUrl = itemPath(item.id, lang);
 const links = (item.data.links ?? []).slice(0, 2);
 const tags = item.data.tags ?? [];
@@ -25,14 +57,14 @@ const tags = item.data.tags ?? [];
   data-latest-order={latestOrder}
   data-relevance-order={relevanceOrder}
 >
-  <a class:list={{ 'portfolio-gallery-card__media': true, 'portfolio-gallery-card__media--empty': !thumbnail }} href={itemUrl} aria-label={`${labels.portfolioPage.openItem}: ${item.data.title}`}>
+  <a class:list={{ 'portfolio-gallery-card__media': true, 'portfolio-gallery-card__media--empty': !thumbnail }} href={itemUrl} aria-label={`${labels.portfolioPage.openItem}: ${item.data.title}`} style={thumbnailMediaStyle || undefined}>
     {thumbnail ? (
       <img
         src={thumbnail.path}
         alt={thumbnail.alt}
         loading="lazy"
         decoding="async"
-        style={thumbnail.objectPosition ? `object-position:${thumbnail.objectPosition}` : undefined}
+        style={thumbnailImageStyle || undefined}
       />
     ) : (
       <>

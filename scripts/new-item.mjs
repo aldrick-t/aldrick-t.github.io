@@ -27,7 +27,10 @@ assets: []
 # thumbnail:
 #   path: "/items/${slug}/thumbnail.webp"
 #   alt: "Describe the thumbnail image."
+#   objectFit: "cover"
 #   objectPosition: "50% 50%"
+#   backgroundColor: "#ffffff"
+#   aspectRatio: "16 / 10"
 media: []
 relations: []
 cvReview: []
