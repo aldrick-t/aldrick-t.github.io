@@ -31,7 +31,7 @@ const filters = itemTypeOrder
     <p>{labels.portfolioPage.intro}</p>
   </header>
   <PortfolioControls filters={filters} total={items.length} lang={lang} />
-  <div data-portfolio-view="timeline">
+  <div data-portfolio-view="timeline" hidden>
     {groups.map((group) => (
       <section id={group.type} class="page-section portfolio-group" aria-labelledby={`${group.type}-title`} data-portfolio-group data-type={group.type}>
         <header class="section-heading"><h2 id={`${group.type}-title`}>{group.label}</h2><span>{group.items.length}</span></header>
@@ -53,7 +53,7 @@ const filters = itemTypeOrder
       </section>
     ))}
   </div>
-  <div data-portfolio-view="gallery" hidden>
+  <div data-portfolio-view="gallery">
     <PortfolioGallery items={items} latestOrderById={latestOrderById} relevanceOrderById={relevanceOrderById} lang={lang} />
   </div>
 </div>
@@ -70,9 +70,12 @@ const filters = itemTypeOrder
     const allowedTypes = new Set(typeButtons.map((button) => button.dataset.typeFilter));
     const requestedType = params.get('type') ?? '';
 
-    let view = params.get('view') === 'gallery' ? 'gallery' : 'timeline';
+    const requestedView = params.get('view');
+    const requestedSort = params.get('sort');
+
+    let view = requestedView === 'timeline' ? 'timeline' : 'gallery';
     let type = allowedTypes.has(requestedType) ? requestedType : 'all';
-    let sort = params.get('sort') === 'relevance' ? 'relevance' : 'latest';
+    let sort = requestedSort === 'latest' || requestedSort === 'relevance' ? requestedSort : view === 'timeline' ? 'latest' : 'relevance';
 
     const sortList = (list: Element) => {
       const orderKey = sort === 'relevance' ? 'relevanceOrder' : 'latestOrder';
@@ -123,6 +126,7 @@ const filters = itemTypeOrder
     viewButtons.forEach((button) => {
       button.addEventListener('click', () => {
         view = button.dataset.viewControl === 'gallery' ? 'gallery' : 'timeline';
+        sort = view === 'timeline' ? 'latest' : 'relevance';
         applyState(true);
       });
     });

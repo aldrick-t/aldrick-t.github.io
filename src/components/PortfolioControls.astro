@@ -20,10 +20,10 @@ const labels = ui[lang];
 
 <nav class="portfolio-controls" data-portfolio-controls aria-label={labels.portfolioPage.controlsAria}>
   <div class="portfolio-controls__group" role="group" aria-label={labels.portfolioPage.viewMode}>
-    <button class="portfolio-control portfolio-control--active" type="button" data-view-control="timeline" aria-pressed="true">
+    <button class="portfolio-control" type="button" data-view-control="timeline" aria-pressed="false">
       {labels.portfolioPage.timelineView}
     </button>
-    <button class="portfolio-control" type="button" data-view-control="gallery" aria-pressed="false">
+    <button class="portfolio-control portfolio-control--active" type="button" data-view-control="gallery" aria-pressed="true">
       {labels.portfolioPage.galleryView}
     </button>
   </div>
@@ -41,7 +41,7 @@ const labels = ui[lang];
     <span>{labels.portfolioPage.sortBy}</span>
     <select data-sort-control>
       <option value="latest">{labels.portfolioPage.latestSort}</option>
-      <option value="relevance">{labels.portfolioPage.relevanceSort}</option>
+      <option value="relevance" selected>{labels.portfolioPage.relevanceSort}</option>
     </select>
   </label>
 </nav>
