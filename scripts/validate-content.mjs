@@ -89,6 +89,15 @@ for (const item of items) {
   if (data.thumbnail) {
     if (!data.thumbnail.alt?.trim()) errors.push(`${item.file}: thumbnail requires alt text`);
     resolvePublicItemAsset(item, data.thumbnail.path, 'thumbnail');
+    if (data.thumbnail.objectFit && !['cover', 'contain', 'fill', 'scale-down'].includes(data.thumbnail.objectFit)) {
+      errors.push(`${item.file}: thumbnail objectFit must be cover, contain, fill, or scale-down`);
+    }
+    if (data.thumbnail.backgroundColor && !/^#[0-9a-fA-F]{6}$/.test(data.thumbnail.backgroundColor)) {
+      errors.push(`${item.file}: thumbnail backgroundColor must be a 6-digit hex color such as #ffffff`);
+    }
+    if (data.thumbnail.aspectRatio && !/^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/.test(data.thumbnail.aspectRatio)) {
+      errors.push(`${item.file}: thumbnail aspectRatio must be a numeric ratio such as 16 / 10`);
+    }
   }
   for (const media of data.media ?? []) {
     if (media.kind === 'image') {

@@ -28,7 +28,10 @@ assets: []
 thumbnail:
   path: "/items/my-item/thumbnail.webp"
   alt: "Short description of the thumbnail image."
+  objectFit: "cover"
   objectPosition: "50% 50%"
+  backgroundColor: "#ffffff"
+  aspectRatio: "16 / 10"
 media:
   - kind: "image"
     path: "/items/my-item/detail.webp"
@@ -50,6 +53,33 @@ Write the complete item narrative after the frontmatter. Remove `featuredRank` u
 Use `relevanceRank` only when manually curating Portfolio Gallery relevance. Lower numbers appear first. Omit `relevanceRank` to let the baseline relevance sort use featured rank, item type, media availability, recency, and title.
 
 Store gallery thumbnails and media under `public/items/<item-slug>/`. Use `/items/<item-slug>/thumbnail.webp` for the main card image and descriptive names such as `/items/<item-slug>/prototype-test.webp` for supporting media. Content validation rejects missing thumbnail/media paths, empty alt/title text, duplicate published relevance ranks, and unsupported YouTube URLs.
+
+Thumbnail display controls are optional and affect only Portfolio Gallery cards. `objectFit` accepts `cover`, `contain`, `fill`, or `scale-down`; omit it to use the default cropped `cover` card behavior. `objectPosition` maps to CSS `object-position`, so `"50% 50%"` centers the crop, `"0% 50%"` favors the left edge, and `"100% 50%"` favors the right edge. Use `backgroundColor` with `contain` or `scale-down` to control the letterbox color, and reserve `aspectRatio` for rare images that need a frame other than the default `16 / 10`.
+
+Quick examples:
+
+```yaml
+thumbnail:
+  path: "/items/my-item/thumbnail.webp"
+  alt: "Centered cropped thumbnail."
+  objectFit: "cover"
+  objectPosition: "50% 50%"
+```
+
+```yaml
+thumbnail:
+  path: "/items/my-item/thumbnail.webp"
+  alt: "Full image thumbnail."
+  objectFit: "contain"
+  backgroundColor: "#ffffff"
+```
+
+```yaml
+thumbnail:
+  path: "/items/my-item/thumbnail.webp"
+  alt: "Stretched thumbnail."
+  objectFit: "fill"
+```
 
 ## Translations
 

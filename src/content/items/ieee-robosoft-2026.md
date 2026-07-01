@@ -17,7 +17,9 @@ timeline: true
 thumbnail:
   path: "/items/ieee-robosoft-2026/thumbnail.png"
   alt: "Short description of the thumbnail image."
+  objectFit: "contain"
   objectPosition: "50% 50%"
+  backgroundColor: "#ffffff"
 relations:
   - id: "robosoft-2026-harvesting-robot"
     label: "Competition project"
