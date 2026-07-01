@@ -1,6 +1,6 @@
 ---
 import type { ItemEntry } from '../lib/items';
-import { sortItems } from '../lib/items';
+import { sortItemsByRelevance } from '../lib/items';
 import type { Language } from '../lib/i18n';
 import PortfolioGalleryCard from './PortfolioGalleryCard.astro';
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { items, latestOrderById, relevanceOrderById, lang = 'en' } = Astro.props;
-const sortedItems = sortItems(items);
+const sortedItems = sortItemsByRelevance(items);
 ---
 
 <div class="portfolio-gallery" data-portfolio-gallery data-sortable-list>
