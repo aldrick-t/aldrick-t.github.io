@@ -90,6 +90,16 @@ for (const item of items) {
   for (const link of data.links ?? []) {
     try { new URL(link.url); } catch { errors.push(`${item.file}: invalid link URL ${link.url}`); }
   }
+  for (const collaborator of data.collaborators ?? []) {
+    if (!collaborator || typeof collaborator !== 'object') {
+      errors.push(`${item.file}: collaborators must be objects with name and optional url`);
+      continue;
+    }
+    if (typeof collaborator.name !== 'string' || !collaborator.name.trim()) errors.push(`${item.file}: collaborators require name`);
+    if (collaborator.url !== undefined) {
+      try { new URL(collaborator.url); } catch { errors.push(`${item.file}: invalid collaborator URL ${collaborator.url}`); }
+    }
+  }
   for (const asset of data.assets ?? []) {
     if (!asset.alt?.trim()) errors.push(`${item.file}: assets require alt text`);
     const assetPath = asset.path?.startsWith('/') ? path.join(root, 'public', asset.path) : path.resolve(itemsDir, asset.path ?? '');

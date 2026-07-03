@@ -32,6 +32,7 @@ assets: []
 #   backgroundColor: "#ffffff"
 #   aspectRatio: "16 / 10"
 media: []
+collaborators: []
 relations: []
 cvReview: []
 ---

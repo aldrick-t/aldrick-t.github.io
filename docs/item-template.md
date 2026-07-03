@@ -41,6 +41,12 @@ media:
     url: "https://www.youtube.com/watch?v=exampleid12"
     title: "Video title for accessibility"
     caption: "Optional caption."
+collaborators:
+  - name: "Jane Doe"
+    url: "https://www.linkedin.com/in/janedoe"
+  - name: "John Smith"
+    url: "mailto:john@example.com"
+  - name: "Research Lab Partner"
 relations:
   - id: "another-item-slug"
     label: "Related project"
@@ -53,6 +59,8 @@ Write the complete item narrative after the frontmatter. Remove `featuredRank` u
 Use `relevanceRank` only when manually curating Portfolio Gallery relevance. Lower numbers appear first. Omit `relevanceRank` to let the baseline relevance sort use featured rank, item type, media availability, recency, and title.
 
 Store gallery thumbnails and media under `public/items/<item-slug>/`. Use `/items/<item-slug>/thumbnail.webp` for the main card image and descriptive names such as `/items/<item-slug>/prototype-test.webp` for supporting media. Content validation rejects missing thumbnail/media paths, empty alt/title text, duplicate published relevance ranks, and unsupported YouTube URLs.
+
+Use `collaborators` to credit people or organizations that worked on an item. Each collaborator needs a `name`; `url` is optional and may point to a website, LinkedIn, GitHub, Google Scholar, or a `mailto:` email link. Collaborators are canonical item metadata and should not be duplicated in translation files.
 
 Thumbnail display controls are optional and affect only Portfolio Gallery cards. `objectFit` accepts `cover`, `contain`, `fill`, or `scale-down`; omit it to use the default cropped `cover` card behavior. `objectPosition` maps to CSS `object-position`, so `"50% 50%"` centers the crop, `"0% 50%"` favors the left edge, and `"100% 50%"` favors the right edge. Use `backgroundColor` with `contain` or `scale-down` to control the letterbox color, and reserve `aspectRatio` for rare images that need a frame other than the default `16 / 10`.
 
@@ -97,7 +105,7 @@ links:
 ---
 ```
 
-Write the localized narrative body after the frontmatter. Do not duplicate dates, skills, publication flags, relations, or asset metadata in translation files; those remain canonical in `src/content/items/<slug>.md`.
+Write the localized narrative body after the frontmatter. Do not duplicate dates, skills, publication flags, collaborators, relations, or asset metadata in translation files; those remain canonical in `src/content/items/<slug>.md`.
 
 ## CV synchronization
 
