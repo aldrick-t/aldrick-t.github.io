@@ -1,14 +1,14 @@
 :root,
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #ffffff;
+  --bg: #F2F0EF;
   --surface: #f6f7f8;
   --surface-raised: #ffffff;
   --text: #17191c;
   --muted: #626870;
   --border: #dfe2e6;
   --border-strong: #b7bcc3;
-  --accent: #645de8;
+  --accent: #5fb935;
   --accent-soft: #eaf2ff;
   --focus: #256fdc;
   --code: #f0f2f4;
