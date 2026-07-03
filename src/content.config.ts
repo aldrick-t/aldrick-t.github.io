@@ -45,6 +45,11 @@ const itemRelationSchema = z.object({
   label: z.string().min(1)
 });
 
+const itemCollaboratorSchema = z.object({
+  name: z.string().trim().min(1),
+  url: z.string().url().optional()
+});
+
 const items = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/items' }),
   schema: z.object({
@@ -78,6 +83,7 @@ const items = defineCollection({
     assets: z.array(itemAssetSchema).default([]),
     thumbnail: itemThumbnailSchema.optional(),
     media: z.array(itemMediaSchema).default([]),
+    collaborators: z.array(itemCollaboratorSchema).default([]),
     relations: z.array(itemRelationSchema).default([]),
     relatedFallback: z.literal('skills').optional(),
     cvReview: z.array(z.enum(['engineering', 'academic', 'full'])).default([])
