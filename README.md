@@ -24,6 +24,27 @@ npm run dev
 
 Astro prints the local preview URL, usually `http://localhost:4321`.
 
+## Cleanup
+
+Stop any lingering Astro dev servers:
+
+```bash
+pkill -f "astro dev" || true
+pkill -f "npm run dev" || true
+```
+
+If a process is still holding the default port, find and kill it directly:
+
+```bash
+lsof -ti tcp:4321 | xargs kill
+```
+
+Remove generated build and cache files:
+
+```bash
+rm -rf dist .astro
+```
+
 ## Commands
 
 ```bash
