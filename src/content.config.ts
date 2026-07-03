@@ -79,6 +79,7 @@ const items = defineCollection({
     thumbnail: itemThumbnailSchema.optional(),
     media: z.array(itemMediaSchema).default([]),
     relations: z.array(itemRelationSchema).default([]),
+    relatedFallback: z.literal('skills').optional(),
     cvReview: z.array(z.enum(['engineering', 'academic', 'full'])).default([])
   })
 });

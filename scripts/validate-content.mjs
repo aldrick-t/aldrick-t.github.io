@@ -77,7 +77,16 @@ for (const item of items) {
   if (Number.isFinite(start) && start > end) errors.push(`${item.file}: dateEnd precedes dateStart`);
   if (data.published !== false && !item.body) errors.push(`${item.file}: published items require body content`);
   for (const skill of data.skills ?? []) if (!skillIds.has(skill)) errors.push(`${item.file}: unknown skill ${skill}`);
-  for (const relation of data.relations ?? []) if (!ids.has(relation.id)) errors.push(`${item.file}: broken relation ${relation.id}`);
+  if (data.relatedFallback !== undefined && data.relatedFallback !== 'skills') {
+    errors.push(`${item.file}: relatedFallback must be skills when provided`);
+  }
+  const relationIds = new Set();
+  for (const relation of data.relations ?? []) {
+    if (relation.id === item.id) errors.push(`${item.file}: relation cannot point to itself`);
+    if (relationIds.has(relation.id)) errors.push(`${item.file}: duplicate relation ${relation.id}`);
+    relationIds.add(relation.id);
+    if (!ids.has(relation.id)) errors.push(`${item.file}: broken relation ${relation.id}`);
+  }
   for (const link of data.links ?? []) {
     try { new URL(link.url); } catch { errors.push(`${item.file}: invalid link URL ${link.url}`); }
   }

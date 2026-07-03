@@ -83,19 +83,32 @@ export function getSkillLabel(id: string, language: Language = 'en'): string {
 
 export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 4): ItemEntry[] {
   const itemSkills = item.data.skills ?? [];
-  const explicitIds = new Set((item.data.relations ?? []).map((relation) => relation.id));
-  return allItems
+  const itemById = new Map(allItems.filter((candidate) => candidate.data.published).map((candidate) => [candidate.id, candidate]));
+  const seenIds = new Set<string>([item.id]);
+  const relatedItems = (item.data.relations ?? [])
+    .map((relation) => itemById.get(relation.id))
+    .filter((candidate): candidate is ItemEntry => {
+      if (!candidate || seenIds.has(candidate.id)) return false;
+      seenIds.add(candidate.id);
+      return true;
+    })
+    .slice(0, limit);
+
+  if (item.data.relatedFallback !== 'skills' || relatedItems.length >= limit) return relatedItems;
+
+  const remaining = limit - relatedItems.length;
+  const fallbackItems = allItems
     .filter((candidate) => candidate.id !== item.id && candidate.data.published)
     .map((candidate) => ({
       candidate,
-      score:
-        (explicitIds.has(candidate.id) ? 100 : 0) +
-        (candidate.data.skills ?? []).filter((skill) => itemSkills.includes(skill)).length
+      score: (candidate.data.skills ?? []).filter((skill) => itemSkills.includes(skill)).length
     }))
-    .filter(({ score }) => score > 0)
+    .filter(({ candidate, score }) => score > 0 && !seenIds.has(candidate.id))
     .sort((a, b) => b.score - a.score || monthIndex(b.candidate.data.dateEnd) - monthIndex(a.candidate.data.dateEnd))
-    .slice(0, limit)
+    .slice(0, remaining)
     .map(({ candidate }) => candidate);
+
+  return [...relatedItems, ...fallbackItems];
 }
 
 export interface TimelinePlacement {
