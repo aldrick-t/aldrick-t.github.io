@@ -20,3 +20,22 @@ export function getYouTubeEmbedUrl(url: string): string | undefined {
   if (!videoId || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) return undefined;
   return `https://www.youtube-nocookie.com/embed/${videoId}`;
 }
+
+export function isRemoteUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export function getPdfSourceUrl(entry: { path?: string; url?: string }): string | undefined {
+  return entry.path ?? entry.url;
+}
+
+export function getGeneratedPdfThumbnailPath(itemId: string, pdfPath: string): string {
+  const filename = pdfPath.split('/').pop() ?? '';
+  const basename = filename.replace(/\.pdf$/i, '');
+  return `/items/${itemId}/generated/${basename}-page-1.png`;
+}

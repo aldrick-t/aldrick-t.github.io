@@ -24,7 +24,12 @@ const itemThumbnailSchema = z.object({
   aspectRatio: z.string().regex(/^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/).optional()
 });
 
-const itemMediaSchema = z.discriminatedUnion('kind', [
+const itemMediaThumbnailSchema = z.object({
+  path: z.string().min(1),
+  alt: z.string().min(1)
+});
+
+const itemMediaSchema = z.union([
   z.object({
     kind: z.literal('image'),
     path: z.string().min(1),
@@ -37,6 +42,21 @@ const itemMediaSchema = z.discriminatedUnion('kind', [
     url: z.string().url(),
     title: z.string().min(1),
     caption: z.string().optional()
+  }),
+  z.object({
+    kind: z.literal('pdf'),
+    path: z.string().min(1).optional(),
+    url: z.string().url().optional(),
+    title: z.string().min(1),
+    caption: z.string().optional(),
+    thumbnail: itemMediaThumbnailSchema.optional()
+  }).superRefine((media, context) => {
+    if (Boolean(media.path) === Boolean(media.url)) {
+      context.addIssue({
+        code: 'custom',
+        message: 'PDF media requires exactly one of path or url'
+      });
+    }
   })
 ]);
 

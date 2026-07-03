@@ -1,6 +1,6 @@
 ---
 import type { ItemEntry } from '../lib/items';
-import { getYouTubeEmbedUrl } from '../lib/media';
+import { getGeneratedPdfThumbnailPath, getPdfSourceUrl, getYouTubeEmbedUrl } from '../lib/media';
 
 interface Props {
   item: ItemEntry;
@@ -29,17 +29,42 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
         );
       }
 
-      const embedUrl = getYouTubeEmbedUrl(entry.url);
-      return embedUrl ? (
-        <figure class="item-media-card item-media-card--video">
-          <iframe
-            src={embedUrl}
-            title={entry.title}
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          />
-          {entry.caption ? <figcaption>{entry.caption}</figcaption> : null}
+      if (entry.kind === 'youtube') {
+        const embedUrl = getYouTubeEmbedUrl(entry.url);
+        return embedUrl ? (
+          <figure class="item-media-card item-media-card--video">
+            <iframe
+              src={embedUrl}
+              title={entry.title}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            />
+            {entry.caption ? <figcaption>{entry.caption}</figcaption> : null}
+          </figure>
+        ) : null;
+      }
+
+      const pdfUrl = getPdfSourceUrl(entry);
+      const thumbnail = entry.thumbnail?.path ?? (entry.path ? getGeneratedPdfThumbnailPath(item.id, entry.path) : undefined);
+      const thumbnailAlt = entry.thumbnail?.alt ?? `${entry.title} first page preview`;
+
+      return pdfUrl ? (
+        <figure class="item-media-card item-media-card--pdf">
+          <a class="item-media-card__pdf-link" href={pdfUrl} target="_blank" rel="noreferrer noopener" aria-label={`Open PDF: ${entry.title}`}>
+            {thumbnail ? (
+              <span class="item-media-card__pdf-preview">
+                <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
+                <span class="item-media-card__pdf-badge">PDF</span>
+              </span>
+            ) : (
+              <span class="item-media-card__pdf-fallback">
+                <span class="item-media-card__pdf-badge">PDF</span>
+                <strong>{entry.title}</strong>
+              </span>
+            )}
+          </a>
+          <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
         </figure>
       ) : null;
     })}

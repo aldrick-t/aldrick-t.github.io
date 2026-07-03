@@ -4,14 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "npm run media:thumbnails && astro dev",
     "content:check": "node ./scripts/validate-content.mjs",
+    "media:thumbnails": "node ./scripts/generate-pdf-thumbnails.mjs",
     "new:item": "node ./scripts/new-item.mjs",
     "build:cv": "node ./scripts/build-cvs.mjs",
-    "build": "npm run content:check && astro build",
-    "build:all": "npm run content:check && npm run build:cv && astro build",
+    "build": "npm run media:thumbnails && npm run content:check && astro build",
+    "build:all": "npm run media:thumbnails && npm run content:check && npm run build:cv && astro build",
     "preview": "astro preview",
-    "check": "npm run content:check && astro check"
+    "check": "npm run media:thumbnails && npm run content:check && astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

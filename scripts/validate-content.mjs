@@ -8,6 +8,7 @@ const itemTranslationsDir = path.join(root, 'src', 'content', 'item-translations
 const errors = [];
 const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news']);
 const allowedLanguages = new Set(['es', 'ja']);
+const allowedImageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp']);
 const datePattern = /^\d{4}(-\d{2})?$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
@@ -41,6 +42,34 @@ function resolvePublicItemAsset(item, assetPath, label) {
   }
   const fullPath = path.join(root, 'public', assetPath);
   if (!existsSync(fullPath)) errors.push(`${item.file}: missing ${label} ${assetPath}`);
+}
+
+function getGeneratedPdfThumbnailPath(item, pdfPath) {
+  const filename = pdfPath.split('/').pop() ?? '';
+  const basename = filename.replace(/\.pdf$/i, '');
+  return `/items/${item.id}/generated/${basename}-page-1.png`;
+}
+
+function isHttpUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function validateItemMediaThumbnail(item, thumbnail, label) {
+  if (!thumbnail || typeof thumbnail !== 'object') {
+    errors.push(`${item.file}: ${label} thumbnail must be an object with path and alt`);
+    return;
+  }
+  if (!thumbnail.alt?.trim()) errors.push(`${item.file}: ${label} thumbnail requires alt text`);
+  resolvePublicItemAsset(item, thumbnail.path, `${label} thumbnail`);
+  const extension = path.extname(thumbnail.path ?? '').toLowerCase();
+  if (!allowedImageExtensions.has(extension)) {
+    errors.push(`${item.file}: ${label} thumbnail must be an image file`);
+  }
 }
 
 function getYouTubeEmbedUrl(url) {
@@ -118,6 +147,7 @@ for (const item of items) {
       errors.push(`${item.file}: thumbnail aspectRatio must be a numeric ratio such as 16 / 10`);
     }
   }
+  const generatedPdfThumbnails = new Map();
   for (const media of data.media ?? []) {
     if (media.kind === 'image') {
       if (!media.alt?.trim()) errors.push(`${item.file}: image media requires alt text`);
@@ -125,6 +155,32 @@ for (const item of items) {
     } else if (media.kind === 'youtube') {
       if (!media.title?.trim()) errors.push(`${item.file}: YouTube media requires title`);
       if (!getYouTubeEmbedUrl(media.url ?? '')) errors.push(`${item.file}: unsupported YouTube URL ${media.url}`);
+    } else if (media.kind === 'pdf') {
+      if (!media.title?.trim()) errors.push(`${item.file}: PDF media requires title`);
+      const hasPath = typeof media.path === 'string' && media.path.length > 0;
+      const hasUrl = typeof media.url === 'string' && media.url.length > 0;
+      if (hasPath === hasUrl) {
+        errors.push(`${item.file}: PDF media requires exactly one of path or url`);
+      } else if (hasPath) {
+        if (!media.path.startsWith(`/items/${item.id}/`)) {
+          errors.push(`${item.file}: PDF media must live under /items/${item.id}/`);
+        } else {
+          const extension = path.extname(media.path).toLowerCase();
+          if (extension !== '.pdf') errors.push(`${item.file}: PDF media path must end in .pdf`);
+          const fullPath = path.join(root, 'public', media.path);
+          if (!existsSync(fullPath)) errors.push(`${item.file}: missing PDF media ${media.path}`);
+        }
+        if (!media.thumbnail) {
+          const generatedPath = getGeneratedPdfThumbnailPath(item, media.path);
+          if (generatedPdfThumbnails.has(generatedPath)) {
+            errors.push(`${item.file}: duplicate generated PDF thumbnail ${generatedPath} for ${media.path} and ${generatedPdfThumbnails.get(generatedPath)}`);
+          }
+          generatedPdfThumbnails.set(generatedPath, media.path);
+        }
+      } else if (!isHttpUrl(media.url)) {
+        errors.push(`${item.file}: remote PDF media URL must use http or https`);
+      }
+      if (media.thumbnail) validateItemMediaThumbnail(item, media.thumbnail, 'PDF media');
     } else {
       errors.push(`${item.file}: unsupported media kind ${media.kind}`);
     }

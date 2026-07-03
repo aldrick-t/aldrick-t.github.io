@@ -41,6 +41,16 @@ media:
     url: "https://www.youtube.com/watch?v=exampleid12"
     title: "Video title for accessibility"
     caption: "Optional caption."
+  - kind: "pdf"
+    path: "/items/my-item/report.pdf"
+    title: "Report title"
+    caption: "Optional caption."
+  - kind: "pdf"
+    url: "https://example.com/report.pdf"
+    title: "External report title"
+    thumbnail:
+      path: "/items/my-item/external-report-thumbnail.webp"
+      alt: "Short description of the external report thumbnail."
 collaborators:
   - name: "Jane Doe"
     url: "https://www.linkedin.com/in/janedoe"
@@ -58,7 +68,9 @@ Write the complete item narrative after the frontmatter. Remove `featuredRank` u
 
 Use `relevanceRank` only when manually curating Portfolio Gallery relevance. Lower numbers appear first. Omit `relevanceRank` to let the baseline relevance sort use featured rank, item type, media availability, recency, and title.
 
-Store gallery thumbnails and media under `public/items/<item-slug>/`. Use `/items/<item-slug>/thumbnail.webp` for the main card image and descriptive names such as `/items/<item-slug>/prototype-test.webp` for supporting media. Content validation rejects missing thumbnail/media paths, empty alt/title text, duplicate published relevance ranks, and unsupported YouTube URLs.
+Store gallery thumbnails and media under `public/items/<item-slug>/`. Use `/items/<item-slug>/thumbnail.webp` for the main card image and descriptive names such as `/items/<item-slug>/prototype-test.webp` for supporting media. Content validation rejects missing thumbnail/media paths, empty alt/title text, duplicate published relevance ranks, unsupported YouTube URLs, and invalid PDF media sources.
+
+PDF media supports either a local `path` or a remote `url`, never both. Local PDFs must live under `public/items/<item-slug>/` and should use a `.pdf` extension. When a local PDF omits `thumbnail`, `npm run media:thumbnails` generates the first-page preview at `/items/<item-slug>/generated/<pdf-basename>-page-1.png`; these generated PNGs are ignored by Git. Remote PDFs are not fetched during builds. Add a local `thumbnail` to a remote PDF when you want a real preview image; otherwise the site renders a lightweight PDF fallback card.
 
 Use `collaborators` to credit people or organizations that worked on an item. Each collaborator needs a `name`; `url` is optional and may point to a website, LinkedIn, GitHub, Google Scholar, or a `mailto:` email link. Collaborators are canonical item metadata and should not be duplicated in translation files.
 

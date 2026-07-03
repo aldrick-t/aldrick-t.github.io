@@ -9,6 +9,7 @@ dist/
 # Generated CV artifacts
 cv/*.pdf
 public/cv/*.pdf
+public/items/**/generated/*.png
 
 # Local agent task memory; keep project onboarding docs versioned
 .agent/*
