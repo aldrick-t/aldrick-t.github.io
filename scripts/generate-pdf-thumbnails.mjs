@@ -8,11 +8,21 @@ const itemsDir = path.join(root, 'src', 'content', 'items');
 const publicDir = path.join(root, 'public');
 const thumbnailSuffix = '-page-1.png';
 
+function getMarkdownFiles(directory, prefix = '') {
+  return readdirSync(path.join(directory, prefix), { withFileTypes: true })
+    .flatMap((entry) => {
+      const relativePath = path.join(prefix, entry.name);
+      if (entry.isDirectory()) return getMarkdownFiles(directory, relativePath);
+      return entry.isFile() && entry.name.endsWith('.md') ? [relativePath] : [];
+    })
+    .sort();
+}
+
 function parseItem(file) {
   const source = readFileSync(path.join(itemsDir, file), 'utf8');
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) throw new Error(`${file}: missing YAML frontmatter`);
-  return { id: file.replace(/\.md$/, ''), file, data: load(match[1]) ?? {} };
+  return { id: path.basename(file, '.md'), file, data: load(match[1]) ?? {} };
 }
 
 function commandExists(command) {
@@ -36,10 +46,14 @@ function cleanGeneratedDirectory(itemId, expectedPaths) {
   }
 }
 
-const items = readdirSync(itemsDir)
-  .filter((file) => file.endsWith('.md'))
-  .sort()
+const items = getMarkdownFiles(itemsDir)
   .map(parseItem);
+const itemIds = new Map();
+for (const item of items) {
+  const existing = itemIds.get(item.id);
+  if (existing) throw new Error(`${item.file}: duplicate item slug ${item.id}; first seen in ${existing}`);
+  itemIds.set(item.id, item.file);
+}
 
 const tasks = [];
 const expectedByItem = new Map();

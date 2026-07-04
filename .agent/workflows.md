@@ -10,7 +10,7 @@
 
 ## Add or update an item
 
-1. Create a draft with `npm run new:item -- <kebab-case-slug> <type>` or edit an existing file in `src/content/items/`.
+1. Create a draft with `npm run new:item -- <kebab-case-slug> <type>` or edit an existing file under `src/content/items/`; canonical files are usually grouped in exact type folders.
 2. Use the schema in `docs/item-template.md`.
 3. Keep `published: false` until the body, links, dates, assets, and translations are ready.
 4. Use skill IDs from `src/data/skills.ts`.

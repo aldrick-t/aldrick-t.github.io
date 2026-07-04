@@ -4,7 +4,7 @@
 
 This is a static Astro portfolio. Route entrypoints live in `src/pages/`, with localized routes mirrored under `src/pages/[lang]/`. Reusable page sections and UI live in `src/components/`, shared layout in `src/layouts/BaseLayout.astro`, and global styling in `src/styles/global.css`.
 
-Canonical portfolio facts are Markdown files in `src/content/items/`. Localized item text belongs in `src/content/item-translations/es/` and `src/content/item-translations/ja/`; keep canonical metadata such as dates, skills, links, relations, publication flags, and assets in the English item only. Static public files go in `public/`, imported icons in `src/assets/icons/`, and hand-authored Typst CV sources in `cv/`.
+Canonical portfolio facts are Markdown files anywhere under `src/content/items/`, usually organized by exact item type such as `src/content/items/project/` or `src/content/items/work/`. Localized item text belongs in `src/content/item-translations/es/` and `src/content/item-translations/ja/`; keep canonical metadata such as dates, skills, links, relations, publication flags, and assets in the English item only. Static public files go in `public/`, imported icons in `src/assets/icons/`, and hand-authored Typst CV sources in `cv/`.
 
 ## Build, Test, and Development Commands
 

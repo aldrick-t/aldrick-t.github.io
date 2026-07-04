@@ -13,6 +13,16 @@ const datePattern = /^\d{4}(-\d{2})?$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
 
+function getMarkdownFiles(directory, prefix = '') {
+  return readdirSync(path.join(directory, prefix), { withFileTypes: true })
+    .flatMap((entry) => {
+      const relativePath = path.join(prefix, entry.name);
+      if (entry.isDirectory()) return getMarkdownFiles(directory, relativePath);
+      return entry.isFile() && entry.name.endsWith('.md') ? [relativePath] : [];
+    })
+    .sort();
+}
+
 function parseItem(file) {
   const source = readFileSync(path.join(itemsDir, file), 'utf8');
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
@@ -21,17 +31,25 @@ function parseItem(file) {
     return null;
   }
   try {
-    return { id: file.replace(/\.md$/, ''), file, data: load(match[1]), body: match[2].trim() };
+    return { id: path.basename(file, '.md'), file, data: load(match[1]), body: match[2].trim() };
   } catch (error) {
     errors.push(`${file}: invalid YAML (${error.message})`);
     return null;
   }
 }
 
-const files = readdirSync(itemsDir).filter((file) => file.endsWith('.md')).sort();
+const files = getMarkdownFiles(itemsDir);
 const items = files.map(parseItem).filter(Boolean);
-const ids = new Set(items.map((item) => item.id));
-const itemById = new Map(items.map((item) => [item.id, item]));
+const ids = new Set();
+const itemById = new Map();
+for (const item of items) {
+  if (ids.has(item.id)) {
+    errors.push(`${item.file}: duplicate item slug ${item.id}; item filenames must be unique across src/content/items`);
+    continue;
+  }
+  ids.add(item.id);
+  itemById.set(item.id, item);
+}
 const featuredRanks = new Map();
 const relevanceRanks = new Map();
 

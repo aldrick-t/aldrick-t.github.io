@@ -1,5 +1,5 @@
 ---
-import type { ItemEntry } from '../lib/items';
+import { getItemSlug, type ItemEntry } from '../lib/items';
 import { getGeneratedPdfThumbnailPath, getPdfSourceUrl, getYouTubeEmbedUrl } from '../lib/media';
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { item } = Astro.props;
+const slug = getItemSlug(item);
 const assets = item.data.assets ?? [];
 const explicitMedia = item.data.media ?? [];
 const links = item.data.links ?? [];
@@ -46,7 +47,7 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
       }
 
       const pdfUrl = getPdfSourceUrl(entry);
-      const thumbnail = entry.thumbnail?.path ?? (entry.path ? getGeneratedPdfThumbnailPath(item.id, entry.path) : undefined);
+      const thumbnail = entry.thumbnail?.path ?? (entry.path ? getGeneratedPdfThumbnailPath(slug, entry.path) : undefined);
       const thumbnailAlt = entry.thumbnail?.alt ?? `${entry.title} first page preview`;
 
       return pdfUrl ? (

@@ -1,7 +1,7 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { ItemEntry } from '../lib/items';
-import { formatDateRange, getRelatedItems, getSkillLabel, sortItems } from '../lib/items';
+import { formatDateRange, getItemSlug, getRelatedItems, getSkillLabel, sortItems } from '../lib/items';
 import { getItemTypeLabel, itemPath, localizePath, ui, type Language } from '../lib/i18n';
 import ItemMedia from './ItemMedia.astro';
 
@@ -14,9 +14,10 @@ interface Props {
 
 const { item, allItems, Content, lang = 'en' } = Astro.props;
 const labels = ui[lang];
+const slug = getItemSlug(item);
 const relatedItems = getRelatedItems(item, allItems);
 const portfolioItems = sortItems(allItems.filter((entry) => entry.data.portfolio));
-const index = portfolioItems.findIndex((entry) => entry.id === item.id);
+const index = portfolioItems.findIndex((entry) => getItemSlug(entry) === slug);
 const previous = index > 0 ? portfolioItems[index - 1] : undefined;
 const next = index >= 0 && index < portfolioItems.length - 1 ? portfolioItems[index + 1] : undefined;
 const media = item.data.media ?? [];
@@ -49,9 +50,9 @@ const hasMedia = media.length || assets.length || links.some((link) => link.kind
   {collaborators.length ? <section class="item-section" aria-labelledby="collaborators-title"><h2 id="collaborators-title">{labels.itemPage.collaborators}</h2><ul class="collaborator-list">{collaborators.map((collaborator) => <li>{collaborator.url ? <a href={collaborator.url} target={collaborator.url.startsWith('mailto:') ? undefined : '_blank'} rel={collaborator.url.startsWith('mailto:') ? undefined : 'noreferrer noopener'}>{collaborator.name}</a> : <span>{collaborator.name}</span>}</li>)}</ul></section> : null}
   {hasMedia ? <section class="item-section" aria-labelledby="media-title"><h2 id="media-title">{labels.itemPage.media}</h2><ItemMedia item={item} /></section> : null}
   {skills.length ? <section class="item-section" aria-labelledby="skills-title"><h2 id="skills-title">{labels.itemPage.skills}</h2><ul class="plain-tags">{skills.map((skill) => <li>{getSkillLabel(skill, lang)}</li>)}</ul></section> : null}
-  {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(related.id, lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
+  {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(getItemSlug(related), lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
   <nav class="item-pagination" aria-label={labels.itemPage.adjacentAria}>
-    {previous ? <a href={itemPath(previous.id, lang)}><span>{labels.itemPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
-    {next ? <a href={itemPath(next.id, lang)}><span>{labels.itemPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
+    {previous ? <a href={itemPath(getItemSlug(previous), lang)}><span>{labels.itemPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
+    {next ? <a href={itemPath(getItemSlug(next), lang)}><span>{labels.itemPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
   </nav>
 </article>

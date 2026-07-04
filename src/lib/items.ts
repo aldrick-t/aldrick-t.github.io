@@ -22,6 +22,11 @@ export const itemTypeOrder: ItemType[] = [
 
 const currentMonth = new Date().getFullYear() * 12 + new Date().getMonth();
 
+export function getItemSlug(item: Pick<ItemEntry, 'id'> | string): string {
+  const id = typeof item === 'string' ? item : item.id;
+  return id.split('/').filter(Boolean).pop() ?? id;
+}
+
 export function monthIndex(value: string): number {
   if (value === 'Present') return currentMonth;
   const [year, month = '01'] = value.split('-');
@@ -83,13 +88,15 @@ export function getSkillLabel(id: string, language: Language = 'en'): string {
 
 export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 4): ItemEntry[] {
   const itemSkills = item.data.skills ?? [];
-  const itemById = new Map(allItems.filter((candidate) => candidate.data.published).map((candidate) => [candidate.id, candidate]));
-  const seenIds = new Set<string>([item.id]);
+  const itemSlug = getItemSlug(item);
+  const itemBySlug = new Map(allItems.filter((candidate) => candidate.data.published).map((candidate) => [getItemSlug(candidate), candidate]));
+  const seenSlugs = new Set<string>([itemSlug]);
   const relatedItems = (item.data.relations ?? [])
-    .map((relation) => itemById.get(relation.id))
+    .map((relation) => itemBySlug.get(relation.id))
     .filter((candidate): candidate is ItemEntry => {
-      if (!candidate || seenIds.has(candidate.id)) return false;
-      seenIds.add(candidate.id);
+      const candidateSlug = candidate ? getItemSlug(candidate) : undefined;
+      if (!candidate || !candidateSlug || seenSlugs.has(candidateSlug)) return false;
+      seenSlugs.add(candidateSlug);
       return true;
     })
     .slice(0, limit);
@@ -98,12 +105,12 @@ export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 
 
   const remaining = limit - relatedItems.length;
   const fallbackItems = allItems
-    .filter((candidate) => candidate.id !== item.id && candidate.data.published)
+    .filter((candidate) => getItemSlug(candidate) !== itemSlug && candidate.data.published)
     .map((candidate) => ({
       candidate,
       score: (candidate.data.skills ?? []).filter((skill) => itemSkills.includes(skill)).length
     }))
-    .filter(({ candidate, score }) => score > 0 && !seenIds.has(candidate.id))
+    .filter(({ candidate, score }) => score > 0 && !seenSlugs.has(getItemSlug(candidate)))
     .sort((a, b) => b.score - a.score || monthIndex(b.candidate.data.dateEnd) - monthIndex(a.candidate.data.dateEnd))
     .slice(0, remaining)
     .map(({ candidate }) => candidate);
@@ -135,7 +142,7 @@ export function buildTimeline(items: ItemEntry[]) {
     }
     laneIntervals[lane].push([start, end]);
     const concurrent = sorted.filter((candidate) => {
-      if (candidate.id === item.id) return false;
+      if (getItemSlug(candidate) === getItemSlug(item)) return false;
       const candidateStart = monthIndex(candidate.data.dateStart);
       const candidateEnd = monthIndex(candidate.data.dateEnd);
       return start <= candidateEnd && end >= candidateStart;
