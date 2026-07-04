@@ -1,6 +1,6 @@
 ---
 title: "Telemetry Development Division Lead and Founder"
-type: "work"
+type: "project"
 summary: "Founded and led a telemetry division building resilient data-acquisition and firmware systems for an electric racing team."
 organization: "Electrum Performance Racing Team"
 dateStart: "2024-06"
