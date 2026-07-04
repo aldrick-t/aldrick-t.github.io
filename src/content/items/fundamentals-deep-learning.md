@@ -19,8 +19,8 @@ cvReview: ["engineering", "academic", "full"]
 media:
   - kind: "pdf"
     path: "/items/fundamentals-deep-learning/fundamentals-deep-learning-certificate.pdf"
-    alt: "Certificate of competency for Fundamentals of Deep Learning."
-    caption: "Certificate of competency."
+    title: "Certificate of Competency"
+    caption: "Issue Date: May 9, 2025"
 ---
 
 NVIDIA training covering the fundamental workflow for building and training deep-learning models.
