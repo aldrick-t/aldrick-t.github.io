@@ -14,6 +14,16 @@ tags: ["Mobile robotics", "Perception", "Autonomy"]
 published: true
 portfolio: true
 timeline: true
+media:
+  - kind: "youtube"
+    url: "https://youtu.be/C__XYonTsjs"
+    title: "Puzzlebot Final Challenge"
+    caption: "Demonstration of the Puzzlebot navigating a course with traffic signs and lights."
+collaborators:
+  - name: "Diego Quezada Colorado"
+    url: "https://www.linkedin.com/in/diegoquezadaco/"
+  - name: "Emanuel Vega"
+    url: "https://www.linkedin.com/in/emanueljvegag/"
 relations:
   - id: "bs-robotics-digital-systems"
     label: "Academic context"
