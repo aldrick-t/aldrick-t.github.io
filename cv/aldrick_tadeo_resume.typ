@@ -65,19 +65,6 @@ Robotics and embedded software engineer focused on ROS2-based autonomous systems
 - Developed NX Open plugins to employ NX workflows with internal tools and capture usage/error data with minimal impact to engineers. 
 - Built Grafana dashboards to track adoption, workflow bottlenecks, and reliability trends across CAD/PLM tooling. 
 
-#work(
-  title: "Telemetry Development Division Lead & Founder",
-  company: "Electrum Performance Racing Team",
-  dates: dates-helper(start-date: "Jun 2024", end-date: "Oct 2025"),
-  one-liner: true,
-)
-
-- Founded and led the Telemetry Division, building a robust real-time data acquisition system designed for high-stress environments. 
-- Developed failsafe telemetry solutions using serial communication protocols, reducing transmission failures by 15%. 
-- Improved cross-team collaboration by implementing Fusion 360's cloud-based version control, cutting design iteration times by 10%. 
-- Directed a cost optimization initiative, reducing manufacturing and component expenses by 35% while maintaining system reliability. 
-- Engineered firmware components to streamline workflows and enhance data accuracy across multiple vehicle subsystems.
-
 == Projects
 
 #project(
@@ -113,6 +100,18 @@ Robotics and embedded software engineer focused on ROS2-based autonomous systems
 - Built vision redundancy features, reducing false positives and lowering detection/decision error rates by 15%. 
 - Redesigned the ROS2 node-topic architecture, optimizing data throughput and minimizing system failure points.
 
+#project(
+  name: "Electrum Performance Racing Team",
+  role: "Telemetry Development Division Lead & Founder",
+  dates: dates-helper(start-date: "Jun 2024", end-date: "Oct 2025"),
+)
+
+- Founded and led the Telemetry Division, building a robust real-time data acquisition system designed for high-stress environments. 
+- Developed failsafe telemetry solutions using serial communication protocols, reducing transmission failures by 15%. 
+- Improved cross-team collaboration by implementing Fusion 360's cloud-based version control, cutting design iteration times by 10%. 
+- Directed a cost optimization initiative, reducing manufacturing and component expenses by 35% while maintaining system reliability. 
+- Engineered firmware components to streamline workflows and enhance data accuracy across multiple vehicle subsystems.
+
 == Skills
 
 #skills(
@@ -142,12 +141,7 @@ Robotics and embedded software engineer focused on ROS2-based autonomous systems
 
 #skills(
   category: "DevOps",
-  items: "Git/GitHub, CI/CD, Azure DevOps, Agile/Scrum, Unit Testing"
-)
-
-#skills(
-  category: "DevOps",
-  items: "Git/GitHub, CI/CD, Azure DevOps, Agile/Scrum, Unit Testing"
+  items: "Git/GitHub, CI/CD, Azure DevOps, Azure Pipelines, Github Actions, Agile/Scrum, Unit Testing"
 )
 
 == Certificates
