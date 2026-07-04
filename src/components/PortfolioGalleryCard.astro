@@ -1,6 +1,6 @@
 ---
 import type { ItemEntry } from '../lib/items';
-import { formatDateRange } from '../lib/items';
+import { formatDateRange, getItemSlug } from '../lib/items';
 import { getItemTypeLabel, itemPath, ui, type Language } from '../lib/i18n';
 
 interface Props {
@@ -45,7 +45,7 @@ const thumbnailImageStyle = [
   thumbnail?.objectFit ? `object-fit:${thumbnail.objectFit}` : undefined,
   thumbnail?.objectPosition ? `object-position:${thumbnail.objectPosition}` : undefined
 ].filter(Boolean).join(';');
-const itemUrl = itemPath(item.id, lang);
+const itemUrl = itemPath(getItemSlug(item), lang);
 const links = (item.data.links ?? []).slice(0, 2);
 const tags = item.data.tags ?? [];
 ---

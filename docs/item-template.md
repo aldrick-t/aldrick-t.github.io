@@ -1,6 +1,6 @@
 # Item template
 
-Use `npm run new:item -- my-item project` to create a draft, or copy this frontmatter into a new lowercase kebab-case file under `src/content/items/`.
+Use `npm run new:item -- my-item project` to create a draft at `src/content/items/project/my-item.md`, or copy this frontmatter into a new lowercase kebab-case file anywhere under `src/content/items/`.
 
 ```yaml
 ---
@@ -117,7 +117,7 @@ links:
 ---
 ```
 
-Write the localized narrative body after the frontmatter. Do not duplicate dates, skills, publication flags, collaborators, relations, or asset metadata in translation files; those remain canonical in `src/content/items/<slug>.md`.
+Write the localized narrative body after the frontmatter. Do not duplicate dates, skills, publication flags, collaborators, relations, or asset metadata in translation files; those remain canonical in the matching Markdown file under `src/content/items/`. Translation filenames, relation IDs, public URLs, and public assets continue to use the filename slug, not the folder path.
 
 ## CV synchronization
 

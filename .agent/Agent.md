@@ -1,6 +1,6 @@
 # Agent guide
 
-This repository is a static Astro portfolio for Aldrick Tadeo. Treat `src/content/items/*.md` as the canonical source for portfolio facts, keep localized content in the translation collection, and keep Typst CV sources manually authored.
+This repository is a static Astro portfolio for Aldrick Tadeo. Treat Markdown files anywhere under `src/content/items/` as the canonical source for portfolio facts, keep localized content in the translation collection, and keep Typst CV sources manually authored.
 
 ## Start here
 
