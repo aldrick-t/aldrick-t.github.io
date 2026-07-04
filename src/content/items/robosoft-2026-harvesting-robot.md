@@ -3,7 +3,7 @@ title: "Delicate Ripe Fruit Harvesting Robot"
 type: "project"
 summary: "A soft robotic harvesting system combining a UR5e manipulator, custom jamming gripper, and in-hand RGB-D perception."
 organization: "IEEE RoboSoft 2026 Manipulation Challenge"
-dateStart: "2025-08"
+dateStart: "2025-10"
 dateEnd: "2026-04"
 highlights:
   - "Co-developed a raspberry-inspired soft gripper with granular jamming for stiffness modulation."

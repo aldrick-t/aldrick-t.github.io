@@ -20,10 +20,19 @@ thumbnail:
   objectFit: "contain"
   objectPosition: "50% 50%"
   backgroundColor: "#ffffff"
+media:
+  - kind: "pdf"
+    path: "/items/ieee-robosoft-2026/ieee-robosoft-2026-participation.pdf"
+    title: "Certificate of Participation"
+    caption: "IEEE - RAS"
 relations:
   - id: "robosoft-2026-harvesting-robot"
     label: "Competition project"
 cvReview: ["academic", "full"]
+collaborators:
+  - name: "Carol Rodriguez"
+    url: "https://www.linkedin.com/in/carol-rodriguez-/"
 ---
 
 The conference visit centered on the Manipulation Challenge and the presentation of a complete robotic harvesting system developed by a four-member team with two participating members. The challenge involved picking raspberries from an artificial bush and placing them in a basket, with a scoring system based on the number of fruits collected and the accuracy of placement.
+
