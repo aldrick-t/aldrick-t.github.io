@@ -11,6 +11,11 @@ tags: ["Credential"]
 published: true
 portfolio: true
 timeline: false
+thumbnail:
+  path: "/items/generative-ai-diffusion-models/generated/GenAIwithDiffusionModels_aldrick_tadeo-page-1.png"
+  alt: "Centered cropped thumbnail."
+  objectFit: "cover"
+  objectPosition: "50% 50%"
 media:
   - kind: "pdf"
     path: "/items/generative-ai-diffusion-models/GenAIwithDiffusionModels_aldrick_tadeo.pdf"

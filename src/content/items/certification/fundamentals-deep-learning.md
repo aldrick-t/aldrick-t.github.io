@@ -11,6 +11,11 @@ tags: ["Credential"]
 published: true
 portfolio: true
 timeline: false
+thumbnail:
+  path: "/items/fundamentals-deep-learning/generated/fundamentals-deep-learning-certificate-page-1.png"
+  alt: "Centered cropped thumbnail."
+  objectFit: "contain"
+  objectPosition: "50% 50%"
 links:
   - kind: "credential"
     label: "Credential ID: W-y3ytgySYGKL1ps1Yh-EA"

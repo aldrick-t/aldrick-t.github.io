@@ -11,11 +11,16 @@ tags: ["Credential"]
 published: true
 portfolio: true
 timeline: false
-links:
-  - kind: "credential"
-    label: "Credential ID: 65a25e083f50497dba5f5538026087"
-    url: "https://opencv.org/university/"
+thumbnail:
+  path: "/items/opencv-bootcamp/generated/certificate-page-1.png"
+  alt: "Centered cropped thumbnail."
+  objectFit: "cover"
+  objectPosition: "50% 50%"
 cvReview: ["engineering", "academic", "full"]
+media:
+  - kind: "pdf"
+    path: "/items/opencv-bootcamp/certificate.pdf"
+    title: "Report title"
 ---
 
 Coursework covering core OpenCV techniques used in later robotics perception projects.

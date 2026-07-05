@@ -11,6 +11,11 @@ tags: ["Credential", "Industrial robotics"]
 published: true
 portfolio: true
 timeline: false
+thumbnail:
+  path: "/items/ur-e-series-tracks/generated/ur_proTrack-page-1.png"
+  alt: "Centered cropped thumbnail."
+  objectFit: "contain"
+  objectPosition: "50% 50%"
 media:
   - kind: "pdf"
     path: "/items/ur-e-series-tracks/ur_appTrack.pdf"
