@@ -11,10 +11,14 @@ tags: ["Credential"]
 published: true
 portfolio: true
 timeline: false
+media:
+  - kind: "pdf"
+    path: "/items/generative-ai-diffusion-models/GenAIwithDiffusionModels_aldrick_tadeo.pdf"
+    title: "Certificate of Competency"
 links:
   - kind: "credential"
-    label: "Credential ID: TauXuWfURMOBYNutOVkopw"
-    url: "https://learn.nvidia.com/"
+    label: "Credential ID: x91OqtdARUWi07HsVf5Vyg"
+    url: "https://learn.nvidia.com/certificates?id=x91OqtdARUWi07HsVf5Vyg"
 cvReview: ["engineering", "academic", "full"]
 ---
 
