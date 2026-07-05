@@ -1,8 +1,10 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { ItemEntry } from '../lib/items';
-import { formatDateRange, getRelatedItems, getSkillLabel, sortItems } from '../lib/items';
+import { formatDateRange, getItemSlug, getRelatedItems, getSkillLabel, sortItems } from '../lib/items';
 import { getItemTypeLabel, itemPath, localizePath, ui, type Language } from '../lib/i18n';
+import { getYouTubeEmbedUrl } from '../lib/media';
+import ItemLinkIcon from './ItemLinkIcon.astro';
 import ItemMedia from './ItemMedia.astro';
 
 interface Props {
@@ -14,9 +16,10 @@ interface Props {
 
 const { item, allItems, Content, lang = 'en' } = Astro.props;
 const labels = ui[lang];
+const slug = getItemSlug(item);
 const relatedItems = getRelatedItems(item, allItems);
 const portfolioItems = sortItems(allItems.filter((entry) => entry.data.portfolio));
-const index = portfolioItems.findIndex((entry) => entry.id === item.id);
+const index = portfolioItems.findIndex((entry) => getItemSlug(entry) === slug);
 const previous = index > 0 ? portfolioItems[index - 1] : undefined;
 const next = index >= 0 && index < portfolioItems.length - 1 ? portfolioItems[index + 1] : undefined;
 const media = item.data.media ?? [];
@@ -25,7 +28,7 @@ const links = item.data.links ?? [];
 const highlights = item.data.highlights ?? [];
 const collaborators = item.data.collaborators ?? [];
 const skills = item.data.skills ?? [];
-const hasMedia = media.length || assets.length || links.some((link) => link.kind === 'video');
+const hasMedia = media.length || assets.length || links.some((link) => link.kind === 'video' && getYouTubeEmbedUrl(link.url));
 ---
 
 <article class="shell page-stack item-page">
@@ -41,7 +44,16 @@ const hasMedia = media.length || assets.length || links.some((link) => link.kind
       {item.data.organization ? <p class="item-header__organization">{item.data.organization}{item.data.location ? ` · ${item.data.location}` : ''}</p> : null}
       <p class="item-header__summary">{item.data.summary}</p>
     </div>
-    {links.length ? <div class="item-links">{links.map((link, index) => <a class:list={{ button: true, 'button--primary': index === 0 }} href={link.url} target="_blank" rel="noreferrer noopener">{link.label} {labels.common.externalSuffix}</a>)}</div> : null}
+    {links.length ? (
+      <div class="item-links">
+        {links.map((link, index) => (
+          <a class:list={{ button: true, 'button--primary': index === 0, 'button--with-icon': true }} href={link.url} target="_blank" rel="noreferrer noopener">
+            <ItemLinkIcon kind={link.kind} icon={link.icon} />
+            <span>{link.label} {labels.common.externalSuffix}</span>
+          </a>
+        ))}
+      </div>
+    ) : null}
   </header>
 
   {highlights.length ? <section class="item-section" aria-labelledby="highlights-title"><h2 id="highlights-title">{labels.itemPage.highlights}</h2><ul class="highlight-list">{highlights.map((highlight) => <li>{highlight}</li>)}</ul></section> : null}
@@ -49,9 +61,9 @@ const hasMedia = media.length || assets.length || links.some((link) => link.kind
   {collaborators.length ? <section class="item-section" aria-labelledby="collaborators-title"><h2 id="collaborators-title">{labels.itemPage.collaborators}</h2><ul class="collaborator-list">{collaborators.map((collaborator) => <li>{collaborator.url ? <a href={collaborator.url} target={collaborator.url.startsWith('mailto:') ? undefined : '_blank'} rel={collaborator.url.startsWith('mailto:') ? undefined : 'noreferrer noopener'}>{collaborator.name}</a> : <span>{collaborator.name}</span>}</li>)}</ul></section> : null}
   {hasMedia ? <section class="item-section" aria-labelledby="media-title"><h2 id="media-title">{labels.itemPage.media}</h2><ItemMedia item={item} /></section> : null}
   {skills.length ? <section class="item-section" aria-labelledby="skills-title"><h2 id="skills-title">{labels.itemPage.skills}</h2><ul class="plain-tags">{skills.map((skill) => <li>{getSkillLabel(skill, lang)}</li>)}</ul></section> : null}
-  {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(related.id, lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
+  {relatedItems.length ? <section class="item-section" aria-labelledby="related-title"><h2 id="related-title">{labels.itemPage.related}</h2><div class="related-grid">{relatedItems.map((related) => <a href={itemPath(getItemSlug(related), lang)}><span>{getItemTypeLabel(related.data.type, lang, 'singular')}</span><strong>{related.data.title}</strong></a>)}</div></section> : null}
   <nav class="item-pagination" aria-label={labels.itemPage.adjacentAria}>
-    {previous ? <a href={itemPath(previous.id, lang)}><span>{labels.itemPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
-    {next ? <a href={itemPath(next.id, lang)}><span>{labels.itemPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
+    {previous ? <a href={itemPath(getItemSlug(previous), lang)}><span>{labels.itemPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
+    {next ? <a href={itemPath(getItemSlug(next), lang)}><span>{labels.itemPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
   </nav>
 </article>

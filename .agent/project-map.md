@@ -16,7 +16,7 @@
 - `src/layouts/BaseLayout.astro` - shared document shell, metadata, navigation, and page chrome.
 - `src/styles/global.css` - global design tokens and component styling.
 - `src/content.config.ts` - Astro content collection schemas for canonical items and translations.
-- `src/content/items/*.md` - canonical portfolio, career, education, award, course, publication, volunteering, and news records.
+- `src/content/items/**/*.md` - canonical portfolio, career, education, award, course, publication, volunteering, and news records, usually organized by exact item type folder.
 - `src/content/item-translations/es/*.md` - Spanish localized item text.
 - `src/content/item-translations/ja/*.md` - Japanese localized item text.
 - `src/lib/items.ts` - canonical item helpers.
@@ -40,6 +40,6 @@
 
 ## Content flow
 
-Canonical item Markdown feeds the homepage, portfolio, item detail pages, skill evidence, timeline, related items, and localized pages. Translation Markdown only overrides display text and body copy; canonical dates, skills, links, relations, publication flags, and assets stay in the English item file.
+Canonical item Markdown feeds the homepage, portfolio, item detail pages, skill evidence, timeline, related items, and localized pages. Item slugs come from Markdown filenames, not folder paths. Translation Markdown only overrides display text and body copy; canonical dates, skills, links, relations, publication flags, and assets stay in the English item file.
 
 CV files do not derive from Markdown at build time. The website content is the factual reference, but the Typst sources must be edited manually and reviewed as PDFs.

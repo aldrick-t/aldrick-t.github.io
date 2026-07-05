@@ -1,7 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Language } from './i18n';
 import { defaultLanguage } from './i18n';
-import type { ItemEntry } from './items';
+import { getItemSlug, type ItemEntry } from './items';
 
 export type ItemTranslationEntry = CollectionEntry<'itemTranslations'>;
 export type LocalizedItemEntry = ItemEntry & {
@@ -20,7 +20,7 @@ export async function getItemTranslations(language: Language): Promise<Map<strin
 }
 
 export function localizeItem(item: ItemEntry, translations: Map<string, ItemTranslationEntry>, language: Language): LocalizedItemEntry {
-  const translation = language === defaultLanguage ? undefined : translations.get(item.id);
+  const translation = language === defaultLanguage ? undefined : translations.get(getItemSlug(item));
   if (!translation) return item as LocalizedItemEntry;
 
   const links = item.data.links ?? [];

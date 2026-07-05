@@ -1,6 +1,7 @@
 const email = 'aldricktadeo@gmail.com';
 const githubUrl = 'https://github.com/aldrick-t';
 const linkedinUrl = 'https://www.linkedin.com/in/aldrick-t/';
+const tecEmail = 'aldricktadeo@exatec.tec.mx';
 
 export const siteConfig = {
   name: 'Aldrick Tadeo',
@@ -13,6 +14,7 @@ export const siteConfig = {
   availability: 'Open to robotics, software, research, and graduate study opportunities.',
   location: 'Mexico',
   email,
+  tecEmail,
   githubUrl,
   linkedinUrl,
   portfolioRoute: '/portfolio',
@@ -20,7 +22,7 @@ export const siteConfig = {
   contactLinks: [
     { label: 'LinkedIn', href: linkedinUrl, external: true, mail: false, icon: 'linkedin' },
     { label: 'GitHub', href: githubUrl, external: true, mail: false, icon: 'github' },
-    { label: 'Email', href: `mailto:${email}`, external: false, mail: true, icon: 'email' }
+    { label: 'Email', href: `mailto:${email}`, external: false, mail: true, icon: 'email' },
   ],
   researchInterests: [
     'Sim-to-real robotics and digital twins',

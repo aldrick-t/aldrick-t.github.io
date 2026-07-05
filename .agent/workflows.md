@@ -4,18 +4,20 @@
 
 1. Confirm the worktree status with `git status --short`.
 2. Install dependencies with `npm ci`.
-3. Run `npm run content:check` to verify content, translations, skills, assets, and CV manifest consistency.
-4. Start development with `npm run dev` when visual inspection is needed.
+3. Run `npm run media:thumbnails` to generate local PDF media thumbnails when needed.
+4. Run `npm run content:check` to verify content, translations, skills, assets, and CV manifest consistency.
+5. Start development with `npm run dev` when visual inspection is needed.
 
 ## Add or update an item
 
-1. Create a draft with `npm run new:item -- <kebab-case-slug> <type>` or edit an existing file in `src/content/items/`.
+1. Create a draft with `npm run new:item -- <kebab-case-slug> <type>` or edit an existing file under `src/content/items/`; canonical files are usually grouped in exact type folders.
 2. Use the schema in `docs/item-template.md`.
 3. Keep `published: false` until the body, links, dates, assets, and translations are ready.
 4. Use skill IDs from `src/data/skills.ts`.
 5. Ensure relation IDs point to existing canonical item slugs.
 6. Add localized text under `src/content/item-translations/es/` and `src/content/item-translations/ja/` when the item is public or when the owner asks for localization.
-7. Run `npm run content:check`.
+7. For local PDF media without manual thumbnails, run `npm run media:thumbnails`.
+8. Run `npm run content:check`.
 
 ## Update translations
 

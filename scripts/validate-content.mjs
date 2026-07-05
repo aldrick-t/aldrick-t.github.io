@@ -8,9 +8,23 @@ const itemTranslationsDir = path.join(root, 'src', 'content', 'item-translations
 const errors = [];
 const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news']);
 const allowedLanguages = new Set(['es', 'ja']);
+const allowedImageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp']);
+const allowedLinkKinds = new Set(['site', 'repository', 'publication', 'credential', 'video', 'file', 'other']);
+const allowedLinkIcons = new Set(['site', 'github', 'publication', 'credential', 'video', 'file', 'external', 'other']);
+const allowedVideoExtensions = new Set(['.mp4', '.webm']);
 const datePattern = /^\d{4}(-\d{2})?$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
+
+function getMarkdownFiles(directory, prefix = '') {
+  return readdirSync(path.join(directory, prefix), { withFileTypes: true })
+    .flatMap((entry) => {
+      const relativePath = path.join(prefix, entry.name);
+      if (entry.isDirectory()) return getMarkdownFiles(directory, relativePath);
+      return entry.isFile() && entry.name.endsWith('.md') ? [relativePath] : [];
+    })
+    .sort();
+}
 
 function parseItem(file) {
   const source = readFileSync(path.join(itemsDir, file), 'utf8');
@@ -20,27 +34,71 @@ function parseItem(file) {
     return null;
   }
   try {
-    return { id: file.replace(/\.md$/, ''), file, data: load(match[1]), body: match[2].trim() };
+    return { id: path.basename(file, '.md'), file, data: load(match[1]), body: match[2].trim() };
   } catch (error) {
     errors.push(`${file}: invalid YAML (${error.message})`);
     return null;
   }
 }
 
-const files = readdirSync(itemsDir).filter((file) => file.endsWith('.md')).sort();
+const files = getMarkdownFiles(itemsDir);
 const items = files.map(parseItem).filter(Boolean);
-const ids = new Set(items.map((item) => item.id));
-const itemById = new Map(items.map((item) => [item.id, item]));
+const ids = new Set();
+const itemById = new Map();
+for (const item of items) {
+  if (ids.has(item.id)) {
+    errors.push(`${item.file}: duplicate item slug ${item.id}; item filenames must be unique across src/content/items`);
+    continue;
+  }
+  ids.add(item.id);
+  itemById.set(item.id, item);
+}
 const featuredRanks = new Map();
 const relevanceRanks = new Map();
 
 function resolvePublicItemAsset(item, assetPath, label) {
   if (!assetPath?.startsWith(`/items/${item.id}/`)) {
     errors.push(`${item.file}: ${label} must live under /items/${item.id}/`);
-    return;
+    return false;
   }
   const fullPath = path.join(root, 'public', assetPath);
-  if (!existsSync(fullPath)) errors.push(`${item.file}: missing ${label} ${assetPath}`);
+  if (!existsSync(fullPath)) {
+    errors.push(`${item.file}: missing ${label} ${assetPath}`);
+    return false;
+  }
+  return true;
+}
+
+function getGeneratedPdfThumbnailPath(item, pdfPath) {
+  const filename = pdfPath.split('/').pop() ?? '';
+  const basename = filename.replace(/\.pdf$/i, '');
+  return `/items/${item.id}/generated/${basename}-page-1.png`;
+}
+
+function isHttpUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function isLocalItemAssetPath(item, value) {
+  return typeof value === 'string' && value.startsWith(`/items/${item.id}/`);
+}
+
+function validateItemMediaThumbnail(item, thumbnail, label) {
+  if (!thumbnail || typeof thumbnail !== 'object') {
+    errors.push(`${item.file}: ${label} thumbnail must be an object with path and alt`);
+    return;
+  }
+  if (!thumbnail.alt?.trim()) errors.push(`${item.file}: ${label} thumbnail requires alt text`);
+  resolvePublicItemAsset(item, thumbnail.path, `${label} thumbnail`);
+  const extension = path.extname(thumbnail.path ?? '').toLowerCase();
+  if (!allowedImageExtensions.has(extension)) {
+    errors.push(`${item.file}: ${label} thumbnail must be an image file`);
+  }
 }
 
 function getYouTubeEmbedUrl(url) {
@@ -88,7 +146,16 @@ for (const item of items) {
     if (!ids.has(relation.id)) errors.push(`${item.file}: broken relation ${relation.id}`);
   }
   for (const link of data.links ?? []) {
-    try { new URL(link.url); } catch { errors.push(`${item.file}: invalid link URL ${link.url}`); }
+    if (!allowedLinkKinds.has(link.kind)) errors.push(`${item.file}: unsupported link kind ${link.kind}`);
+    if (!link.label?.trim()) errors.push(`${item.file}: link requires label`);
+    if (link.icon !== undefined && !allowedLinkIcons.has(link.icon)) {
+      errors.push(`${item.file}: unsupported link icon ${link.icon}`);
+    }
+    if (isLocalItemAssetPath(item, link.url)) {
+      resolvePublicItemAsset(item, link.url, 'link URL');
+    } else if (!isHttpUrl(link.url)) {
+      errors.push(`${item.file}: link URL must be http(s) or live under /items/${item.id}/`);
+    }
   }
   for (const collaborator of data.collaborators ?? []) {
     if (!collaborator || typeof collaborator !== 'object') {
@@ -118,6 +185,7 @@ for (const item of items) {
       errors.push(`${item.file}: thumbnail aspectRatio must be a numeric ratio such as 16 / 10`);
     }
   }
+  const generatedPdfThumbnails = new Map();
   for (const media of data.media ?? []) {
     if (media.kind === 'image') {
       if (!media.alt?.trim()) errors.push(`${item.file}: image media requires alt text`);
@@ -125,6 +193,41 @@ for (const item of items) {
     } else if (media.kind === 'youtube') {
       if (!media.title?.trim()) errors.push(`${item.file}: YouTube media requires title`);
       if (!getYouTubeEmbedUrl(media.url ?? '')) errors.push(`${item.file}: unsupported YouTube URL ${media.url}`);
+    } else if (media.kind === 'video') {
+      if (!media.title?.trim()) errors.push(`${item.file}: video media requires title`);
+      if (resolvePublicItemAsset(item, media.path, 'video media')) {
+        const extension = path.extname(media.path).toLowerCase();
+        if (!allowedVideoExtensions.has(extension)) {
+          errors.push(`${item.file}: video media path must end in ${[...allowedVideoExtensions].join(' or ')}`);
+        }
+      }
+      if (media.poster) validateItemMediaThumbnail(item, media.poster, 'video media poster');
+    } else if (media.kind === 'pdf') {
+      if (!media.title?.trim()) errors.push(`${item.file}: PDF media requires title`);
+      const hasPath = typeof media.path === 'string' && media.path.length > 0;
+      const hasUrl = typeof media.url === 'string' && media.url.length > 0;
+      if (hasPath === hasUrl) {
+        errors.push(`${item.file}: PDF media requires exactly one of path or url`);
+      } else if (hasPath) {
+        if (resolvePublicItemAsset(item, media.path, 'PDF media')) {
+          const extension = path.extname(media.path).toLowerCase();
+          if (extension !== '.pdf') errors.push(`${item.file}: PDF media path must end in .pdf`);
+        }
+        if (!media.thumbnail) {
+          const generatedPath = getGeneratedPdfThumbnailPath(item, media.path);
+          if (generatedPdfThumbnails.has(generatedPath)) {
+            errors.push(`${item.file}: duplicate generated PDF thumbnail ${generatedPath} for ${media.path} and ${generatedPdfThumbnails.get(generatedPath)}`);
+          }
+          generatedPdfThumbnails.set(generatedPath, media.path);
+        }
+      } else if (!isHttpUrl(media.url)) {
+        errors.push(`${item.file}: remote PDF media URL must use http or https`);
+      }
+      if (media.thumbnail) validateItemMediaThumbnail(item, media.thumbnail, 'PDF media');
+    } else if (media.kind === 'file') {
+      if (!media.title?.trim()) errors.push(`${item.file}: file media requires title`);
+      resolvePublicItemAsset(item, media.path, 'file media');
+      if (media.thumbnail) validateItemMediaThumbnail(item, media.thumbnail, 'file media');
     } else {
       errors.push(`${item.file}: unsupported media kind ${media.kind}`);
     }

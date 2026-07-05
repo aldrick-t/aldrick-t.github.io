@@ -1,12 +1,27 @@
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+
+function getMarkdownFiles(directory, prefix = '') {
+  if (!existsSync(path.join(directory, prefix))) return [];
+  return readdirSync(path.join(directory, prefix), { withFileTypes: true })
+    .flatMap((entry) => {
+      const relativePath = path.join(prefix, entry.name);
+      if (entry.isDirectory()) return getMarkdownFiles(directory, relativePath);
+      return entry.isFile() && entry.name.endsWith('.md') ? [relativePath] : [];
+    })
+    .sort();
+}
 
 const [slug, type = 'project'] = process.argv.slice(2);
 const types = ['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news'];
 if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error('Usage: npm run new:item -- <kebab-case-slug> [type]');
 if (!types.includes(type)) throw new Error(`Type must be one of: ${types.join(', ')}`);
-const output = path.join(process.cwd(), 'src', 'content', 'items', `${slug}.md`);
-if (existsSync(output)) throw new Error(`${output} already exists`);
+const itemsDir = path.join(process.cwd(), 'src', 'content', 'items');
+const existing = getMarkdownFiles(itemsDir).find((file) => path.basename(file, '.md') === slug);
+if (existing) throw new Error(`Item slug ${slug} already exists at ${path.join(itemsDir, existing)}`);
+const outputDir = path.join(itemsDir, type);
+const output = path.join(outputDir, `${slug}.md`);
+mkdirSync(outputDir, { recursive: true });
 
 const title = slug.split('-').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ');
 writeFileSync(output, `---
@@ -22,6 +37,9 @@ published: false
 portfolio: true
 timeline: false
 # relevanceRank: 1
+# links kind: site, repository, publication, credential, video, file, other
+# link url accepts http(s) or /items/${slug}/...
+# optional link icon: site, github, publication, credential, video, file, external, other
 links: []
 assets: []
 # thumbnail:
@@ -31,6 +49,7 @@ assets: []
 #   objectPosition: "50% 50%"
 #   backgroundColor: "#ffffff"
 #   aspectRatio: "16 / 10"
+# media kind: image, youtube, video, pdf, file
 media: []
 collaborators: []
 relations: []

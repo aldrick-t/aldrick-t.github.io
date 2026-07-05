@@ -79,7 +79,7 @@ See `docs/item-template.md` for the full frontmatter schema and CV synchronizati
 │   ├── assets/icons/               # Skill and UI icons imported by components
 │   ├── components/                 # Astro page sections and reusable UI
 │   ├── config/                     # Site-level configuration
-│   ├── content/items/              # Canonical item Markdown
+│   ├── content/items/              # Canonical item Markdown, organized by type
 │   ├── content/item-translations/  # Spanish and Japanese localized item text
 │   ├── data/                       # Profile, CV, and skill data
 │   ├── layouts/                    # Shared Astro document layout
@@ -94,7 +94,7 @@ See `docs/item-template.md` for the full frontmatter schema and CV synchronizati
 
 ## Content model
 
-- `src/content/items/*.md` contains canonical projects, work, education, publications, conferences, awards, courses, certifications, volunteering, and news.
+- `src/content/items/**/*.md` contains canonical projects, work, education, publications, conferences, awards, courses, certifications, volunteering, and news. Files are usually grouped by exact frontmatter `type` value, while public slugs come from the Markdown filename.
 - `src/content/item-translations/{es,ja}/*.md` contains localized item titles, summaries, highlights, tags, link labels, and body copy. Missing translations fall back to English.
 - `src/data/skills.ts` defines canonical skill IDs and groups. Item-to-skill relationships are derived from each item's `skills` field.
 - `src/config/site.ts` defines the public site URL, personal introduction, and contact links.

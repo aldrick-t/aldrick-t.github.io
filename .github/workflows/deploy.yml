@@ -26,6 +26,9 @@ jobs:
       - name: Setup Typst
         uses: typst-community/setup-typst@v4
 
+      - name: Install PDF thumbnail tools
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -40,6 +43,9 @@ jobs:
 
       - name: Compile CV PDFs
         run: npm run build:cv
+
+      - name: Generate media thumbnails
+        run: npm run media:thumbnails
 
       - name: Build site
         run: npx astro build
