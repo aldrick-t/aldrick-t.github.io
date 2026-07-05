@@ -13,8 +13,8 @@ portfolio: true
 timeline: false
 links:
   - kind: "credential"
-    label: "Credential ID: 1tO0Ys3ITkGJkXM3sgBKrQ"
-    url: "https://learn.nvidia.com/"
+    label: "Credential ID: W-y3ytgySYGKL1ps1Yh-EA"
+    url: "https://learn.nvidia.com/certificates?id=W-y3ytgySYGKL1ps1Yh-EA#"
 cvReview: ["engineering", "academic", "full"]
 media:
   - kind: "pdf"
