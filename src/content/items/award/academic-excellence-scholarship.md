@@ -9,7 +9,7 @@ highlights:
   - "Awarded throughout the undergraduate engineering program."
 skills: []
 tags: ["Academic achievement"]
-published: true
+published: false
 portfolio: true
 timeline: true
 relations:

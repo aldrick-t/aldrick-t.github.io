@@ -9,8 +9,8 @@ highlights:
   - "Presented a mobile-robot autonomy and perception system."
 skills: ["ros2", "computer-vision", "robot-control"]
 tags: ["Engineering expo", "Robotics"]
-published: true
-portfolio: true
+published: false
+portfolio: false
 timeline: false
 relations:
   - id: "computer-vision-autonomous-navigation"

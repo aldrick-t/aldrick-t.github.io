@@ -13,6 +13,15 @@ tags: ["STEM outreach", "Community service"]
 published: true
 portfolio: true
 timeline: true
+links:
+  - kind: "repository"
+    label: "GitHub"
+    url: "https://github.com/aldrick-t/clinica-koi-ss"
+collaborators:
+  - name: "Diego Quezada Colorado"
+    url: "https://www.linkedin.com/in/diegoquezadaco/"
+  - name: "Emanuel Vega"
+    url: "https://www.linkedin.com/in/emanueljvegag/"
 cvReview: ["academic", "full"]
 ---
 
