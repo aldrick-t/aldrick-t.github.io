@@ -10,6 +10,7 @@ const { lang = 'en' } = Astro.props;
 const labels = ui[lang];
 const contacts = [
   { label: labels.footer.email, value: siteConfig.email, href: `mailto:${siteConfig.email}`, external: false },
+  { label: 'Inst. Email', value: siteConfig.tecEmail, href: `mailto:${siteConfig.tecEmail}`, external: false },
   { label: 'GitHub', value: 'github.com/aldrick-t', href: siteConfig.githubUrl, external: true },
   { label: 'LinkedIn', value: 'linkedin.com/in/aldrick-t', href: siteConfig.linkedinUrl, external: true }
 ];
