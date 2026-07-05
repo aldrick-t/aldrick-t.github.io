@@ -14,11 +14,28 @@ tags: ["Mobile robotics", "Perception", "Autonomy"]
 published: true
 portfolio: true
 timeline: true
-media:
-  - kind: "youtube"
+thumbnail:
+  path: "/items/computer-vision-autonomous-navigation/thumbnail.png"
+  alt: "Robot arm aligning a gripper over a test plant."
+  objectFit: "contain"
+  objectPosition: "50% 50%"
+links:
+  - kind: "repository"
+    label: "GitHub"
+    url: "https://github.com/aldrick-t/puzzlebot-emdial"
+  - kind: "file"
+    label: "Poster"
+    url: "/items/computer-vision-autonomous-navigation/Poster-Puzzlebot-Emdial.pdf"
+    icon: "publication"
+  - kind: "video"
+    label: "Presentation Video (ES)"
     url: "https://youtu.be/C__XYonTsjs"
-    title: "Puzzlebot Final Challenge"
-    caption: "Demonstration of the Puzzlebot navigating a course with traffic signs and lights."
+    icon: "video"
+media:
+  - kind: "pdf"
+    path: "/items/computer-vision-autonomous-navigation/Poster-Puzzlebot-Emdial.pdf"
+    title: "Poster"
+    caption: "Presented at Expo Ingenierías 2025."
 collaborators:
   - name: "Diego Quezada Colorado"
     url: "https://www.linkedin.com/in/diegoquezadaco/"
