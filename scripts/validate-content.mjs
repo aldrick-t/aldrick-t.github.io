@@ -9,6 +9,9 @@ const errors = [];
 const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news']);
 const allowedLanguages = new Set(['es', 'ja']);
 const allowedImageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp']);
+const allowedLinkKinds = new Set(['site', 'repository', 'publication', 'credential', 'video', 'file', 'other']);
+const allowedLinkIcons = new Set(['site', 'github', 'publication', 'credential', 'video', 'file', 'external', 'other']);
+const allowedVideoExtensions = new Set(['.mp4', '.webm']);
 const datePattern = /^\d{4}(-\d{2})?$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
@@ -56,10 +59,14 @@ const relevanceRanks = new Map();
 function resolvePublicItemAsset(item, assetPath, label) {
   if (!assetPath?.startsWith(`/items/${item.id}/`)) {
     errors.push(`${item.file}: ${label} must live under /items/${item.id}/`);
-    return;
+    return false;
   }
   const fullPath = path.join(root, 'public', assetPath);
-  if (!existsSync(fullPath)) errors.push(`${item.file}: missing ${label} ${assetPath}`);
+  if (!existsSync(fullPath)) {
+    errors.push(`${item.file}: missing ${label} ${assetPath}`);
+    return false;
+  }
+  return true;
 }
 
 function getGeneratedPdfThumbnailPath(item, pdfPath) {
@@ -75,6 +82,10 @@ function isHttpUrl(value) {
   } catch {
     return false;
   }
+}
+
+function isLocalItemAssetPath(item, value) {
+  return typeof value === 'string' && value.startsWith(`/items/${item.id}/`);
 }
 
 function validateItemMediaThumbnail(item, thumbnail, label) {
@@ -135,7 +146,16 @@ for (const item of items) {
     if (!ids.has(relation.id)) errors.push(`${item.file}: broken relation ${relation.id}`);
   }
   for (const link of data.links ?? []) {
-    try { new URL(link.url); } catch { errors.push(`${item.file}: invalid link URL ${link.url}`); }
+    if (!allowedLinkKinds.has(link.kind)) errors.push(`${item.file}: unsupported link kind ${link.kind}`);
+    if (!link.label?.trim()) errors.push(`${item.file}: link requires label`);
+    if (link.icon !== undefined && !allowedLinkIcons.has(link.icon)) {
+      errors.push(`${item.file}: unsupported link icon ${link.icon}`);
+    }
+    if (isLocalItemAssetPath(item, link.url)) {
+      resolvePublicItemAsset(item, link.url, 'link URL');
+    } else if (!isHttpUrl(link.url)) {
+      errors.push(`${item.file}: link URL must be http(s) or live under /items/${item.id}/`);
+    }
   }
   for (const collaborator of data.collaborators ?? []) {
     if (!collaborator || typeof collaborator !== 'object') {
@@ -173,6 +193,15 @@ for (const item of items) {
     } else if (media.kind === 'youtube') {
       if (!media.title?.trim()) errors.push(`${item.file}: YouTube media requires title`);
       if (!getYouTubeEmbedUrl(media.url ?? '')) errors.push(`${item.file}: unsupported YouTube URL ${media.url}`);
+    } else if (media.kind === 'video') {
+      if (!media.title?.trim()) errors.push(`${item.file}: video media requires title`);
+      if (resolvePublicItemAsset(item, media.path, 'video media')) {
+        const extension = path.extname(media.path).toLowerCase();
+        if (!allowedVideoExtensions.has(extension)) {
+          errors.push(`${item.file}: video media path must end in ${[...allowedVideoExtensions].join(' or ')}`);
+        }
+      }
+      if (media.poster) validateItemMediaThumbnail(item, media.poster, 'video media poster');
     } else if (media.kind === 'pdf') {
       if (!media.title?.trim()) errors.push(`${item.file}: PDF media requires title`);
       const hasPath = typeof media.path === 'string' && media.path.length > 0;
@@ -180,13 +209,9 @@ for (const item of items) {
       if (hasPath === hasUrl) {
         errors.push(`${item.file}: PDF media requires exactly one of path or url`);
       } else if (hasPath) {
-        if (!media.path.startsWith(`/items/${item.id}/`)) {
-          errors.push(`${item.file}: PDF media must live under /items/${item.id}/`);
-        } else {
+        if (resolvePublicItemAsset(item, media.path, 'PDF media')) {
           const extension = path.extname(media.path).toLowerCase();
           if (extension !== '.pdf') errors.push(`${item.file}: PDF media path must end in .pdf`);
-          const fullPath = path.join(root, 'public', media.path);
-          if (!existsSync(fullPath)) errors.push(`${item.file}: missing PDF media ${media.path}`);
         }
         if (!media.thumbnail) {
           const generatedPath = getGeneratedPdfThumbnailPath(item, media.path);
@@ -199,6 +224,10 @@ for (const item of items) {
         errors.push(`${item.file}: remote PDF media URL must use http or https`);
       }
       if (media.thumbnail) validateItemMediaThumbnail(item, media.thumbnail, 'PDF media');
+    } else if (media.kind === 'file') {
+      if (!media.title?.trim()) errors.push(`${item.file}: file media requires title`);
+      resolvePublicItemAsset(item, media.path, 'file media');
+      if (media.thumbnail) validateItemMediaThumbnail(item, media.thumbnail, 'file media');
     } else {
       errors.push(`${item.file}: unsupported media kind ${media.kind}`);
     }

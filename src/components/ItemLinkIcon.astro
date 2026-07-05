@@ -1,0 +1,43 @@
+---
+import credentialIcon from '../assets/icons/ui/status.svg?raw';
+import externalIcon from '../assets/icons/ui/external.svg?raw';
+import fileIcon from '../assets/icons/ui/file.svg?raw';
+import githubIcon from '../assets/icons/ui/github.svg?raw';
+import publicationIcon from '../assets/icons/ui/pdf.svg?raw';
+import siteIcon from '../assets/icons/ui/site.svg?raw';
+import videoIcon from '../assets/icons/ui/video.svg?raw';
+
+interface Props {
+  kind: string;
+  icon?: string;
+}
+
+const { kind, icon } = Astro.props;
+
+const iconRegistry = {
+  site: siteIcon,
+  github: githubIcon,
+  publication: publicationIcon,
+  credential: credentialIcon,
+  video: videoIcon,
+  file: fileIcon,
+  external: externalIcon,
+  other: externalIcon
+} satisfies Record<string, string>;
+
+const defaultIconsByKind: Record<string, keyof typeof iconRegistry> = {
+  site: 'site',
+  repository: 'github',
+  publication: 'publication',
+  credential: 'credential',
+  video: 'video',
+  file: 'file',
+  other: 'other'
+};
+
+const iconKey = icon && icon in iconRegistry
+  ? (icon as keyof typeof iconRegistry)
+  : defaultIconsByKind[kind] ?? 'external';
+---
+
+<span class="item-link-icon" aria-hidden="true" set:html={iconRegistry[iconKey]} />

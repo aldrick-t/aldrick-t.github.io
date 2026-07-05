@@ -30,6 +30,10 @@ export function isRemoteUrl(value: string): boolean {
   }
 }
 
+export function isLocalItemPath(value: string): boolean {
+  return value.startsWith('/items/');
+}
+
 export function getPdfSourceUrl(entry: { path?: string; url?: string }): string | undefined {
   return entry.path ?? entry.url;
 }
@@ -38,4 +42,17 @@ export function getGeneratedPdfThumbnailPath(itemId: string, pdfPath: string): s
   const filename = pdfPath.split('/').pop() ?? '';
   const basename = filename.replace(/\.pdf$/i, '');
   return `/items/${itemId}/generated/${basename}-page-1.png`;
+}
+
+export function getFileExtensionLabel(filePath: string): string {
+  const filename = filePath.split('/').pop() ?? '';
+  const extension = filename.includes('.') ? filename.split('.').pop() : undefined;
+  return extension ? extension.toUpperCase() : 'FILE';
+}
+
+export function getVideoMimeType(videoPath: string): string | undefined {
+  const extension = videoPath.split('.').pop()?.toLowerCase();
+  if (extension === 'mp4') return 'video/mp4';
+  if (extension === 'webm') return 'video/webm';
+  return undefined;
 }

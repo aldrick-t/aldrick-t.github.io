@@ -2,10 +2,25 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+const itemLinkIconKeys = ['site', 'github', 'publication', 'credential', 'video', 'file', 'external', 'other'] as const;
+
+const isRemoteOrItemPath = (value: string) => {
+  if (value.startsWith('/items/')) return true;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
 const itemLinkSchema = z.object({
-  kind: z.enum(['site', 'repository', 'publication', 'credential', 'video', 'other']),
+  kind: z.enum(['site', 'repository', 'publication', 'credential', 'video', 'file', 'other']),
   label: z.string().min(1),
-  url: z.string().url()
+  url: z.string().min(1).refine(isRemoteOrItemPath, {
+    message: 'Link URL must be an http(s) URL or a local /items/ path'
+  }),
+  icon: z.enum(itemLinkIconKeys).optional()
 });
 
 const itemAssetSchema = z.object({
@@ -44,6 +59,13 @@ const itemMediaSchema = z.union([
     caption: z.string().optional()
   }),
   z.object({
+    kind: z.literal('video'),
+    path: z.string().min(1),
+    title: z.string().min(1),
+    caption: z.string().optional(),
+    poster: itemMediaThumbnailSchema.optional()
+  }),
+  z.object({
     kind: z.literal('pdf'),
     path: z.string().min(1).optional(),
     url: z.string().url().optional(),
@@ -57,6 +79,13 @@ const itemMediaSchema = z.union([
         message: 'PDF media requires exactly one of path or url'
       });
     }
+  }),
+  z.object({
+    kind: z.literal('file'),
+    path: z.string().min(1),
+    title: z.string().min(1),
+    caption: z.string().optional(),
+    thumbnail: itemMediaThumbnailSchema.optional()
   })
 ]);
 

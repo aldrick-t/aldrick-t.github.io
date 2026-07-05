@@ -1,6 +1,6 @@
 ---
 import { getItemSlug, type ItemEntry } from '../lib/items';
-import { getGeneratedPdfThumbnailPath, getPdfSourceUrl, getYouTubeEmbedUrl } from '../lib/media';
+import { getFileExtensionLabel, getGeneratedPdfThumbnailPath, getPdfSourceUrl, getVideoMimeType, getYouTubeEmbedUrl } from '../lib/media';
 
 interface Props {
   item: ItemEntry;
@@ -13,7 +13,7 @@ const explicitMedia = item.data.media ?? [];
 const links = item.data.links ?? [];
 const assetMedia = assets.map((asset) => ({ kind: 'image' as const, ...asset }));
 const videoLinkMedia = links
-  .filter((link) => link.kind === 'video')
+  .filter((link) => link.kind === 'video' && getYouTubeEmbedUrl(link.url))
   .map((link) => ({ kind: 'youtube' as const, url: link.url, title: link.label, caption: undefined }));
 const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
 ---
@@ -46,28 +46,68 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
         ) : null;
       }
 
-      const pdfUrl = getPdfSourceUrl(entry);
-      const thumbnail = entry.thumbnail?.path ?? (entry.path ? getGeneratedPdfThumbnailPath(slug, entry.path) : undefined);
-      const thumbnailAlt = entry.thumbnail?.alt ?? `${entry.title} first page preview`;
+      if (entry.kind === 'video') {
+        return (
+          <figure class="item-media-card item-media-card--video">
+            <video controls preload="metadata" poster={entry.poster?.path}>
+              <source src={entry.path} type={getVideoMimeType(entry.path)} />
+            </video>
+            <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
+          </figure>
+        );
+      }
 
-      return pdfUrl ? (
-        <figure class="item-media-card item-media-card--pdf">
-          <a class="item-media-card__pdf-link" href={pdfUrl} target="_blank" rel="noreferrer noopener" aria-label={`Open PDF: ${entry.title}`}>
-            {thumbnail ? (
-              <span class="item-media-card__pdf-preview">
-                <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
-                <span class="item-media-card__pdf-badge">PDF</span>
-              </span>
-            ) : (
-              <span class="item-media-card__pdf-fallback">
-                <span class="item-media-card__pdf-badge">PDF</span>
-                <strong>{entry.title}</strong>
-              </span>
-            )}
-          </a>
-          <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
-        </figure>
-      ) : null;
+      if (entry.kind === 'pdf') {
+        const pdfUrl = getPdfSourceUrl(entry);
+        const thumbnail = entry.thumbnail?.path ?? (entry.path ? getGeneratedPdfThumbnailPath(slug, entry.path) : undefined);
+        const thumbnailAlt = entry.thumbnail?.alt ?? `${entry.title} first page preview`;
+
+        return pdfUrl ? (
+          <figure class="item-media-card item-media-card--pdf">
+            <a class="item-media-card__pdf-link" href={pdfUrl} target="_blank" rel="noreferrer noopener" aria-label={`Open PDF: ${entry.title}`}>
+              {thumbnail ? (
+                <span class="item-media-card__pdf-preview">
+                  <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
+                  <span class="item-media-card__pdf-badge">PDF</span>
+                </span>
+              ) : (
+                <span class="item-media-card__pdf-fallback">
+                  <span class="item-media-card__pdf-badge">PDF</span>
+                  <strong>{entry.title}</strong>
+                </span>
+              )}
+            </a>
+            <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
+          </figure>
+        ) : null;
+      }
+
+      if (entry.kind === 'file') {
+        const thumbnail = entry.thumbnail?.path;
+        const thumbnailAlt = entry.thumbnail?.alt ?? `${entry.title} preview`;
+        const badge = getFileExtensionLabel(entry.path);
+
+        return (
+          <figure class="item-media-card item-media-card--file">
+            <a class="item-media-card__file-link" href={entry.path} target="_blank" rel="noreferrer noopener" aria-label={`Open file: ${entry.title}`}>
+              {thumbnail ? (
+                <span class="item-media-card__file-preview">
+                  <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
+                  <span class="item-media-card__file-badge">{badge}</span>
+                </span>
+              ) : (
+                <span class="item-media-card__file-fallback">
+                  <span class="item-media-card__file-badge">{badge}</span>
+                  <strong>{entry.title}</strong>
+                </span>
+              )}
+            </a>
+            <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
+          </figure>
+        );
+      }
+
+      return null;
     })}
   </div>
 ) : null}

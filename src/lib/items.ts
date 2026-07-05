@@ -1,6 +1,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getLocalizedSkillLabel, skillMap } from '../data/skills';
 import { formatDate as formatLocalizedDate, formatDateRange as formatLocalizedDateRange, getItemTypeLabels, type Language } from './i18n';
+import { getYouTubeEmbedUrl } from './media';
 
 export type ItemEntry = CollectionEntry<'items'>;
 export type ItemType = ItemEntry['data']['type'];
@@ -52,7 +53,7 @@ function hasGalleryMedia(item: ItemEntry): boolean {
   const media = item.data.media ?? [];
   const assets = item.data.assets ?? [];
   const links = item.data.links ?? [];
-  return Boolean(item.data.thumbnail || media.length || assets.length || links.some((link) => link.kind === 'video'));
+  return Boolean(item.data.thumbnail || media.length || assets.length || links.some((link) => link.kind === 'video' && getYouTubeEmbedUrl(link.url)));
 }
 
 function baselineRelevanceDifference(a: ItemEntry, b: ItemEntry): number {

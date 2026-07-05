@@ -37,6 +37,9 @@ published: false
 portfolio: true
 timeline: false
 # relevanceRank: 1
+# links kind: site, repository, publication, credential, video, file, other
+# link url accepts http(s) or /items/${slug}/...
+# optional link icon: site, github, publication, credential, video, file, external, other
 links: []
 assets: []
 # thumbnail:
@@ -46,6 +49,7 @@ assets: []
 #   objectPosition: "50% 50%"
 #   backgroundColor: "#ffffff"
 #   aspectRatio: "16 / 10"
+# media kind: image, youtube, video, pdf, file
 media: []
 collaborators: []
 relations: []
