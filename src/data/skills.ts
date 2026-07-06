@@ -32,6 +32,7 @@ export const skills: SkillDefinition[] = [
   { id: 'postgresql', label: 'PostgreSQL', group: 'Software & tools' },
   { id: 'grafana', label: 'Grafana', group: 'Software & tools' },
   { id: 'git', label: 'Git / GitHub', group: 'Software & tools' },
+  { id: 'teamviewer-spatial', label: 'TeamViewer Spatial', group: 'Software & tools' },
   { id: 'nx', label: 'Siemens NX', group: 'CAD / CAE / simulation' },
   { id: 'fusion', label: 'Autodesk Fusion', group: 'CAD / CAE / simulation' },
   { id: 'solidworks', label: 'SolidWorks', group: 'CAD / CAE / simulation' },
