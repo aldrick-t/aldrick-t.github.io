@@ -28,7 +28,7 @@ links:
     icon: "publication"
 media:
   - kind: "video"
-    path: "public/items/lidar-slam-autonomous-navigation/video-final-presentation-bremdial.mp4"
+    path: "/items/lidar-slam-autonomous-navigation/video-final-presentation-bremdial.mp4"
     title: "Final Presentation Video."
   - kind: "pdf"
     path: "/items/lidar-slam-autonomous-navigation/ev1_reporte_final_bremdial_v2.pdf"

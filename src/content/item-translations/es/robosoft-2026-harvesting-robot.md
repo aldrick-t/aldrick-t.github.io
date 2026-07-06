@@ -1,6 +1,6 @@
 ---
-title: "Robot de Cosecha para Fruta Madura Delicada"
-summary: "Sistema de cosecha con robótica blanda que combina un manipulador UR5e, una pinza personalizada con jamming y percepción RGB-D en la mano."
+title: "MORI - Robot de Cosecha para Fruta Madura Delicada"
+summary: "MORI (MOdular RIgidity-adaptive Instrument) es un sistema de cosecha con robótica blanda que combina un manipulador UR5e, una pinza personalizada con jamming y percepción RGB-D en la mano."
 highlights:
   - "Co-desarrollé una pinza blanda inspirada en frambuesas con jamming granular para modular rigidez."
   - "Construí flujos de fabricación monolítica en silicón usando moldes iterativos impresos en 3D."

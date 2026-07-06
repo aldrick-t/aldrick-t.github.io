@@ -5,6 +5,7 @@ highlights:
   - "Promedio general: 95/100."
   - "Beneficiario de la Beca de Excelencia Académica."
   - "Especialización en Sistemas Ciberfísicos."
+  - "Diploma de Desarrollo Estudiantil por participación constante en actividades formativas extracurriculares."
 tags: ["Robótica", "Sistemas ciberfísicos"]
 ---
 

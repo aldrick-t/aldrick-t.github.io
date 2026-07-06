@@ -6,6 +6,10 @@ highlights:
   - "Combiné visión y sensado a bordo para reducir decisiones de navegación con falsos positivos."
   - "Rediseñé la arquitectura de nodos y tópicos de ROS 2 para mejorar el despliegue y el flujo de datos."
 tags: ["Robótica móvil", "Percepción", "Autonomía"]
+links:
+  - label: "GitHub"
+  - label: "Póster"
+  - label: "Video de presentación (ES)"
 ---
 
 El proyecto unió percepción y control en una pila modular de ROS 2. La simulación, la telemetría y los protocolos de prueba física permitieron comparar el comportamiento de reconocimiento y navegación en entornos controlados y reales.
