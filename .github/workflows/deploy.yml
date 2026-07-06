@@ -38,14 +38,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate media thumbnails
+        run: npm run media:thumbnails
+
       - name: Validate content
         run: npm run content:check
 
       - name: Compile CV PDFs
         run: npm run build:cv
-
-      - name: Generate media thumbnails
-        run: npm run media:thumbnails
 
       - name: Build site
         run: npx astro build
