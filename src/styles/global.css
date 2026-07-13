@@ -100,7 +100,7 @@ main { flex: 1; }
 .shell { width: min(960px, calc(100% - 2rem)); margin-inline: auto; }
 .shell--wide { width: min(1120px, calc(100% - 2rem)); }
 .page-stack { display: grid; gap: clamp(3.5rem, 8vw, 6.5rem); padding-block: clamp(2.4rem, 6vw, 5rem) 6rem; }
-.home-page { gap: clamp(2rem, 4vw, 3rem); padding-top: clamp(1rem, 3vw, 2.25rem); }
+.home-page { gap: clamp(2rem, 4vw, 3rem); padding-top: clamp(1rem, 3vw, 2.25rem); overflow-x: clip; }
 
 .skip-link {
   position: fixed;
@@ -118,6 +118,7 @@ main { flex: 1; }
   position: sticky;
   top: 0;
   z-index: 50;
+  overflow-x: clip;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
 }
@@ -175,14 +176,14 @@ main { flex: 1; }
   grid-template-columns: minmax(0, 1.55fr) minmax(14rem, .75fr);
   column-gap: clamp(2rem, 6vw, 5rem);
   row-gap: clamp(1.4rem, 3vw, 2rem);
-  align-items: end;
+  align-items: start;
   padding: clamp(1.5rem, 4vw, 2.5rem);
   border: 1px solid var(--border);
   border-radius: .55rem;
   background: var(--surface-raised);
 }
-.intro-panel > h1 { grid-column: 1 / -1; font-size: clamp(2.15rem, 5vw, 3.5rem); }
 .intro-panel__main { min-width: 0; }
+.intro-panel__main > h1 { font-size: clamp(2.15rem, 5vw, 3.5rem); }
 .intro-panel__title { margin-top: .65rem; color: var(--accent); font-size: 1.05rem; font-weight: 600; }
 .intro-panel__summary { max-width: 65ch; margin-top: 1.7rem; color: var(--muted); font-size: 1.08rem; }
 .intro-panel__aside { display: grid; gap: 1.25rem; color: var(--muted); }
