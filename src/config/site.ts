@@ -4,19 +4,19 @@ const linkedinUrl = 'https://www.linkedin.com/in/aldrick-t/';
 const tecEmail = 'aldricktadeo@exatec.tec.mx';
 
 export const siteConfig = {
-  name: 'Aldrick Tadeo',
+  name: 'Aldrick Tadeo Arellano',
   fullName: 'Aldrick Victor Tadeo Arellano',
   firstName: 'Aldrick',
-  middleName: 'Victor Tadeo',
-  lastName: 'Arellano',
+  middleName: 'Victor',
+  lastName: 'Tadeo Arellano',
   title: 'B.S. Robotics and Digital Systems Engineering',
   description:
     'Robotics and digital systems engineer working across autonomous systems, perception, embedded software, and engineering tooling.',
   introduction:
     'Building dependable robotic and software systems, from perception and autonomy to telemetry, data and engineering tools. My work focuses on systems that transfer cleanly from prototypes and simulation into real operating environments.',
   availability: 'Open to robotics, software, research, and graduate study opportunities.',
-  location: 'Mexico',
-  institution: 'Tecnológico de Monterrey',
+  location: 'United States & Mexico',
+  institution: 'Independent',
   email,
   tecEmail,
   githubUrl,
