@@ -105,7 +105,6 @@ const languages = profile.languages.map((language) => ({
       <div><h2 id="news-title">{labels.home.sections.news}</h2></div>
       <a href={localizePath('/news', lang)}>{labels.newsPage.title} →</a>
     </header>
-    <p class="section-intro">{labels.home.newsIntro}</p>
     <NewsList items={news.slice(0, 5)} lang={lang} />
   </section>
 
