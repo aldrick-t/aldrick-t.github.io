@@ -1,6 +1,6 @@
 ---
 title: "Ingeniería en Robótica y Sistemas Digitales"
-summary: "Programa de ingeniería enfocado en sistemas ciberfísicos, robótica, control, sistemas embebidos y automatización inteligente."
+summary: "Programa de ingeniería enfocado en robótica, control, autonomía robótica, sistemas embebidos, electrónica digital y sistemas ciberfísicos."
 highlights:
   - "Promedio general: 95/100."
   - "Beneficiario de la Beca de Excelencia Académica."
