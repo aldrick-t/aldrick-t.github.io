@@ -1,7 +1,9 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
-import { getRelatedNewsPosts, getNewsSlug, sortNews, formatPostedDate, type LocalizedNewsEntry } from '../lib/news';
-import { newsPath, localizePath, ui, type Language } from '../lib/i18n';
+import { getRelatedNewsPosts, getRelatedPortfolioItems, getNewsSlug, sortNews, formatPostedDate, type LocalizedNewsEntry } from '../lib/news';
+import { getPublishedLocalizedItems } from '../lib/localized-items';
+import { getItemSlug } from '../lib/items';
+import { getItemTypeLabel, itemPath, newsPath, localizePath, ui, type Language } from '../lib/i18n';
 
 interface Props {
   item: LocalizedNewsEntry;
@@ -13,6 +15,7 @@ interface Props {
 const { item, allItems, Content, lang = 'en' } = Astro.props;
 const labels = ui[lang];
 const related = getRelatedNewsPosts(item, allItems);
+const relatedItems = getRelatedPortfolioItems(item, await getPublishedLocalizedItems(lang, (candidate) => candidate.data.portfolio));
 const posts = sortNews(allItems.filter((entry) => entry.data.published && entry.data.newsKind === 'post'));
 const index = posts.findIndex((entry) => getNewsSlug(entry) === getNewsSlug(item));
 const previous = index > 0 ? posts[index - 1] : undefined;
@@ -42,6 +45,20 @@ const next = index >= 0 && index < posts.length - 1 ? posts[index + 1] : undefin
           <a href={newsPath(getNewsSlug(entry), lang)}>
             <span>{labels.newsPage.post}</span>
             <strong>{entry.data.title}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : null}
+
+  {relatedItems.length ? (
+    <section class="item-section news-post-section" aria-labelledby="related-items-title">
+      <h2 id="related-items-title">{labels.itemPage.related}</h2>
+      <div class="related-grid">
+        {relatedItems.map((relatedItem) => (
+          <a href={itemPath(getItemSlug(relatedItem), lang)}>
+            <span>{getItemTypeLabel(relatedItem.data.type, lang, 'singular')}</span>
+            <strong>{relatedItem.data.title}</strong>
           </a>
         ))}
       </div>
