@@ -1,0 +1,55 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import { getRelatedNewsPosts, getNewsSlug, sortNews, formatPostedDate, type LocalizedNewsEntry } from '../lib/news';
+import { newsPath, localizePath, ui, type Language } from '../lib/i18n';
+
+interface Props {
+  item: LocalizedNewsEntry;
+  allItems: LocalizedNewsEntry[];
+  Content: AstroComponentFactory;
+  lang?: Language;
+}
+
+const { item, allItems, Content, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const related = getRelatedNewsPosts(item, allItems);
+const posts = sortNews(allItems.filter((entry) => entry.data.published && entry.data.newsKind === 'post'));
+const index = posts.findIndex((entry) => getNewsSlug(entry) === getNewsSlug(item));
+const previous = index > 0 ? posts[index - 1] : undefined;
+const next = index >= 0 && index < posts.length - 1 ? posts[index + 1] : undefined;
+---
+
+<article class="shell page-stack news-post-page">
+  <nav class="breadcrumb" aria-label={labels.newsPage.breadcrumbAria}>
+    <a href={localizePath('/news', lang)}>{labels.newsPage.title}</a>
+    <span>/</span>
+    <span>{labels.newsPage.post}</span>
+  </nav>
+
+  <header class="news-post-header">
+    <p class="mono-label">{labels.newsPage.post} · {formatPostedDate(item, lang)}</p>
+    <h1>{item.data.title}</h1>
+    <p>{item.data.summary}</p>
+  </header>
+
+  <div class="news-post-body prose"><Content /></div>
+
+  {related.length ? (
+    <section class="item-section news-post-section" aria-labelledby="related-posts-title">
+      <h2 id="related-posts-title">{labels.newsPage.relatedPosts}</h2>
+      <div class="related-grid">
+        {related.map((entry) => (
+          <a href={newsPath(getNewsSlug(entry), lang)}>
+            <span>{labels.newsPage.post}</span>
+            <strong>{entry.data.title}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : null}
+
+  <nav class="item-pagination" aria-label={labels.newsPage.adjacentAria}>
+    {previous ? <a href={newsPath(getNewsSlug(previous), lang)}><span>{labels.newsPage.previous}</span><strong>{previous.data.title}</strong></a> : <span />}
+    {next ? <a href={newsPath(getNewsSlug(next), lang)}><span>{labels.newsPage.next}</span><strong>{next.data.title}</strong></a> : <span />}
+  </nav>
+</article>

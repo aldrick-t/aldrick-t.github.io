@@ -7,4 +7,4 @@ highlights:
 tags: ["Conferencia", "Competencia", "Robótica blanda"]
 ---
 
-La visita a la conferencia se centró en el Manipulation Challenge y en la presentación de un sistema robótico completo de cosecha desarrollado por un equipo de cuatro integrantes.
+La visita a la conferencia se centró en el Manipulation Challenge y en la presentación de un sistema robótico completo de cosecha desarrollado por un equipo de cuatro integrantes, de los cuales participaron dos. El reto consistió en recoger frambuesas de un arbusto artificial y colocarlas en una canasta, con un sistema de puntuación basado en la cantidad de frutos recolectados y la precisión de su colocación.

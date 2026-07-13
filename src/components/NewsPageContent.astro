@@ -1,0 +1,21 @@
+---
+import { ui, type Language } from '../lib/i18n';
+import { getPublishedLocalizedNews } from '../lib/localized-news';
+import NewsList from './NewsList.astro';
+
+interface Props {
+  lang?: Language;
+}
+
+const { lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const news = await getPublishedLocalizedNews(lang);
+---
+
+<div class="shell page-stack news-page">
+  <header class="page-header">
+    <h1>{labels.newsPage.title}</h1>
+    <p>{labels.newsPage.intro}</p>
+  </header>
+  <NewsList items={news} lang={lang} />
+</div>

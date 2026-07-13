@@ -3,9 +3,10 @@ import { siteConfig } from '../config/site';
 import { getLocalizedSkillGroups } from '../data/skills';
 import { ui, localizePath, itemPath, type Language } from '../lib/i18n';
 import { getPublishedLocalizedItems } from '../lib/localized-items';
+import { getPublishedLocalizedNews } from '../lib/localized-news';
 import { getItemSlug, sortItems } from '../lib/items';
-import ItemCard from './ItemCard.astro';
-import Timeline from './Timeline.astro';
+import PortfolioGalleryCard from './PortfolioGalleryCard.astro';
+import NewsList from './NewsList.astro';
 import githubIcon from '../assets/icons/ui/github.svg?raw';
 import linkedinIcon from '../assets/icons/ui/linkedin.svg?raw';
 import emailIcon from '../assets/icons/ui/email.svg?raw';
@@ -20,13 +21,14 @@ const profile = { ...siteConfig, ...labels.site };
 const landingSections = [
   { id: 'intro', label: labels.home.sections.intro },
   { id: 'featured', label: labels.home.sections.featured },
-  { id: 'timeline', label: labels.home.sections.timeline },
+  { id: 'news', label: labels.home.sections.news },
   { id: 'skills', label: labels.home.sections.skills },
   { id: 'languages', label: labels.home.sections.languages },
   { id: 'credentials', label: labels.home.sections.credentials }
 ] as const;
 const skillGroups = getLocalizedSkillGroups(lang);
 const items = await getPublishedLocalizedItems(lang);
+const news = await getPublishedLocalizedNews(lang);
 const featured = items.filter((item) => item.data.featuredRank).sort((a, b) => (a.data.featuredRank ?? 0) - (b.data.featuredRank ?? 0));
 if (featured.length !== 3) throw new Error(`Expected exactly three featured items, found ${featured.length}.`);
 const credentials = sortItems(items.filter((item) => item.data.type === 'course' || item.data.type === 'certification'));
@@ -52,8 +54,8 @@ const languages = profile.languages.map((language) => ({
   </nav>
 
   <section id="intro" class="intro-panel" aria-labelledby="intro-title">
-    <div>
-      <h1 id="intro-title">{profile.fullName}</h1>
+    <div class="intro-panel__main">
+      <h1 id="intro-title">{profile.name}</h1>
       <p class="intro-panel__title">{profile.title}</p>
       <p class="intro-panel__summary">{profile.introduction}</p>
     </div>
@@ -91,15 +93,20 @@ const languages = profile.languages.map((language) => ({
       <div><h2 id="featured-title">{labels.home.sections.featured}</h2></div>
       <a href={localizePath('/portfolio', lang)}>{labels.common.allItems} →</a>
     </header>
-    <div class="featured-rail">{featured.map((item) => <ItemCard item={item} lang={lang} featured />)}</div>
+    <div class="featured-rail">
+      {featured.map((item, index) => (
+        <PortfolioGalleryCard item={item} lang={lang} latestOrder={index} relevanceOrder={index} />
+      ))}
+    </div>
   </section>
 
-  <section id="timeline" class="page-section" aria-labelledby="timeline-title">
+  <section id="news" class="page-section" aria-labelledby="news-title">
     <header class="section-heading">
-      <div><h2 id="timeline-title">{labels.home.sections.timeline}</h2></div>
+      <div><h2 id="news-title">{labels.home.sections.news}</h2></div>
+      <a href={localizePath('/news', lang)}>{labels.newsPage.title} →</a>
     </header>
-    <p class="section-intro">{labels.home.timelineIntro}</p>
-    <Timeline items={items} lang={lang} />
+    <p class="section-intro">{labels.home.newsIntro}</p>
+    <NewsList items={news.slice(0, 5)} lang={lang} />
   </section>
 
   <section id="skills" class="page-section" aria-labelledby="skills-title">

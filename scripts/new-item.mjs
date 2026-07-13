@@ -13,7 +13,7 @@ function getMarkdownFiles(directory, prefix = '') {
 }
 
 const [slug, type = 'project'] = process.argv.slice(2);
-const types = ['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news'];
+const types = ['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering'];
 if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error('Usage: npm run new:item -- <kebab-case-slug> [type]');
 if (!types.includes(type)) throw new Error(`Type must be one of: ${types.join(', ')}`);
 const itemsDir = path.join(process.cwd(), 'src', 'content', 'items');
@@ -35,7 +35,6 @@ skills: []
 tags: []
 published: false
 portfolio: true
-timeline: false
 # relevanceRank: 1
 # links kind: site, repository, publication, credential, video, file, other
 # link url accepts http(s) or /items/${slug}/...

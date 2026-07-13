@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import NewsPostPageContent from '../../../components/NewsPostPageContent.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../../config/site';
+import { localizedLanguages, type LocalizedLanguage } from '../../../lib/i18n';
+import { getNewsSlug } from '../../../lib/news';
+import { getNewsTranslations, localizeNews, localizeNewsItems } from '../../../lib/localized-news';
+
+export async function getStaticPaths() {
+  const news = (await getCollection('news')).filter((entry) => entry.data.published && entry.data.newsKind === 'post');
+  return localizedLanguages.flatMap((lang) =>
+    news.map((item) => ({ params: { lang, slug: getNewsSlug(item) }, props: { item, allItems: news } }))
+  );
+}
+
+const { item, allItems } = Astro.props;
+const lang = Astro.params.lang as LocalizedLanguage;
+const translations = await getNewsTranslations(lang);
+const localizedItem = localizeNews(item, translations, lang);
+const localizedItems = localizeNewsItems(allItems, translations, lang);
+const { Content } = await render(localizedItem.translation ?? item);
+const slug = getNewsSlug(item);
+---
+
+<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/news/${slug}`}>
+  <NewsPostPageContent item={localizedItem} allItems={localizedItems} Content={Content} lang={lang} />
+</BaseLayout>

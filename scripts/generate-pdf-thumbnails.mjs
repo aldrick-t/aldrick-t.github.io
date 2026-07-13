@@ -47,6 +47,7 @@ function cleanGeneratedDirectory(itemId, expectedPaths) {
 }
 
 const items = getMarkdownFiles(itemsDir)
+  .filter((file) => !file.startsWith(`news${path.sep}`))
   .map(parseItem);
 const itemIds = new Map();
 for (const item of items) {

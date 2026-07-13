@@ -1,0 +1,27 @@
+---
+import { formatPostedDate, getNewsSlug, type LocalizedNewsEntry } from '../lib/news';
+import { newsPath, ui, type Language } from '../lib/i18n';
+
+interface Props {
+  item: LocalizedNewsEntry;
+  lang?: Language;
+}
+
+const { item, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+const isPost = item.data.newsKind === 'post';
+---
+
+<article class="news-row">
+  <div class="news-row__date">
+    <time datetime={item.data.datePosted}>{formatPostedDate(item, lang)}</time>
+  </div>
+  <div class="news-row__body">
+    <span class="news-row__kind">{isPost ? labels.newsPage.post : labels.newsPage.update}</span>
+    <h3>
+      {isPost ? <a href={newsPath(getNewsSlug(item), lang)}>{item.data.title}</a> : item.data.title}
+    </h3>
+    <p>{item.data.summary}</p>
+    {isPost ? <a class="text-link" href={newsPath(getNewsSlug(item), lang)}>{labels.newsPage.readPost} <span aria-hidden="true">→</span></a> : null}
+  </div>
+</article>
