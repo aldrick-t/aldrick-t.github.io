@@ -1,0 +1,21 @@
+---
+import type { LocalizedNewsEntry } from '../lib/news';
+import { ui, type Language } from '../lib/i18n';
+import NewsRow from './NewsRow.astro';
+
+interface Props {
+  items: LocalizedNewsEntry[];
+  lang?: Language;
+}
+
+const { items, lang = 'en' } = Astro.props;
+const labels = ui[lang];
+---
+
+{items.length ? (
+  <div class="news-list">
+    {items.map((item) => <NewsRow item={item} lang={lang} />)}
+  </div>
+) : (
+  <p class="news-empty">{labels.newsPage.empty}</p>
+)}

@@ -8,6 +8,7 @@
     "content:check": "node ./scripts/validate-content.mjs",
     "media:thumbnails": "node ./scripts/generate-pdf-thumbnails.mjs",
     "new:item": "node ./scripts/new-item.mjs",
+    "new:news": "node ./scripts/new-news.mjs",
     "build:cv": "node ./scripts/build-cvs.mjs",
     "build": "npm run media:thumbnails && npm run content:check && astro build",
     "build:all": "npm run media:thumbnails && npm run content:check && npm run build:cv && astro build",

@@ -5,7 +5,7 @@ export const profile = siteConfig;
 export const landingSections = [
   { id: 'intro', label: 'Intro' },
   { id: 'featured', label: 'Featured' },
-  { id: 'timeline', label: 'Timeline' },
+  { id: 'news', label: 'News' },
   { id: 'skills', label: 'Skills' },
   { id: 'languages', label: 'Languages' },
   { id: 'credentials', label: 'Courses & certifications' }

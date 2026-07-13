@@ -41,6 +41,10 @@ export function itemPath(slug: string, language: Language): string {
   return localizePath(`/items/${slug}`, language);
 }
 
+export function newsPath(slug: string, language: Language): string {
+  return localizePath(`/news/${slug}`, language);
+}
+
 export function formatDate(value: string, language: Language): string {
   if (value === 'Present') return ui[language].date.present;
   const [year, month] = value.split('-');
@@ -66,8 +70,7 @@ const itemTypes: Record<Language, ItemTypeCopy> = {
     award: { plural: 'Awards', singular: 'Award' },
     course: { plural: 'Courses', singular: 'Course' },
     certification: { plural: 'Certifications', singular: 'Certification' },
-    volunteering: { plural: 'Volunteering', singular: 'Volunteering' },
-    news: { plural: 'News', singular: 'News' }
+    volunteering: { plural: 'Volunteering', singular: 'Volunteering' }
   },
   es: {
     project: { plural: 'Proyectos', singular: 'Proyecto' },
@@ -78,8 +81,7 @@ const itemTypes: Record<Language, ItemTypeCopy> = {
     award: { plural: 'Reconocimientos', singular: 'Reconocimiento' },
     course: { plural: 'Cursos', singular: 'Curso' },
     certification: { plural: 'Certificaciones', singular: 'Certificación' },
-    volunteering: { plural: 'Voluntariado', singular: 'Voluntariado' },
-    news: { plural: 'Noticias', singular: 'Noticia' }
+    volunteering: { plural: 'Voluntariado', singular: 'Voluntariado' }
   },
   ja: {
     project: { plural: 'プロジェクト', singular: 'プロジェクト' },
@@ -90,8 +92,7 @@ const itemTypes: Record<Language, ItemTypeCopy> = {
     award: { plural: '受賞', singular: '受賞' },
     course: { plural: 'コース', singular: 'コース' },
     certification: { plural: '認定資格', singular: '認定資格' },
-    volunteering: { plural: 'ボランティア', singular: 'ボランティア' },
-    news: { plural: 'ニュース', singular: 'ニュース' }
+    volunteering: { plural: 'ボランティア', singular: 'ボランティア' }
   }
 };
 
@@ -193,7 +194,7 @@ export const ui = {
         { language: 'Japanese', proficiency: 'Elementary proficiency' }
       ]
     },
-    nav: { aria: 'Primary navigation', home: 'Home', portfolio: 'Portfolio', cv: 'CV', contact: 'Contact' },
+    nav: { aria: 'Primary navigation', home: 'Home', portfolio: 'Portfolio', cv: 'CV', news: 'News', contact: 'Contact' },
     language: { label: 'Language', select: 'Select language' },
     footer: { aria: 'Footer links', email: 'Email' },
     skipLink: 'Skip to content',
@@ -217,15 +218,14 @@ export const ui = {
       sections: {
         intro: 'Intro',
         featured: 'Featured',
-        timeline: 'Timeline',
+        news: 'News',
         skills: 'Skills',
         languages: 'Languages',
         credentials: 'Courses & certifications'
       },
       researchInterests: 'Research Interests',
-      timelineIntro: 'Time runs from newest to oldest. Parallel lanes show work that happened concurrently.'
+      newsIntro: 'Short updates and longer posts about my work, research, and current interests.'
     },
-    timeline: { concurrentWith: 'Concurrent with', more: 'more' },
     portfolioPage: {
       title: 'Portfolio',
       description: 'All projects, experience, education, recognition, service, and continued learning.',
@@ -242,6 +242,20 @@ export const ui = {
       relevanceSort: 'Relevance',
       noThumbnail: 'No thumbnail',
       openItem: 'Open item'
+    },
+    newsPage: {
+      title: 'News',
+      description: 'Updates and posts about Aldrick Tadeo’s work, research, and interests.',
+      intro: 'A chronological record of short updates and longer posts.',
+      breadcrumbAria: 'News breadcrumb',
+      post: 'Post',
+      update: 'Update',
+      readPost: 'Read post',
+      empty: 'No News entries have been published yet.',
+      relatedPosts: 'Related posts',
+      adjacentAria: 'Adjacent News posts',
+      previous: 'Previous post',
+      next: 'Next post'
     },
     itemPage: {
       breadcrumbAria: 'Breadcrumb',
@@ -314,7 +328,7 @@ export const ui = {
         { language: 'Japonés', proficiency: 'Competencia elemental' }
       ]
     },
-    nav: { aria: 'Navegación principal', home: 'Inicio', portfolio: 'Portafolio', cv: 'CV', contact: 'Contacto' },
+    nav: { aria: 'Navegación principal', home: 'Inicio', portfolio: 'Portafolio', cv: 'CV', news: 'Noticias', contact: 'Contacto' },
     language: { label: 'Idioma', select: 'Seleccionar idioma' },
     footer: { aria: 'Enlaces del pie de página', email: 'Correo' },
     skipLink: 'Saltar al contenido',
@@ -338,15 +352,14 @@ export const ui = {
       sections: {
         intro: 'Intro',
         featured: 'Destacado',
-        timeline: 'Línea de tiempo',
+        news: 'Noticias',
         skills: 'Habilidades',
         languages: 'Idiomas',
         credentials: 'Cursos y certificaciones'
       },
       researchInterests: 'Intereses de investigación',
-      timelineIntro: 'El tiempo va de lo más reciente a lo más antiguo. Los carriles paralelos muestran trabajos que ocurrieron al mismo tiempo.'
+      newsIntro: 'Actualizaciones breves y publicaciones sobre mi trabajo, investigación e intereses actuales.'
     },
-    timeline: { concurrentWith: 'Concurrente con', more: 'más' },
     portfolioPage: {
       title: 'Portafolio',
       description: 'Proyectos, experiencia, educación, reconocimientos, servicio y aprendizaje continuo.',
@@ -363,6 +376,20 @@ export const ui = {
       relevanceSort: 'Relevancia',
       noThumbnail: 'Sin miniatura',
       openItem: 'Abrir elemento'
+    },
+    newsPage: {
+      title: 'Noticias',
+      description: 'Actualizaciones y publicaciones sobre el trabajo, la investigación y los intereses de Aldrick Tadeo.',
+      intro: 'Un registro cronológico de actualizaciones breves y publicaciones más extensas.',
+      breadcrumbAria: 'Ruta de noticias',
+      post: 'Publicación',
+      update: 'Actualización',
+      readPost: 'Leer publicación',
+      empty: 'Todavía no hay noticias publicadas.',
+      relatedPosts: 'Publicaciones relacionadas',
+      adjacentAria: 'Publicaciones de noticias adyacentes',
+      previous: 'Publicación anterior',
+      next: 'Siguiente publicación'
     },
     itemPage: {
       breadcrumbAria: 'Ruta de navegación',
@@ -435,7 +462,7 @@ export const ui = {
         { language: '日本語', proficiency: '初級レベル' }
       ]
     },
-    nav: { aria: 'メインナビゲーション', home: 'ホーム', portfolio: 'ポートフォリオ', cv: 'CV', contact: '連絡先' },
+    nav: { aria: 'メインナビゲーション', home: 'ホーム', portfolio: 'ポートフォリオ', cv: 'CV', news: 'ニュース', contact: '連絡先' },
     language: { label: '言語', select: '言語を選択' },
     footer: { aria: 'フッターリンク', email: 'メール' },
     skipLink: '本文へスキップ',
@@ -459,15 +486,14 @@ export const ui = {
       sections: {
         intro: '概要',
         featured: '注目',
-        timeline: 'タイムライン',
+        news: 'ニュース',
         skills: 'スキル',
         languages: '言語',
         credentials: 'コースと認定資格'
       },
       researchInterests: '研究関心',
-      timelineIntro: '時系列は新しいものから古いものへ並びます。並列レーンは同時期に進行した活動を示します。'
+      newsIntro: '仕事、研究、現在の関心についての短い更新と長めの投稿です。'
     },
-    timeline: { concurrentWith: '同時期:', more: '件以上' },
     portfolioPage: {
       title: 'ポートフォリオ',
       description: 'プロジェクト、経験、学歴、受賞、社会貢献、継続学習の一覧。',
@@ -484,6 +510,20 @@ export const ui = {
       relevanceSort: '関連度',
       noThumbnail: 'サムネイルなし',
       openItem: '項目を開く'
+    },
+    newsPage: {
+      title: 'ニュース',
+      description: 'Aldrick Tadeoの仕事、研究、関心についての更新と投稿。',
+      intro: '短い更新と長めの投稿を時系列でまとめています。',
+      breadcrumbAria: 'ニュースのパンくずリスト',
+      post: '投稿',
+      update: '更新',
+      readPost: '投稿を読む',
+      empty: '公開されたニュースはまだありません。',
+      relatedPosts: '関連記事',
+      adjacentAria: '前後のニュース投稿',
+      previous: '前の投稿',
+      next: '次の投稿'
     },
     itemPage: {
       breadcrumbAria: 'パンくずリスト',

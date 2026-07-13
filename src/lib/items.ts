@@ -17,8 +17,7 @@ export const itemTypeOrder: ItemType[] = [
   'award',
   'volunteering',
   'course',
-  'certification',
-  'news'
+  'certification'
 ];
 
 const currentMonth = new Date().getFullYear() * 12 + new Date().getMonth();
@@ -117,56 +116,4 @@ export function getRelatedItems(item: ItemEntry, allItems: ItemEntry[], limit = 
     .map(({ candidate }) => candidate);
 
   return [...relatedItems, ...fallbackItems];
-}
-
-export interface TimelinePlacement {
-  item: ItemEntry;
-  lane: number;
-  rowStart: number;
-  rowSpan: number;
-  concurrent: ItemEntry[];
-}
-
-export function buildTimeline(items: ItemEntry[]) {
-  const sorted = sortItems(items.filter((item) => item.data.timeline && item.data.published));
-  const latest = Math.max(...sorted.map((item) => monthIndex(item.data.dateEnd)));
-  const earliest = Math.min(...sorted.map((item) => monthIndex(item.data.dateStart)));
-  const laneIntervals: Array<Array<[number, number]>> = [];
-
-  const placements: TimelinePlacement[] = sorted.map((item) => {
-    const start = monthIndex(item.data.dateStart);
-    const end = monthIndex(item.data.dateEnd);
-    let lane = laneIntervals.findIndex((intervals) => intervals.every(([otherStart, otherEnd]) => end < otherStart || start > otherEnd));
-    if (lane === -1) {
-      lane = laneIntervals.length;
-      laneIntervals.push([]);
-    }
-    laneIntervals[lane].push([start, end]);
-    const concurrent = sorted.filter((candidate) => {
-      if (getItemSlug(candidate) === getItemSlug(item)) return false;
-      const candidateStart = monthIndex(candidate.data.dateStart);
-      const candidateEnd = monthIndex(candidate.data.dateEnd);
-      return start <= candidateEnd && end >= candidateStart;
-    });
-    return {
-      item,
-      lane,
-      rowStart: latest - end + 1,
-      rowSpan: Math.max(end - start + 1, 1),
-      concurrent
-    };
-  });
-
-  const years = Array.from({ length: Math.floor(latest / 12) - Math.floor(earliest / 12) + 1 }, (_, index) => {
-    const year = Math.floor(latest / 12) - index;
-    const topMonth = Math.min(latest, year * 12 + 11);
-    return { year, offset: latest - topMonth };
-  });
-
-  return {
-    placements,
-    laneCount: Math.max(laneIntervals.length, 1),
-    totalMonths: latest - earliest + 1,
-    years
-  };
 }
