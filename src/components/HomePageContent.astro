@@ -4,7 +4,7 @@ import { getLocalizedSkillGroups } from '../data/skills';
 import { ui, localizePath, itemPath, type Language } from '../lib/i18n';
 import { getPublishedLocalizedItems } from '../lib/localized-items';
 import { getItemSlug, sortItems } from '../lib/items';
-import ItemCard from './ItemCard.astro';
+import PortfolioGalleryCard from './PortfolioGalleryCard.astro';
 import Timeline from './Timeline.astro';
 import githubIcon from '../assets/icons/ui/github.svg?raw';
 import linkedinIcon from '../assets/icons/ui/linkedin.svg?raw';
@@ -91,7 +91,11 @@ const languages = profile.languages.map((language) => ({
       <div><h2 id="featured-title">{labels.home.sections.featured}</h2></div>
       <a href={localizePath('/portfolio', lang)}>{labels.common.allItems} →</a>
     </header>
-    <div class="featured-rail">{featured.map((item) => <ItemCard item={item} lang={lang} featured />)}</div>
+    <div class="featured-rail">
+      {featured.map((item, index) => (
+        <PortfolioGalleryCard item={item} lang={lang} latestOrder={index} relevanceOrder={index} />
+      ))}
+    </div>
   </section>
 
   <section id="timeline" class="page-section" aria-labelledby="timeline-title">
