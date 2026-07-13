@@ -292,9 +292,11 @@ for (const item of newsItems) {
     if (relation.id === item.id) errors.push(`${item.file}: relation cannot point to itself`);
     if (relationIds.has(relation.id)) errors.push(`${item.file}: duplicate relation ${relation.id}`);
     relationIds.add(relation.id);
-    const target = newsById.get(relation.id);
-    if (!target) errors.push(`${item.file}: broken News relation ${relation.id}`);
-    else if (target.data.newsKind !== 'post') errors.push(`${item.file}: News relation ${relation.id} must target a post`);
+    const newsTarget = newsById.get(relation.id);
+    const itemTarget = itemById.get(relation.id);
+    if (!newsTarget && !itemTarget) errors.push(`${item.file}: broken News relation ${relation.id}`);
+    if (newsTarget && newsTarget.data.newsKind !== 'post') errors.push(`${item.file}: News relation ${relation.id} must target a post`);
+    if (itemTarget && itemTarget.data.published === false) errors.push(`${item.file}: News relation ${relation.id} must target a published item`);
   }
 }
 

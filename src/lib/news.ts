@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { formatDate, type Language } from './i18n';
+import { getItemSlug, type ItemEntry } from './items';
 
 export type NewsEntry = CollectionEntry<'news'>;
 export type NewsTranslationEntry = CollectionEntry<'newsTranslations'>;
@@ -45,6 +46,19 @@ export function getRelatedNewsPosts(news: NewsEntry, allNews: NewsEntry[], limit
       seen.add(slug);
       return true;
     })
+    .slice(0, limit);
+}
+
+export function getRelatedPortfolioItems(news: NewsEntry, allItems: ItemEntry[], limit = 3): ItemEntry[] {
+  const itemsBySlug = new Map(
+    allItems
+      .filter((candidate) => candidate.data.published && candidate.data.portfolio)
+      .map((candidate) => [getItemSlug(candidate), candidate])
+  );
+
+  return (news.data.relations ?? [])
+    .map((relation) => itemsBySlug.get(relation.id))
+    .filter((candidate): candidate is ItemEntry => Boolean(candidate))
     .slice(0, limit);
 }
 
