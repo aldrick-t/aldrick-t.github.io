@@ -3,7 +3,7 @@ title: "600+ Hours of Community Service Award"
 type: "award"
 summary: "Recognition for completing more than 600 hours of community service during undergraduate studies."
 organization: "Department of Social Formation, Tecnológico de Monterrey"
-dateStart: "2026-04"
+dateStart: "2022-08"
 dateEnd: "2026-04"
 highlights:
   - "Recognized for sustained service throughout the undergraduate program."
