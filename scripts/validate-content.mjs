@@ -4,19 +4,23 @@ import { load } from 'js-yaml';
 
 const root = process.cwd();
 const itemsDir = path.join(root, 'src', 'content', 'items');
+const newsDir = path.join(itemsDir, 'news');
 const itemTranslationsDir = path.join(root, 'src', 'content', 'item-translations');
+const newsTranslationsDir = path.join(root, 'src', 'content', 'news-translations');
 const errors = [];
-const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering', 'news']);
+const allowedTypes = new Set(['project', 'work', 'education', 'publication', 'conference', 'award', 'course', 'certification', 'volunteering']);
 const allowedLanguages = new Set(['es', 'ja']);
 const allowedImageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp']);
 const allowedLinkKinds = new Set(['site', 'repository', 'publication', 'credential', 'video', 'file', 'other']);
 const allowedLinkIcons = new Set(['site', 'github', 'publication', 'credential', 'video', 'file', 'external', 'other']);
 const allowedVideoExtensions = new Set(['.mp4', '.webm']);
 const datePattern = /^\d{4}(-\d{2})?$/;
+const postedDatePattern = /^\d{4}-\d{2}$/;
 const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
 
 function getMarkdownFiles(directory, prefix = '') {
+  if (!existsSync(path.join(directory, prefix))) return [];
   return readdirSync(path.join(directory, prefix), { withFileTypes: true })
     .flatMap((entry) => {
       const relativePath = path.join(prefix, entry.name);
@@ -41,7 +45,7 @@ function parseItem(file) {
   }
 }
 
-const files = getMarkdownFiles(itemsDir);
+const files = getMarkdownFiles(itemsDir).filter((file) => !file.startsWith(`news${path.sep}`));
 const items = files.map(parseItem).filter(Boolean);
 const ids = new Set();
 const itemById = new Map();
@@ -55,6 +59,32 @@ for (const item of items) {
 }
 const featuredRanks = new Map();
 const relevanceRanks = new Map();
+
+function parseNews(file) {
+  const source = readFileSync(path.join(newsDir, file), 'utf8');
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  const displayFile = path.join('src', 'content', 'items', 'news', file);
+  if (!match) {
+    errors.push(`${displayFile}: missing YAML frontmatter`);
+    return null;
+  }
+  try {
+    return { id: path.basename(file, '.md'), file: displayFile, data: load(match[1]) ?? {}, body: match[2].trim() };
+  } catch (error) {
+    errors.push(`${displayFile}: invalid YAML (${error.message})`);
+    return null;
+  }
+}
+
+const newsItems = getMarkdownFiles(newsDir).map(parseNews).filter(Boolean);
+const newsById = new Map();
+for (const item of newsItems) {
+  if (newsById.has(item.id)) {
+    errors.push(`${item.file}: duplicate News slug ${item.id}`);
+    continue;
+  }
+  newsById.set(item.id, item);
+}
 
 function resolvePublicItemAsset(item, assetPath, label) {
   if (!assetPath?.startsWith(`/items/${item.id}/`)) {
@@ -244,6 +274,30 @@ for (const item of items) {
   }
 }
 
+for (const item of newsItems) {
+  const data = item.data ?? {};
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.id)) errors.push(`${item.file}: filename must be a lowercase kebab-case slug`);
+  for (const field of ['title', 'summary', 'newsKind', 'datePosted']) if (!data[field]) errors.push(`${item.file}: missing ${field}`);
+  if (!['post', 'entry'].includes(data.newsKind)) errors.push(`${item.file}: newsKind must be post or entry`);
+  if (!postedDatePattern.test(String(data.datePosted ?? ''))) errors.push(`${item.file}: invalid datePosted; use YYYY-MM`);
+  if (data.published !== false && data.newsKind === 'post' && !item.body) errors.push(`${item.file}: published News posts require body content`);
+  if (data.newsKind === 'entry' && item.body) errors.push(`${item.file}: News entries must not contain body content`);
+
+  const relationIds = new Set();
+  for (const relation of data.relations ?? []) {
+    if (!relation || typeof relation !== 'object' || !relation.id || !relation.label) {
+      errors.push(`${item.file}: News relations require id and label`);
+      continue;
+    }
+    if (relation.id === item.id) errors.push(`${item.file}: relation cannot point to itself`);
+    if (relationIds.has(relation.id)) errors.push(`${item.file}: duplicate relation ${relation.id}`);
+    relationIds.add(relation.id);
+    const target = newsById.get(relation.id);
+    if (!target) errors.push(`${item.file}: broken News relation ${relation.id}`);
+    else if (target.data.newsKind !== 'post') errors.push(`${item.file}: News relation ${relation.id} must target a post`);
+  }
+}
+
 if (existsSync(itemTranslationsDir)) {
   for (const language of readdirSync(itemTranslationsDir).sort()) {
     const languageDir = path.join(itemTranslationsDir, language);
@@ -277,6 +331,39 @@ if (existsSync(itemTranslationsDir)) {
   }
 }
 
+if (existsSync(newsTranslationsDir)) {
+  for (const language of readdirSync(newsTranslationsDir).sort()) {
+    const languageDir = path.join(newsTranslationsDir, language);
+    if (!allowedLanguages.has(language)) {
+      errors.push(`src/content/news-translations/${language}: unsupported language directory`);
+      continue;
+    }
+    for (const file of readdirSync(languageDir).filter((entry) => entry.endsWith('.md')).sort()) {
+      const source = readFileSync(path.join(languageDir, file), 'utf8');
+      const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      if (!match) {
+        errors.push(`${language}/${file}: missing YAML frontmatter`);
+        continue;
+      }
+      const id = file.replace(/\.md$/, '');
+      const canonical = newsById.get(id);
+      if (!canonical) errors.push(`${language}/${file}: translation does not match a canonical News item`);
+      let data;
+      try {
+        data = load(match[1]) ?? {};
+      } catch (error) {
+        errors.push(`${language}/${file}: invalid YAML (${error.message})`);
+        continue;
+      }
+      for (const field of ['title', 'summary']) if (!data[field]) errors.push(`${language}/${file}: missing ${field}`);
+      if (canonical?.data?.published !== false && canonical?.data?.newsKind === 'post' && !match[2].trim()) {
+        errors.push(`${language}/${file}: published News post translations require body content`);
+      }
+      if (canonical?.data?.newsKind === 'entry' && match[2].trim()) errors.push(`${language}/${file}: News entry translations must not contain body content`);
+    }
+  }
+}
+
 if (featuredRanks.size !== 3) errors.push(`Expected exactly three published featured items; found ${featuredRanks.size}`);
 
 const manifest = JSON.parse(readFileSync(path.join(root, 'cv', 'manifest.json'), 'utf8'));
@@ -297,4 +384,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${items.length} items, ${skillIds.size} skills, ${allowedLanguages.size} translation locales, and ${manifest.length} CV variants.`);
+console.log(`Validated ${items.length} items, ${newsItems.length} News records, ${skillIds.size} skills, ${allowedLanguages.size} translation locales, and ${manifest.length} CV variants.`);

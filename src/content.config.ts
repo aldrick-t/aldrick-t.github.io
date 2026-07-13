@@ -100,7 +100,7 @@ const itemCollaboratorSchema = z.object({
 });
 
 const items = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/items' }),
+  loader: glob({ pattern: ['**/[^_]*.md', '!news/**'], base: './src/content/items' }),
   schema: z.object({
     title: z.string().min(1),
     type: z.enum([
@@ -112,8 +112,7 @@ const items = defineCollection({
       'award',
       'course',
       'certification',
-      'volunteering',
-      'news'
+      'volunteering'
     ]),
     summary: z.string().min(1),
     organization: z.string().optional(),
@@ -139,6 +138,18 @@ const items = defineCollection({
   })
 });
 
+const news = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/items/news' }),
+  schema: z.object({
+    title: z.string().min(1),
+    summary: z.string().min(1),
+    newsKind: z.enum(['post', 'entry']),
+    datePosted: z.string().regex(/^\d{4}-\d{2}$/),
+    published: z.boolean().default(true),
+    relations: z.array(itemRelationSchema).default([])
+  })
+});
+
 const itemTranslations = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/item-translations' }),
   schema: z.object({
@@ -150,4 +161,12 @@ const itemTranslations = defineCollection({
   })
 });
 
-export const collections = { items, itemTranslations };
+const newsTranslations = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/news-translations' }),
+  schema: z.object({
+    title: z.string().min(1),
+    summary: z.string().min(1)
+  })
+});
+
+export const collections = { items, itemTranslations, news, newsTranslations };

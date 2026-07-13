@@ -31,7 +31,6 @@ skills: ["ros2", "python"]
 tags: ["Robotics"]
 published: false
 portfolio: true
-timeline: true
 featuredRank: 1
 relevanceRank: 1
 links:
@@ -104,7 +103,7 @@ Write the complete item narrative after the frontmatter. Published items require
 | Parameter | Required | Options or format | Description |
 | --- | --- | --- | --- |
 | `title` | Yes | Non-empty string | Display title used on cards, item pages, metadata, and localized fallbacks. |
-| `type` | Yes | `project`, `work`, `education`, `publication`, `conference`, `award`, `course`, `certification`, `volunteering`, `news` | Primary item category. This controls grouping, labels, and baseline gallery relevance. |
+| `type` | Yes | `project`, `work`, `education`, `publication`, `conference`, `award`, `course`, `certification`, `volunteering` | Primary item category. This controls grouping, labels, and baseline gallery relevance. News records use the dedicated News template. |
 | `summary` | Yes | Non-empty string | Short factual description for cards and metadata. Keep it reusable and concise. |
 | `organization` | No | String | Company, school, lab, publisher, event, or issuing organization. |
 | `location` | No | String | City, region, remote, event location, or other location text. |
@@ -134,7 +133,6 @@ tags: ["Robotics", "Computer vision"]
 | --- | --- | --- | --- | --- |
 | `published` | No | `true` | `true` or `false` | Set `false` for drafts. Published items require body content and can appear in public pages. |
 | `portfolio` | No | `true` | `true` or `false` | Controls whether the item appears in portfolio listing pages and adjacent item pagination. |
-| `timeline` | No | `false` | `true` or `false` | Controls whether the item appears in the homepage timeline. |
 | `featuredRank` | No | None | `1`, `2`, or `3` | Homepage feature order. Exactly three published items must have unique featured ranks. Omit this for non-featured items. |
 | `relevanceRank` | No | None | Positive integer | Manual Portfolio Gallery relevance order. Lower numbers appear first. Published portfolio items must not share the same rank. |
 

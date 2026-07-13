@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from 'astro:content';
+import NewsPostPageContent from '../../components/NewsPostPageContent.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config/site';
+import { getNewsSlug } from '../../lib/news';
+import { localizeNewsItems } from '../../lib/localized-news';
+
+export async function getStaticPaths() {
+  const news = (await getCollection('news')).filter((entry) => entry.data.published && entry.data.newsKind === 'post');
+  return news.map((item) => ({ params: { slug: getNewsSlug(item) }, props: { item, allItems: news } }));
+}
+
+const { item, allItems } = Astro.props;
+const { Content } = await render(item);
+const lang = 'en';
+const localizedItems = localizeNewsItems(allItems, new Map(), lang);
+const localizedItem = localizedItems.find((entry) => entry.id === item.id) ?? item;
+const slug = getNewsSlug(item);
+---
+
+<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/news/${slug}`}>
+  <NewsPostPageContent item={localizedItem} allItems={localizedItems} Content={Content} lang={lang} />
+</BaseLayout>

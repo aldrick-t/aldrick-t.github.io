@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsPageContent from '../../components/NewsPageContent.astro';
+import { siteConfig } from '../../config/site';
+import { ui } from '../../lib/i18n';
+
+const lang = 'en';
+const labels = ui[lang];
+---
+
+<BaseLayout title={`${labels.newsPage.title} — ${siteConfig.name}`} description={labels.newsPage.description} lang={lang} path="/news">
+  <NewsPageContent lang={lang} />
+</BaseLayout>
