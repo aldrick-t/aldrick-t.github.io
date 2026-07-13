@@ -5,6 +5,7 @@ name = "aldrick-t.github.io"
 [setup]
 script = '''
 npm ci
+npm run media:thumbnails
 npm run content:check
 '''
 
