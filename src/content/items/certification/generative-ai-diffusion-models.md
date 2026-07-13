@@ -3,8 +3,8 @@ title: "Generative AI with Diffusion Models"
 type: "certification"
 summary: "Training in the principles and implementation workflow behind diffusion-based generative models."
 organization: "NVIDIA"
-dateStart: "2024"
-dateEnd: "2024"
+dateStart: "2024-06"
+dateEnd: "2024-06"
 highlights: []
 skills: ["python", "deep-learning", "pytorch"]
 tags: ["Credential"]

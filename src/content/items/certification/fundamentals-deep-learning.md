@@ -3,8 +3,8 @@ title: "Fundamentals of Deep Learning"
 type: "certification"
 summary: "Applied introduction to neural-network training and deep-learning workflows."
 organization: "NVIDIA"
-dateStart: "2024"
-dateEnd: "2024"
+dateStart: "2024-05"
+dateEnd: "2024-05"
 highlights: []
 skills: ["python", "deep-learning", "machine-learning"]
 tags: ["Credential"]
