@@ -8,20 +8,40 @@ interface Props {
 
 const { lang = 'en' } = Astro.props;
 const labels = ui[lang];
+const profile = { ...siteConfig, ...labels.site };
 const contacts = [
-  { label: labels.footer.email, value: siteConfig.email, href: `mailto:${siteConfig.email}`, external: false },
-  { label: 'Inst. Email', value: siteConfig.tecEmail, href: `mailto:${siteConfig.tecEmail}`, external: false },
-  { label: 'GitHub', value: 'github.com/aldrick-t', href: siteConfig.githubUrl, external: true },
-  { label: 'LinkedIn', value: 'linkedin.com/in/aldrick-t', href: siteConfig.linkedinUrl, external: true }
+  { label: labels.footer.email, value: siteConfig.email, href: `mailto:${siteConfig.email}`, external: false, preferred: true },
+  { label: labels.contactPage.institutionEmail, value: siteConfig.tecEmail, href: `mailto:${siteConfig.tecEmail}`, external: false, preferred: false },
+  { label: 'GitHub', value: 'github.com/aldrick-t', href: siteConfig.githubUrl, external: true, preferred: false },
+  { label: 'LinkedIn', value: 'linkedin.com/in/aldrick-t', href: siteConfig.linkedinUrl, external: true, preferred: false }
 ];
 ---
 
 <div class="shell page-stack contact-page">
-  <header class="page-header"><h1>{labels.contactPage.title}</h1><p>{labels.contactPage.intro}</p></header>
+  <header class="page-header"><h1>{labels.contactPage.title}</h1></header>
+  <article class="contact-card" aria-labelledby="contact-card-title">
+    <header class="contact-card__header">
+      <span class="mono-label">{labels.contactPage.cardEyebrow}</span>
+      <h2 id="contact-card-title">{labels.contactPage.cardTitle}</h2>
+    </header>
+    <dl class="contact-card__details">
+      <div><dt>{labels.contactPage.fields.fullName}</dt><dd>{siteConfig.fullName}</dd></div>
+      <div><dt>{labels.contactPage.fields.firstName}</dt><dd>{siteConfig.firstName}</dd></div>
+      <div><dt>{labels.contactPage.fields.middleName}</dt><dd>{siteConfig.middleName}</dd></div>
+      <div><dt>{labels.contactPage.fields.lastName}</dt><dd>{siteConfig.lastName}</dd></div>
+      <div><dt>{labels.contactPage.fields.title}</dt><dd>{siteConfig.title}</dd></div>
+      <div><dt>{labels.contactPage.fields.institution}</dt><dd>{siteConfig.institution}</dd></div>
+      <div><dt>{labels.contactPage.fields.location}</dt><dd>{siteConfig.location}</dd></div>
+      <div><dt>{labels.contactPage.fields.availability}</dt><dd>{profile.availability}</dd></div>
+    </dl>
+  </article>
   <div class="contact-list">
     {contacts.map((contact) => (
       <article class="contact-row">
-        <div><span class="mono-label">{contact.label}</span><h2><a href={contact.href} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer noopener' : undefined}>{contact.value}{contact.external ? ` ${labels.common.externalSuffix}` : ''}</a></h2></div>
+        <div>
+          <span class="mono-label">{contact.label}{contact.preferred ? <span class="contact-preferred">{labels.contactPage.preferred}</span> : null}</span>
+          <h2><a href={contact.href} target={contact.external ? '_blank' : undefined} rel={contact.external ? 'noreferrer noopener' : undefined}>{contact.value}{contact.external ? ` ${labels.common.externalSuffix}` : ''}</a></h2>
+        </div>
         <button
           type="button"
           class="copy-control"

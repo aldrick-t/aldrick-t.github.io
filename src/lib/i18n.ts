@@ -270,7 +270,21 @@ export const ui = {
       title: 'Contact',
       description: 'Professional contact links for Aldrick Tadeo.',
       eyebrow: '',
-      intro: 'Email is the best way to reach me. Professional profiles are linked below.'
+      cardEyebrow: 'Contact details',
+      cardTitle: 'About me',
+      cardIntro: 'Key details for identifying me and choosing the right way to get in touch.',
+      preferred: 'Preferred',
+      institutionEmail: 'Institution email',
+      fields: {
+        fullName: 'Full name',
+        firstName: 'First name',
+        middleName: 'Middle name(s)',
+        lastName: 'Last name',
+        title: 'Full title',
+        institution: 'Institution',
+        location: 'Location',
+        availability: 'Availability'
+      }
     },
     notFound: {
       description: 'The requested page could not be found.',
@@ -377,7 +391,21 @@ export const ui = {
       title: 'Contacto',
       description: 'Enlaces de contacto profesional de Aldrick Tadeo.',
       eyebrow: 'Canales directos',
-      intro: 'El correo electrónico es la mejor forma de contactarme. Los perfiles profesionales están enlazados abajo.'
+      cardEyebrow: 'Datos de contacto',
+      cardTitle: 'Sobre mí',
+      cardIntro: 'Datos clave para identificarme y elegir la mejor forma de contactarme.',
+      preferred: 'Preferido',
+      institutionEmail: 'Correo institucional',
+      fields: {
+        fullName: 'Nombre completo',
+        firstName: 'Nombre',
+        middleName: 'Segundo nombre(s)',
+        lastName: 'Apellidos',
+        title: 'Título completo',
+        institution: 'Institución',
+        location: 'Ubicación',
+        availability: 'Disponibilidad'
+      }
     },
     notFound: {
       description: 'No se pudo encontrar la página solicitada.',
@@ -484,7 +512,21 @@ export const ui = {
       title: '連絡先',
       description: 'Aldrick Tadeoの仕事用連絡先リンク。',
       eyebrow: '直接の連絡先',
-      intro: 'ご連絡はメールが最適です。仕事用プロフィールは以下に掲載しています。'
+      cardEyebrow: '連絡先情報',
+      cardTitle: 'プロフィール',
+      cardIntro: '本人確認と連絡方法の選択に役立つ基本情報です。',
+      preferred: '推奨',
+      institutionEmail: '所属機関メール',
+      fields: {
+        fullName: '氏名（フルネーム）',
+        firstName: '名',
+        middleName: 'ミドルネーム',
+        lastName: '姓',
+        title: '正式な肩書き',
+        institution: '所属機関',
+        location: '所在地',
+        availability: '対応可能な機会'
+      }
     },
     notFound: {
       description: 'リクエストされたページが見つかりませんでした。',
