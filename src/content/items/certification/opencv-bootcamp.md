@@ -3,8 +3,8 @@ title: "OpenCV Bootcamp"
 type: "certification"
 summary: "Practical training in image processing and computer-vision development with OpenCV."
 organization: "OpenCV University"
-dateStart: "2024"
-dateEnd: "2024"
+dateStart: "2024-04"
+dateEnd: "2024-04"
 highlights: []
 skills: ["python", "opencv", "computer-vision"]
 tags: ["Credential"]
