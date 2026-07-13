@@ -6,6 +6,7 @@ Use these values in Codex project Environment settings so fresh worktrees are re
 
 ```bash
 npm ci
+npm run media:thumbnails
 npm run content:check
 ```
 
@@ -15,6 +16,7 @@ If the environment image includes Typst and you want CV generation verified duri
 
 ```bash
 npm ci
+npm run media:thumbnails
 npm run content:check
 npm run build:cv
 ```
