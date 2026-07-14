@@ -10,7 +10,9 @@ highlights:
   - "Integrated telemetry through C#/.NET services, REST interfaces, and NX Open extensions."
   - "Built Grafana dashboards for adoption, bottleneck, and reliability analysis."
   - "Developed AR/VR training and visualization prototypes for aerospace manufacturing and maintenance using TeamViewer Spatial Suite."
-skills: ["csharp", "postgresql", "grafana", "nx", "git", "teamviewer-spatial"]
+  - "Implemented backend system monitoring and alerting with Prometheus and Grafana."
+  - "Created CI/CD pipelines in Azure DevOps for telemetry services, NX extensions, Grafana provisioning, and Prometheus exporters."
+skills: ["csharp", "postgresql", "grafana", "nx", "git", "teamviewer-spatial", "prometheus", "cicd", "azure-devops", "azure-pipelines"]
 tags: ["Telemetry", "Engineering tooling", "CAD/CAE"]
 published: true
 portfolio: true

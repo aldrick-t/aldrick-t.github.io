@@ -9,14 +9,14 @@ highlights:
   - "Delivered both a full CLI and a Tauri + React desktop application for video inspection and dataset extraction."
   - "Implemented reproducible frame sampling, crop and resize transforms, color conversion, and JSONL/CSV manifests through FFmpeg filtergraphs."
   - "Added interactive video preview, scrubbing, frame seeking, crop editing, legacy profile import, and portable FFmpeg discovery."
-skills: ["rust", "typescript", "react", "tauri", "ffmpeg", "computer-vision", "linux", "git"]
+skills: ["rust", "typescript", "react", "tauri", "ffmpeg", "computer-vision", "linux", "git", "cicd", "GitHub Actions"]
 tags: ["Developer tooling", "Computer vision", "Dataset engineering", "Rust", "Desktop software"]
 published: true
 portfolio: true
 timeline: false
 links:
   - kind: "repository"
-    label: "GitHub repository"
+    label: "GitHub"
     url: "https://github.com/aldrick-t/vid2dataset"
 cvReview: ["full"]
 ---

@@ -18,3 +18,5 @@ Extraction is built around FFmpeg filtergraphs for frame sampling, crop, resize,
 The desktop application adds video preview, scrubbing, time and frame seeking, drag-to-create crop selection, crop editing, and explicit crop/no-crop confirmation. It uses the same Rust core as the CLI rather than maintaining a separate extraction implementation.
 
 This is a functional alpha, not a signed stable production release. Legacy Python code and configuration import remain available for migration. Hosted processing and COCO/YOLO annotation exports are intentionally deferred while the local extraction workflow and release packaging mature.
+
+The pre-release tag is available on GitHub at [vid2dataset2-alpha-2](https://github.com/aldrick-t/vid2dataset/releases/tag/v0.2.0-alpha.2).
