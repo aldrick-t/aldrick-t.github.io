@@ -1,14 +1,16 @@
 ---
 title: "LiDAR-Based SLAM for Autonomous Navigation"
 type: "project"
-summary: "Developing a ROS 2 LiDAR SLAM pipeline for real-time autonomous navigation on embedded mobile-robot hardware."
+summary: "Developed a modular ROS 2 navigation stack that combines LiDAR obstacle sensing, ArUco localization, EKF fusion, and reactive planning for the Puzzlebot."
 organization: "Manchester Robotics, Tecnológico de Monterrey"
 dateStart: "2026-03"
 dateEnd: "2026-06"
 highlights:
-  - "Implementing scan matching and map-generation workflows for robust localization."
-  - "Integrating Gazebo simulation with physical MCR2 Puzzlebot testing."
-  - "Designing repeatable maze-mapping and navigation experiments for sim-to-real evaluation."
+  - "Built independent ROS 2 modules for visual localization, EKF pose fusion, path generation, motion control, wall following, and obstacle avoidance."
+  - "Combined wheel odometry with ArUco marker observations to correct accumulated pose drift and reduce localization uncertainty."
+  - "Implemented Bug0 and Bug2 behaviors that use LiDAR obstacle detection and wall following to recover the route toward a goal."
+  - "Validated goal-to-goal navigation in Gazebo and RViz across eight logged trajectories, with residual distances ranging from 1 to 10 cm."
+  - "Configured a 0.095 m goal-acceptance threshold and documented marker placements, goal coordinates, TF frames, and repeatable launch/test procedures."
 skills: ["cpp", "python", "ros2", "slam", "gazebo", "sensor-integration", "robot-control", "linux"]
 tags: ["Autonomy", "Mobile robotics", "Sim-to-real"]
 published: true
@@ -46,6 +48,10 @@ relations:
 cvReview: ["engineering", "academic", "full"]
 ---
 
-The project investigates real-time mapping and localization on constrained compute hardware. Simulation and physical testing use the same ROS 2 architecture so algorithm changes can be evaluated against comparable navigation tasks.
+This project developed an autonomous-navigation stack for the MCR2 Puzzlebot using ROS 2, Gazebo, RViz, LiDAR, camera-based ArUco markers, wheel odometry, and an extended Kalman filter (EKF). The report’s validated experiment focused on simulated navigation: the robot had to reach predefined goals in a maze while estimating its pose, detecting obstacles, and recovering its route after encounters with walls.
 
-The system is structured for later multi-sensor fusion and comparative SLAM benchmarking.
+The implementation was organized as independent ROS 2 nodes. A localization node provided odometry, while the ArUco/EKF module fused odometric motion with known marker positions and published a corrected global estimate. The controller consumed that estimate and LiDAR scans, driving toward the active goal in direct mode and switching to wall following when an obstacle was detected. Bug0 returned to the goal whenever a clear path was available; Bug2 used the start-to-goal reference line (the m-line) to decide when to leave the obstacle boundary and resume the route.
+
+The report compares the pose estimate before and after visual correction: detecting an ArUco marker reduced the RViz confidence ellipse and corrected both position and orientation. Eight goal-to-goal runs were recorded with residual distances between 0.01 m and 0.10 m; 0.095 m was used as the goal-acceptance threshold. The results supported the feasibility of combining visual references, sensor fusion, and reactive navigation in a controlled environment, while also exposing sensitivity to controller calibration, marker visibility, sensor noise, and node synchronization.
+
+The accompanying repository packages the simulation, launch files, YAML parameters, RViz configuration, unit tests, and a separate physical-robot bringup package. That bringup includes RPLIDAR and micro-ROS integration plus launch wrappers for SLAM Toolbox and Nav2, extending the simulation architecture toward real Puzzlebot deployment. The report itself identifies physical validation, more robust planning, improved calibration, and more systematic measurement as future work.
