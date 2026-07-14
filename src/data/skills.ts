@@ -32,9 +32,14 @@ export const skills: SkillDefinition[] = [
   { id: 'linux', label: 'Linux', group: 'Software & tools' },
   { id: 'ffmpeg', label: 'FFmpeg', group: 'Software & tools' },
   { id: 'docker', label: 'Docker / Podman', group: 'Software & tools' },
+  { id: 'prometheus', label: 'Prometheus', group: 'Software & tools' },
   { id: 'postgresql', label: 'PostgreSQL', group: 'Software & tools' },
   { id: 'grafana', label: 'Grafana', group: 'Software & tools' },
   { id: 'git', label: 'Git / GitHub', group: 'Software & tools' },
+  { id: 'cicd', label: 'CI/CD', group: 'Software & tools' },
+  { id: 'azure-devops', label: 'Azure DevOps', group: 'Software & tools' },
+  { id: 'azure-pipelines', label: 'Azure Pipelines', group: 'Software & tools' },
+  { id: 'github-actions', label: 'GitHub Actions', group: 'Software & tools' },
   { id: 'teamviewer-spatial', label: 'TeamViewer Spatial', group: 'Software & tools' },
   { id: 'nx', label: 'Siemens NX', group: 'CAD / CAE / simulation' },
   { id: 'fusion', label: 'Autodesk Fusion', group: 'CAD / CAE / simulation' },
@@ -46,6 +51,8 @@ export const skills: SkillDefinition[] = [
   { id: 'tensorflow', label: 'TensorFlow', group: 'Libraries & frameworks' },
   { id: 'pytorch', label: 'PyTorch', group: 'Libraries & frameworks' },
   { id: 'numpy', label: 'NumPy', group: 'Libraries & frameworks' }
+  
+  
 ];
 
 export const skillMap = new Map(skills.map((skill) => [skill.id, skill]));
