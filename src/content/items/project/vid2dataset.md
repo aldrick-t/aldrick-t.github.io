@@ -16,7 +16,7 @@ portfolio: true
 timeline: false
 links:
   - kind: "repository"
-    label: "GitHub repository"
+    label: "GitHub"
     url: "https://github.com/aldrick-t/vid2dataset"
 cvReview: ["full"]
 ---
