@@ -30,7 +30,7 @@ const next = index >= 0 && index < posts.length - 1 ? posts[index + 1] : undefin
   </nav>
 
   <header class="news-post-header">
-    <p class="mono-label">{labels.newsPage.post} · {formatPostedDate(item, lang)}</p>
+    <p class="mono-label">{labels.newsPage.post} · <time datetime={item.data.datePosted}>{formatPostedDate(item, lang)}</time></p>
     <h1>{item.data.title}</h1>
     <p>{item.data.summary}</p>
   </header>

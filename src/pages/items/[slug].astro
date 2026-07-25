@@ -5,6 +5,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { localizeItems } from '../../lib/localized-items';
 import { siteConfig } from '../../config/site';
 import { getItemSlug } from '../../lib/items';
+import { localizePath, ui } from '../../lib/i18n';
+import { buildBreadcrumbSchema, buildItemSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const items = (await getCollection('items')).filter((item) => item.data.published);
@@ -18,8 +20,16 @@ const lang = 'en';
 const localizedItems = localizeItems(allItems, new Map(), lang);
 const localizedItem = localizedItems.find((entry) => entry.id === item.id) ?? item;
 const slug = getItemSlug(item);
+const pageUrl = new URL(localizePath(`/items/${slug}`, lang), Astro.site).toString();
+const structuredData = [
+  buildBreadcrumbSchema([
+    { name: ui[lang].common.portfolio, url: new URL(localizePath('/portfolio', lang), Astro.site).toString() },
+    { name: localizedItem.data.title, url: pageUrl }
+  ], lang),
+  buildItemSchema(localizedItem, pageUrl, lang)
+];
 ---
 
-<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/items/${slug}`}>
+<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/items/${slug}`} structuredData={structuredData}>
   <ItemPageContent item={localizedItem} allItems={localizedItems} Content={Content} lang={lang} />
 </BaseLayout>

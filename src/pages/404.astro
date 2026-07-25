@@ -8,6 +8,6 @@ const lang = 'en';
 const labels = ui[lang];
 ---
 
-<BaseLayout title={`404 — ${siteConfig.name}`} description={labels.notFound.description} lang={lang} path="/404">
+<BaseLayout title={`404 — ${siteConfig.name}`} description={labels.notFound.description} lang={lang} path="/404" robots="noindex, nofollow">
   <NotFoundContent lang={lang} />
 </BaseLayout>

@@ -3,6 +3,7 @@ import StickyNav from '../components/StickyNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { siteConfig } from '../config/site';
 import { getLanguageFromPath, getPathWithoutLanguage, languageMeta, languages, localizePath, ui, type Language } from '../lib/i18n';
+import type { JsonLd } from '../lib/seo';
 import '../styles/global.css';
 
 interface Props {
@@ -10,13 +11,21 @@ interface Props {
   description?: string;
   lang?: Language;
   path?: string;
+  robots?: string;
+  ogType?: 'article' | 'website';
+  socialImage?: string;
+  structuredData?: JsonLd | JsonLd[];
 }
 
 const {
   title,
   description = siteConfig.description,
   lang = getLanguageFromPath(Astro.url.pathname),
-  path = getPathWithoutLanguage(Astro.url.pathname)
+  path = getPathWithoutLanguage(Astro.url.pathname),
+  robots = 'index, follow',
+  ogType = 'website',
+  socialImage,
+  structuredData
 } = Astro.props;
 const canonical = new URL(localizePath(path, lang), Astro.site);
 const alternateLinks = languages.map((language) => ({
@@ -34,10 +43,23 @@ const labels = ui[lang];
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
     {alternateLinks.map((link) => <link rel="alternate" hreflang={languageMeta[link.language].htmlLang} href={link.href} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, 'en'), Astro.site)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={languageMeta[lang].locale.replace('-', '_')} />
+    {alternateLinks.filter((link) => link.language !== lang).map((link) => <meta property="og:locale:alternate" content={languageMeta[link.language].locale.replace('-', '_')} />)}
+    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImage ? <meta property="og:image" content={new URL(socialImage, Astro.site)} /> : null}
+    {socialImage ? <meta name="twitter:image" content={new URL(socialImage, Astro.site)} /> : null}
+    {structuredData ? <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} /> : null}
     <script is:inline>
       (() => {
         const saved = localStorage.getItem('site-theme');
