@@ -15,7 +15,6 @@ const news = await getPublishedLocalizedNews(lang);
 <div class="shell page-stack news-page">
   <header class="page-header">
     <h1>{labels.newsPage.title}</h1>
-    <p>{labels.newsPage.intro}</p>
   </header>
   <NewsList items={news} lang={lang} />
 </div>
