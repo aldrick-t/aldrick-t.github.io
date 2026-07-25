@@ -12,7 +12,7 @@ const slug = getItemSlug(item);
 <article class:list={{ 'item-card': true, 'item-card--featured': featured }}>
   <div class="item-card__meta">
     <span>{getItemTypeLabel(item.data.type, lang, 'singular')}</span>
-    <time>{formatDateRange(item, lang)}</time>
+    <time datetime={item.data.dateStart}>{formatDateRange(item, lang)}</time>
   </div>
   <h3><a href={itemPath(slug, lang)}>{item.data.title}</a></h3>
   {item.data.organization ? <p class="item-card__organization">{item.data.organization}</p> : null}

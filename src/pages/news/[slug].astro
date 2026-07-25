@@ -5,6 +5,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../config/site';
 import { getNewsSlug } from '../../lib/news';
 import { localizeNewsItems } from '../../lib/localized-news';
+import { localizePath, ui } from '../../lib/i18n';
+import { buildBreadcrumbSchema, buildNewsSchema } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const news = (await getCollection('news')).filter((entry) => entry.data.published && entry.data.newsKind === 'post');
@@ -17,8 +19,16 @@ const lang = 'en';
 const localizedItems = localizeNewsItems(allItems, new Map(), lang);
 const localizedItem = localizedItems.find((entry) => entry.id === item.id) ?? item;
 const slug = getNewsSlug(item);
+const pageUrl = new URL(localizePath(`/news/${slug}`, lang), Astro.site).toString();
+const structuredData = [
+  buildBreadcrumbSchema([
+    { name: ui[lang].newsPage.title, url: new URL(localizePath('/news', lang), Astro.site).toString() },
+    { name: localizedItem.data.title, url: pageUrl }
+  ], lang),
+  buildNewsSchema(localizedItem, pageUrl, lang)
+];
 ---
 
-<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/news/${slug}`}>
+<BaseLayout title={`${localizedItem.data.title} — ${siteConfig.name}`} description={localizedItem.data.summary} lang={lang} path={`/news/${slug}`} ogType="article" structuredData={structuredData}>
   <NewsPostPageContent item={localizedItem} allItems={localizedItems} Content={Content} lang={lang} />
 </BaseLayout>

@@ -3,11 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HomePageContent from '../components/HomePageContent.astro';
 import { siteConfig } from '../config/site';
 import { ui } from '../lib/i18n';
+import { buildProfileSchema } from '../lib/seo';
 
 const lang = 'en';
 const labels = ui[lang];
+const pageUrl = new URL('/', Astro.site).toString();
 ---
 
-<BaseLayout title={`${siteConfig.name} — ${labels.site.title}`} description={labels.site.description} lang={lang} path="/">
+<BaseLayout title={`${siteConfig.name} — ${labels.site.title}`} description={labels.site.description} lang={lang} path="/" structuredData={buildProfileSchema(pageUrl, lang)}>
   <HomePageContent lang={lang} />
 </BaseLayout>

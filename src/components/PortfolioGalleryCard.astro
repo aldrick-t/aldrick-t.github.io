@@ -63,8 +63,9 @@ const tags = item.data.tags ?? [];
       <img
         src={thumbnail.path}
         alt={thumbnail.alt}
-        loading="lazy"
+        loading={latestOrder === 0 ? 'eager' : 'lazy'}
         decoding="async"
+        fetchpriority={latestOrder === 0 ? 'high' : undefined}
         style={thumbnailImageStyle || undefined}
       />
     ) : (
@@ -77,7 +78,7 @@ const tags = item.data.tags ?? [];
   <div class="portfolio-gallery-card__body">
     <div class="portfolio-gallery-card__meta">
       <span>{getItemTypeLabel(item.data.type, lang, 'singular')}</span>
-      <time>{formatDateRange(item, lang)}</time>
+      <time datetime={item.data.dateStart}>{formatDateRange(item, lang)}</time>
     </div>
     <h3><a href={itemUrl}>{item.data.title}</a></h3>
     {item.data.organization ? <p class="portfolio-gallery-card__organization">{item.data.organization}</p> : null}
