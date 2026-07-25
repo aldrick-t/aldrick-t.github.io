@@ -110,6 +110,7 @@ export const skillGroupsByLanguage: Record<Language, Record<string, string>> = {
     'Robotics & autonomy': 'Robotics & autonomy',
     'AI & perception': 'AI & perception',
     'Embedded & hardware': 'Embedded & hardware',
+    'Professional & interpersonal': 'Professional & interpersonal',
     'Software & tools': 'Software & tools',
     'CAD / CAE / simulation': 'CAD / CAE / simulation',
     'Libraries & frameworks': 'Libraries & frameworks'
@@ -119,6 +120,7 @@ export const skillGroupsByLanguage: Record<Language, Record<string, string>> = {
     'Robotics & autonomy': 'Robótica y autonomía',
     'AI & perception': 'IA y percepción',
     'Embedded & hardware': 'Embebidos y hardware',
+    'Professional & interpersonal': 'Competencias profesionales e interpersonales',
     'Software & tools': 'Software y herramientas',
     'CAD / CAE / simulation': 'CAD / CAE / simulación',
     'Libraries & frameworks': 'Bibliotecas y frameworks'
@@ -128,6 +130,7 @@ export const skillGroupsByLanguage: Record<Language, Record<string, string>> = {
     'Robotics & autonomy': 'ロボティクスと自律性',
     'AI & perception': 'AIと認識',
     'Embedded & hardware': '組込みとハードウェア',
+    'Professional & interpersonal': '専門・対人スキル',
     'Software & tools': 'ソフトウェアとツール',
     'CAD / CAE / simulation': 'CAD / CAE / シミュレーション',
     'Libraries & frameworks': 'ライブラリとフレームワーク'
@@ -137,6 +140,11 @@ export const skillGroupsByLanguage: Record<Language, Record<string, string>> = {
 export const skillLabelsByLanguage: Record<Language, Record<string, string>> = {
   en: {},
   es: {
+    robotics: 'Robótica',
+    'cyber-physical-systems': 'Sistemas ciberfísicos',
+    'smart-interfaces': 'Interfaces inteligentes',
+    'digital-systems': 'Sistemas digitales',
+    'social-intelligence': 'Inteligencia social',
     'sensor-integration': 'Integración de sensores',
     'robot-control': 'Control robótico',
     'computer-vision': 'Visión por computadora',
@@ -154,6 +162,11 @@ export const skillLabelsByLanguage: Record<Language, Record<string, string>> = {
     fea: 'Análisis por elementos finitos'
   },
   ja: {
+    robotics: 'ロボティクス',
+    'cyber-physical-systems': 'サイバーフィジカルシステム',
+    'smart-interfaces': 'スマートインターフェース',
+    'digital-systems': 'デジタルシステム',
+    'social-intelligence': 'ソーシャルインテリジェンス',
     'sensor-integration': 'センサー統合',
     'robot-control': 'ロボット制御',
     'computer-vision': 'コンピュータビジョン',
