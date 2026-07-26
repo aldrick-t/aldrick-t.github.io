@@ -1,34 +1,34 @@
 :root,
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #F2F0EF;
-  --surface: #f6f7f8;
-  --surface-raised: #ffffff;
-  --text: #17191c;
-  --muted: #626870;
-  --border: #dfe2e6;
-  --border-strong: #b7bcc3;
-  --accent: #5fb935;
-  --accent-soft: #eaf2ff;
-  --focus: #256fdc;
-  --code: #f0f2f4;
+  --bg: #f9fbf2;
+  --surface: rgb(215 249 255 / 0.55);
+  --surface-raised: #FAF8EF;
+  --text: #0e1c36;
+  --muted: rgb(14 28 54 / 0.68);
+  --border: rgb(14 28 54 / 0.16);
+  --border-strong: #0e1c36;
+  --accent: #0e1c36;
+  --accent-soft: #EBFCFF;
+  --focus: #afcbff;
+  --code: rgb(14 28 54 / 0.06);
   --site-header-sticky-height: 4.25rem;
   --section-nav-sticky-height: 3.15rem;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #111315;
-  --surface: #191c1f;
-  --surface-raised: #151719;
-  --text: #eceef0;
-  --muted: #a5abb3;
-  --border: #30343a;
-  --border-strong: #4a5058;
-  --accent: #645de8;
-  --accent-soft: #172844;
-  --focus: #8db7ff;
-  --code: #202327;
+  --bg: #0e1c36;
+  --surface: rgb(175 203 255 / 0.1);
+  --surface-raised: rgb(215 249 255 / 0.08);
+  --text: #f9fbf2;
+  --muted: rgb(249 251 242 / 0.72);
+  --border: rgb(175 203 255 / 0.34);
+  --border-strong: #afcbff;
+  --accent: #f9fbf2;
+  --accent-soft: rgb(215 249 255 / 0.12);
+  --focus: #d7f9ff;
+  --code: rgb(215 249 255 / 0.1);
   --site-header-sticky-height: 4.25rem;
   --section-nav-sticky-height: 3.15rem;
 }
@@ -37,17 +37,17 @@
   :root:not([data-theme]),
   :root[data-theme='system'] {
     color-scheme: dark;
-    --bg: #111315;
-    --surface: #191c1f;
-    --surface-raised: #151719;
-    --text: #eceef0;
-    --muted: #a5abb3;
-    --border: #30343a;
-    --border-strong: #4a5058;
-    --accent: #645de8;
-    --accent-soft: #172844;
-    --focus: #8db7ff;
-    --code: #202327;
+    --bg: #0e1c36;
+    --surface: rgb(175 203 255 / 0.1);
+    --surface-raised: rgb(215 249 255 / 0.08);
+    --text: #f9fbf2;
+    --muted: rgb(249 251 242 / 0.72);
+    --border: rgb(175 203 255 / 0.34);
+    --border-strong: #afcbff;
+    --accent: #f9fbf2;
+    --accent-soft: rgb(215 249 255 / 0.12);
+    --focus: #d7f9ff;
+    --code: rgb(215 249 255 / 0.1);
     --site-header-sticky-height: 4.25rem;
     --section-nav-sticky-height: 3.15rem;
   }
