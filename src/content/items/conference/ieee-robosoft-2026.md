@@ -16,7 +16,7 @@ portfolio: true
 timeline: true
 thumbnail:
   path: "/items/ieee-robosoft-2026/thumbnail.png"
-  alt: "Short description of the thumbnail image."
+  alt: "RoboSoft 2026 conference logo with a stylized bridge and black-and-gold lettering."
   objectFit: "contain"
   objectPosition: "50% 50%"
   backgroundColor: "#ffffff"
@@ -35,4 +35,3 @@ collaborators:
 ---
 
 The conference visit centered on the Manipulation Challenge and the presentation of a complete robotic harvesting system developed by a four-member team with two participating members. The challenge involved picking raspberries from an artificial bush and placing them in a basket, with a scoring system based on the number of fruits collected and the accuracy of placement.
-

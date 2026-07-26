@@ -21,7 +21,7 @@ featuredRank: 3
 cvReview: ["engineering", "academic", "full"]
 thumbnail:
   path: "/items/ge-aerospace-software-engineer-intern/GE_Aerospace_logo.svg"
-  alt: "Short description of the thumbnail image."
+  alt: "GE Aerospace wordmark in navy on a white background."
   objectFit: "contain"
   objectPosition: "50% 50%"
   backgroundColor: "#ffffff"

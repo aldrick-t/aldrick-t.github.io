@@ -13,7 +13,7 @@ portfolio: true
 timeline: false
 thumbnail:
   path: "/items/ur-e-series-tracks/generated/ur_proTrack-page-1.png"
-  alt: "Centered cropped thumbnail."
+  alt: "Universal Robots e-Series Pro Track certificate of completion for Aldrick Tadeo Arellano."
   objectFit: "contain"
   objectPosition: "50% 50%"
 media:

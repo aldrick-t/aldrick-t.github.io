@@ -13,7 +13,7 @@ portfolio: true
 timeline: false
 thumbnail:
   path: "/items/opencv-bootcamp/generated/certificate-page-1.png"
-  alt: "Centered cropped thumbnail."
+  alt: "OpenCV University Certificate of Excellence for the OpenCV Bootcamp awarded to Aldrick Tadeo Arellano."
   objectFit: "cover"
   objectPosition: "50% 50%"
 cvReview: ["engineering", "academic", "full"]

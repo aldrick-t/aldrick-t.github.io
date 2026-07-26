@@ -13,7 +13,7 @@ portfolio: true
 timeline: false
 thumbnail:
   path: "/items/generative-ai-diffusion-models/generated/GenAIwithDiffusionModels_aldrick_tadeo-page-1.png"
-  alt: "Centered cropped thumbnail."
+  alt: "NVIDIA Certificate of Competency for Generative AI with Diffusion Models awarded to Aldrick Tadeo Arellano."
   objectFit: "cover"
   objectPosition: "50% 50%"
 media:
