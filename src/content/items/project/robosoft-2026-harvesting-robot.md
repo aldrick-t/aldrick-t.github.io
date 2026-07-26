@@ -17,7 +17,7 @@ timeline: true
 featuredRank: 2
 thumbnail:
   path: "/items/robosoft-2026-harvesting-robot/thumbnail.png"
-  alt: "Test run snapshot in lab conditions."
+  alt: "UR5e manipulator with an RGB-D camera and soft gripper positioned over a fruit during a lab harvesting test."
   objectFit: "fill"
   objectPosition: "50% 0%"
 collaborators:
