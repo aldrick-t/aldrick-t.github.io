@@ -1,6 +1,12 @@
 ---
 import { siteConfig } from '../config/site';
-import { getLocalizedSkillGroups } from '../data/skills';
+import {
+  getLocalizedMainSkillStack,
+  getLocalizedSkillStack,
+  getSkillIconUrls,
+  mainSkillStackIds,
+  mainTechStackIds
+} from '../data/skills';
 import { ui, localizePath, itemPath, type Language } from '../lib/i18n';
 import { getPublishedLocalizedItems } from '../lib/localized-items';
 import { getPublishedLocalizedNews } from '../lib/localized-news';
@@ -26,9 +32,18 @@ const landingSections = [
   { id: 'languages', label: labels.home.sections.languages },
   { id: 'credentials', label: labels.home.sections.credentials }
 ] as const;
-const skillGroups = getLocalizedSkillGroups(lang);
 const items = await getPublishedLocalizedItems(lang);
 const news = await getPublishedLocalizedNews(lang);
+const mainTechStack = getLocalizedMainSkillStack(mainTechStackIds, lang);
+const mainSkillStack = getLocalizedMainSkillStack(mainSkillStackIds, lang);
+const fullTechStack = getLocalizedSkillStack('tech', lang);
+const fullSkillStack = getLocalizedSkillStack('skill', lang);
+const skillUsage = new Map(
+  [...mainTechStack, ...mainSkillStack, ...fullTechStack.flatMap(({ skills }) => skills), ...fullSkillStack.flatMap(({ skills }) => skills)]
+    .map((skill) => [skill.id, sortItems(items.filter((item) => (item.data.skills ?? []).includes(skill.id)))])
+);
+const usageLabel = (skillLabel: string) => labels.home.skills.usage.replace('{skill}', skillLabel);
+const emptyUsageLabel = (skillLabel: string) => labels.home.skills.emptyUsage.replace('{skill}', skillLabel);
 const featured = items.filter((item) => item.data.featuredRank).sort((a, b) => (a.data.featuredRank ?? 0) - (b.data.featuredRank ?? 0));
 if (featured.length !== 3) throw new Error(`Expected exactly three featured items, found ${featured.length}.`);
 const credentials = sortItems(items.filter((item) => item.data.type === 'course' || item.data.type === 'certification'));
@@ -110,18 +125,104 @@ const languages = profile.languages.map((language) => ({
 
   <section id="skills" class="page-section" aria-labelledby="skills-title">
     <header class="section-heading"><div><h2 id="skills-title">{labels.home.sections.skills}</h2></div></header>
-    <div class="skill-groups">
-      {skillGroups.map(({ group, skills }) => {
-        const rows = skills.map((skill) => ({ skill, related: sortItems(items.filter((item) => (item.data.skills ?? []).includes(skill.id))) })).filter(({ related }) => related.length);
-        return rows.length ? (
-          <section class="skill-group" aria-labelledby={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>
-            <h3 id={`skill-group-${group.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`}>{group}</h3>
-            <dl>{rows.map(({ skill, related }) => (
-              <div><dt>{skill.label}</dt><dd>{related.map((item, index) => <><a href={itemPath(getItemSlug(item), lang)}>{item.data.title}</a>{index < related.length - 1 ? ', ' : ''}</>)}</dd></div>
-            ))}</dl>
-          </section>
-        ) : null;
+    <div class="skill-stacks">
+      <section class="skill-stack" aria-labelledby="main-tech-stack-title">
+        <h3 id="main-tech-stack-title">{labels.home.skills.mainTechStack}</h3>
+        <div class="skill-stack__list">
+          {mainTechStack.map((skill) => {
+            const panelId = `main-tech-usage-${skill.id}`;
+            return <button class="skill-stack__button" type="button" data-skill-trigger aria-controls={panelId} aria-expanded="false">
+              <span class="skill-stack__icons" aria-hidden="true">{getSkillIconUrls(skill).map((iconUrl) => <img src={iconUrl} alt="" />)}</span>
+              <span>{skill.label}</span>
+            </button>;
+          })}
+        </div>
+      </section>
+      <section class="skill-stack" aria-labelledby="main-skill-stack-title">
+        <h3 id="main-skill-stack-title">{labels.home.skills.mainSkillStack}</h3>
+        <div class="skill-stack__list">
+          {mainSkillStack.map((skill) => {
+            const panelId = `main-skill-usage-${skill.id}`;
+            return <button class="skill-stack__button" type="button" data-skill-trigger aria-controls={panelId} aria-expanded="false">{skill.label}</button>;
+          })}
+        </div>
+      </section>
+    </div>
+
+    <div class="skill-usage-panels skill-usage-panels--main">
+      {[...mainTechStack, ...mainSkillStack].map((skill) => {
+        const panelId = `${skill.stack === 'tech' ? 'main-tech' : 'main-skill'}-usage-${skill.id}`;
+        const related = skillUsage.get(skill.id) ?? [];
+        return <section id={panelId} class="skill-usage" data-skill-usage hidden>
+          <h4>{usageLabel(skill.label)}</h4>
+          {related.length ? <ul>{related.map((item) => <li><a href={itemPath(getItemSlug(item), lang)}>{item.data.title}</a></li>)}</ul> : <p>{emptyUsageLabel(skill.label)}</p>}
+        </section>;
       })}
+    </div>
+
+    <div class="skill-stacks__more">
+      <button
+        class="button"
+        type="button"
+        data-skills-toggle
+        aria-controls="full-skill-stacks"
+        aria-expanded="false"
+      >
+        <span data-skills-toggle-label data-see-more={labels.home.skills.seeMore} data-show-less={labels.home.skills.showLess}>{labels.home.skills.seeMore}</span>
+        <span aria-hidden="true" data-skills-toggle-arrow>↓</span>
+      </button>
+    </div>
+
+    <div id="full-skill-stacks" class="skill-stacks skill-stacks--full" data-skills-expanded hidden>
+      <section class="skill-stack skill-stack--full" aria-labelledby="full-tech-stack-title">
+        <h3 id="full-tech-stack-title">{labels.home.skills.fullTechStack}</h3>
+        {fullTechStack.map(({ group, skills }, groupIndex) => (
+          <section class="skill-stack__group" aria-labelledby={`full-tech-group-${groupIndex}`}>
+            <h4 id={`full-tech-group-${groupIndex}`}>{group}</h4>
+            <div class="skill-pill-list">
+              {skills.map((skill) => {
+                const panelId = `full-tech-usage-${skill.id}`;
+                return <button class="skill-pill skill-pill--tech" type="button" data-skill-trigger aria-controls={panelId} aria-expanded="false">
+                  <span class="skill-pill__icons" aria-hidden="true">{getSkillIconUrls(skill).map((iconUrl) => <img src={iconUrl} alt="" />)}</span>
+                  <span>{skill.label}</span>
+                </button>;
+              })}
+            </div>
+            <div class="skill-usage-panels skill-usage-panels--group">
+              {skills.map((skill) => {
+                const related = skillUsage.get(skill.id) ?? [];
+                return <section id={`full-tech-usage-${skill.id}`} class="skill-usage" data-skill-usage hidden>
+                  <h5>{usageLabel(skill.label)}</h5>
+                  {related.length ? <ul>{related.map((item) => <li><a href={itemPath(getItemSlug(item), lang)}>{item.data.title}</a></li>)}</ul> : <p>{emptyUsageLabel(skill.label)}</p>}
+                </section>;
+              })}
+            </div>
+          </section>
+        ))}
+      </section>
+      <section class="skill-stack skill-stack--full" aria-labelledby="full-skill-stack-title">
+        <h3 id="full-skill-stack-title">{labels.home.skills.fullSkillStack}</h3>
+        {fullSkillStack.map(({ group, skills }, groupIndex) => (
+          <section class="skill-stack__group" aria-labelledby={`full-skill-group-${groupIndex}`}>
+            <h4 id={`full-skill-group-${groupIndex}`}>{group}</h4>
+            <div class="skill-pill-list">
+              {skills.map((skill) => {
+                const panelId = `full-skill-usage-${skill.id}`;
+                return <button class="skill-pill" type="button" data-skill-trigger aria-controls={panelId} aria-expanded="false">{skill.label}</button>;
+              })}
+            </div>
+            <div class="skill-usage-panels skill-usage-panels--group">
+              {skills.map((skill) => {
+                const related = skillUsage.get(skill.id) ?? [];
+                return <section id={`full-skill-usage-${skill.id}`} class="skill-usage" data-skill-usage hidden>
+                  <h5>{usageLabel(skill.label)}</h5>
+                  {related.length ? <ul>{related.map((item) => <li><a href={itemPath(getItemSlug(item), lang)}>{item.data.title}</a></li>)}</ul> : <p>{emptyUsageLabel(skill.label)}</p>}
+                </section>;
+              })}
+            </div>
+          </section>
+        ))}
+      </section>
     </div>
   </section>
 
@@ -158,3 +259,44 @@ const languages = profile.languages.map((language) => ({
     </div>
   </section>
 </div>
+
+<script>
+  const skillsSection = document.querySelector<HTMLElement>('#skills');
+
+  if (skillsSection) {
+    const triggers = Array.from(skillsSection.querySelectorAll<HTMLButtonElement>('[data-skill-trigger]'));
+    const usagePanels = Array.from(skillsSection.querySelectorAll<HTMLElement>('[data-skill-usage]'));
+    const expandedStacks = skillsSection.querySelector<HTMLElement>('[data-skills-expanded]');
+    const toggle = skillsSection.querySelector<HTMLButtonElement>('[data-skills-toggle]');
+    const toggleLabel = skillsSection.querySelector<HTMLElement>('[data-skills-toggle-label]');
+    const toggleArrow = skillsSection.querySelector<HTMLElement>('[data-skills-toggle-arrow]');
+
+    const closeUsage = () => {
+      triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+      usagePanels.forEach((panel) => { panel.hidden = true; });
+    };
+
+    triggers.forEach((trigger) => trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      closeUsage();
+      if (isOpen) return;
+
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = panelId ? skillsSection.querySelector<HTMLElement>(`#${panelId}`) : null;
+      if (!panel) return;
+
+      trigger.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    }));
+
+    toggle?.addEventListener('click', () => {
+      if (!expandedStacks || !toggleLabel || !toggleArrow) return;
+      const isOpen = !expandedStacks.hidden;
+      expandedStacks.hidden = isOpen;
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      toggleLabel.textContent = isOpen ? toggleLabel.dataset.seeMore ?? '' : toggleLabel.dataset.showLess ?? '';
+      toggleArrow.textContent = isOpen ? '↓' : '↑';
+      if (isOpen) closeUsage();
+    });
+  }
+</script>
