@@ -19,7 +19,7 @@ portfolio: true
 timeline: true
 thumbnail:
   path: "/items/autonomous-harvesting-robot/thumbnail.png"
-  alt: "UR3e robot carrying Yeaberry's three-finger soft gripper beside the crop-monitoring dashboard."
+  alt: "UR3e arm with Yeaberry's three-finger soft gripper harvesting strawberries beside a RoboDK simulation and monitoring dashboard."
   objectFit: "fill"
 links:
   - kind: "repository"
