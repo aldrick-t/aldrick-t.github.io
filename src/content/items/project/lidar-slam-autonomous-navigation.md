@@ -19,7 +19,7 @@ timeline: true
 featuredRank: 1
 thumbnail:
   path: "/items/lidar-slam-autonomous-navigation/thumbnail.png"
-  alt: "Short description of the thumbnail"
+  alt: "MCR2 Puzzlebot navigating a taped maze while a laptop displays its colored route and map."
 links:
   - kind: "repository"
     label: "GitHub"
