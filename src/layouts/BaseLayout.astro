@@ -24,7 +24,7 @@ const {
   path = getPathWithoutLanguage(Astro.url.pathname),
   robots = 'index, follow',
   ogType = 'website',
-  socialImage,
+  socialImage = siteConfig.socialImage,
   structuredData
 } = Astro.props;
 const canonical = new URL(localizePath(path, lang), Astro.site);
@@ -58,6 +58,7 @@ const labels = ui[lang];
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {socialImage ? <meta property="og:image" content={new URL(socialImage, Astro.site)} /> : null}
+    {socialImage ? <meta property="og:image:alt" content={title} /> : null}
     {socialImage ? <meta name="twitter:image" content={new URL(socialImage, Astro.site)} /> : null}
     {structuredData ? <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} /> : null}
     <script is:inline>

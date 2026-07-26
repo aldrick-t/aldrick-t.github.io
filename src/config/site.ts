@@ -12,6 +12,7 @@ export const siteConfig = {
   title: 'B.S. Robotics and Digital Systems Engineering',
   description:
     'Robotics and digital systems engineer working across autonomous systems, perception, embedded software, and engineering tooling.',
+  socialImage: '/og/default.png',
   introduction:
     'Building dependable robotic and software systems, from perception and autonomy to telemetry, data and engineering tools. My work focuses on systems that transfer cleanly from prototypes and simulation into real operating environments.',
   availability: 'Open to robotics, software, research, and graduate study opportunities.',
