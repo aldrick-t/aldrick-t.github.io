@@ -224,6 +224,10 @@ export const ui = {
       copied: 'Copied',
       selectAndCopy: 'Select and copy',
       downloadPdf: 'Download PDF',
+      openPdf: 'Open PDF',
+      openFile: 'Open file',
+      pdfPreview: 'PDF first-page preview',
+      filePreview: 'File preview',
       externalSuffix: '↗'
     },
     home: {
@@ -358,6 +362,10 @@ export const ui = {
       copied: 'Copiado',
       selectAndCopy: 'Selecciona y copia',
       downloadPdf: 'Descargar PDF',
+      openPdf: 'Abrir PDF',
+      openFile: 'Abrir archivo',
+      pdfPreview: 'Vista previa de la primera página del PDF',
+      filePreview: 'Vista previa del archivo',
       externalSuffix: '↗'
     },
     home: {
@@ -492,6 +500,10 @@ export const ui = {
       copied: 'コピーしました',
       selectAndCopy: '選択してコピー',
       downloadPdf: 'PDFをダウンロード',
+      openPdf: 'PDFを開く',
+      openFile: 'ファイルを開く',
+      pdfPreview: 'PDFの1ページ目プレビュー',
+      filePreview: 'ファイルのプレビュー',
       externalSuffix: '↗'
     },
     home: {

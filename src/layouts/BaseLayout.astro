@@ -43,6 +43,7 @@ const labels = ui[lang];
     <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={siteConfig.name} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
     {alternateLinks.map((link) => <link rel="alternate" hreflang={languageMeta[link.language].htmlLang} href={link.href} />)}
@@ -50,6 +51,7 @@ const labels = ui[lang];
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={languageMeta[lang].locale.replace('-', '_')} />
@@ -60,6 +62,7 @@ const labels = ui[lang];
     {socialImage ? <meta property="og:image" content={new URL(socialImage, Astro.site)} /> : null}
     {socialImage ? <meta property="og:image:alt" content={title} /> : null}
     {socialImage ? <meta name="twitter:image" content={new URL(socialImage, Astro.site)} /> : null}
+    {socialImage ? <meta name="twitter:image:alt" content={title} /> : null}
     {structuredData ? <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} /> : null}
     <script is:inline>
       (() => {

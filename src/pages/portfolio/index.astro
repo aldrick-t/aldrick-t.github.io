@@ -2,12 +2,24 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PortfolioPageContent from '../../components/PortfolioPageContent.astro';
 import { siteConfig } from '../../config/site';
-import { ui } from '../../lib/i18n';
+import { getPublishedLocalizedItems } from '../../lib/localized-items';
+import { getItemSlug } from '../../lib/items';
+import { itemPath, localizePath, ui } from '../../lib/i18n';
+import { buildCollectionSchema } from '../../lib/seo';
 
 const lang = 'en';
 const labels = ui[lang];
+const items = await getPublishedLocalizedItems(lang, (item) => item.data.portfolio);
+const pageUrl = new URL(localizePath('/portfolio', lang), Astro.site).toString();
+const structuredData = buildCollectionSchema(
+  pageUrl,
+  labels.portfolioPage.title,
+  labels.portfolioPage.description,
+  items.map((item) => ({ name: item.data.title, url: new URL(itemPath(getItemSlug(item), lang), Astro.site).toString() })),
+  lang
+);
 ---
 
-<BaseLayout title={`${labels.portfolioPage.title} — ${siteConfig.name}`} description={labels.portfolioPage.description} lang={lang} path="/portfolio">
+<BaseLayout title={`${labels.portfolioPage.title} — ${siteConfig.name}`} description={labels.portfolioPage.description} lang={lang} path="/portfolio" structuredData={structuredData}>
   <PortfolioPageContent lang={lang} />
 </BaseLayout>

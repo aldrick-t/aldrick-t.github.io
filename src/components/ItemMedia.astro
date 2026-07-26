@@ -1,12 +1,15 @@
 ---
 import { getItemSlug, type ItemEntry } from '../lib/items';
 import { getFileExtensionLabel, getGeneratedPdfThumbnailPath, getPdfSourceUrl, getVideoMimeType, getYouTubeEmbedUrl } from '../lib/media';
+import { ui, type Language } from '../lib/i18n';
 
 interface Props {
   item: ItemEntry;
+  lang?: Language;
 }
 
-const { item } = Astro.props;
+const { item, lang = 'en' } = Astro.props;
+const labels = ui[lang];
 const slug = getItemSlug(item);
 const assets = item.data.assets ?? [];
 const explicitMedia = item.data.media ?? [];
@@ -49,7 +52,7 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
       if (entry.kind === 'video') {
         return (
           <figure class="item-media-card item-media-card--video">
-            <video controls preload="metadata" poster={entry.poster?.path}>
+            <video controls preload="none" poster={entry.poster?.path ?? item.data.thumbnail?.path}>
               <source src={entry.path} type={getVideoMimeType(entry.path)} />
             </video>
             <figcaption><strong>{entry.title}</strong>{entry.caption ? ` · ${entry.caption}` : ''}</figcaption>
@@ -64,10 +67,10 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
 
         return pdfUrl ? (
           <figure class="item-media-card item-media-card--pdf">
-            <a class="item-media-card__pdf-link" href={pdfUrl} target="_blank" rel="noreferrer noopener" aria-label={`Open PDF: ${entry.title}`}>
+            <a class="item-media-card__pdf-link" href={pdfUrl} target="_blank" rel="noreferrer noopener" aria-label={`${labels.common.openPdf}: ${entry.title}`}>
               {thumbnail ? (
                 <span class="item-media-card__pdf-preview">
-                  <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
+                  <img src={thumbnail} alt={thumbnailAlt || `${labels.common.pdfPreview}: ${entry.title}`} loading="lazy" decoding="async" />
                   <span class="item-media-card__pdf-badge">PDF</span>
                 </span>
               ) : (
@@ -89,10 +92,10 @@ const media = [...explicitMedia, ...assetMedia, ...videoLinkMedia];
 
         return (
           <figure class="item-media-card item-media-card--file">
-            <a class="item-media-card__file-link" href={entry.path} target="_blank" rel="noreferrer noopener" aria-label={`Open file: ${entry.title}`}>
+            <a class="item-media-card__file-link" href={entry.path} target="_blank" rel="noreferrer noopener" aria-label={`${labels.common.openFile}: ${entry.title}`}>
               {thumbnail ? (
                 <span class="item-media-card__file-preview">
-                  <img src={thumbnail} alt={thumbnailAlt} loading="lazy" decoding="async" />
+                  <img src={thumbnail} alt={thumbnailAlt || `${labels.common.filePreview}: ${entry.title}`} loading="lazy" decoding="async" />
                   <span class="item-media-card__file-badge">{badge}</span>
                 </span>
               ) : (

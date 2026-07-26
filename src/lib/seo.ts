@@ -7,6 +7,7 @@ import type { LocalizedNewsEntry } from './news';
 export type JsonLd = Record<string, unknown>;
 
 type Breadcrumb = { name: string; url: string };
+type CollectionEntryLink = { name: string; url: string };
 
 const personId = (url: string) => `${url}#person`;
 
@@ -48,6 +49,34 @@ export function buildBreadcrumbSchema(items: Breadcrumb[], language: Language): 
   };
 }
 
+export function buildCollectionSchema(
+  url: string,
+  name: string,
+  description: string,
+  entries: CollectionEntryLink[],
+  language: Language
+): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': url,
+    url,
+    name,
+    description,
+    inLanguage: languageMeta[language].htmlLang,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: entry.name,
+        url: entry.url
+      }))
+    }
+  };
+}
+
 export function buildItemSchema(item: ItemEntry, url: string, language: Language): JsonLd {
   const tags = item.data.tags ?? [];
   const skills = (item.data.skills ?? []).map((skill) => getSkillLabel(skill, language));
@@ -83,6 +112,7 @@ export function buildNewsSchema(item: LocalizedNewsEntry, url: string, language:
     author: { '@id': personId(new URL('/', url).toString()) },
     mainEntityOfPage: { '@id': url },
     datePublished: exactDate,
-    articleSection: ui[language].newsPage.title
+    articleSection: ui[language].newsPage.title,
+    image: new URL(siteConfig.socialImage, url).toString()
   };
 }
