@@ -18,7 +18,7 @@ published: true
 portfolio: true
 timeline: true
 thumbnail:
-  path: "/items/autonomous-harvesting-robot/thumbnail.png"
+  path: "/items/autonomous-harvesting-robot/thumbnail.jpg"
   alt: "UR3e arm with Yeaberry's three-finger soft gripper harvesting strawberries beside a RoboDK simulation and monitoring dashboard."
   objectFit: "fill"
 links:
@@ -31,7 +31,7 @@ links:
     icon: "publication"
   - kind: "file"
     label: "Video (Spanish)"
-    url: "/items/autonomous-harvesting-robot/VideoExpoIngenierías_yea.mp4"
+    url: "/items/autonomous-harvesting-robot/demo-optimized.mp4"
     icon: "video"
 media:
   - kind: "pdf"
@@ -39,9 +39,12 @@ media:
     title: "Technical Report (Spanish)"
     caption: "Full technical report for the YEA autonomous strawberry harvesting system, dated December 7, 2025."
   - kind: "video"
-    path: "/items/autonomous-harvesting-robot/VideoExpoIngenierías_yea.mp4"
+    path: "/items/autonomous-harvesting-robot/demo-optimized.mp4"
     title: "Short Format Video"
     caption: "Short-format demonstration of the integrated harvesting cell."
+    poster:
+      path: "/items/autonomous-harvesting-robot/thumbnail.jpg"
+      alt: "UR3e arm with Yeaberry's three-finger soft gripper harvesting strawberries beside a RoboDK simulation and monitoring dashboard."
 collaborators:
   - name: "Yael Cortés"
     url: "mailto:A01275893@tec.mx"

@@ -18,7 +18,7 @@ portfolio: true
 timeline: true
 featuredRank: 1
 thumbnail:
-  path: "/items/lidar-slam-autonomous-navigation/thumbnail.png"
+  path: "/items/lidar-slam-autonomous-navigation/thumbnail.jpg"
   alt: "MCR2 Puzzlebot navigating a taped maze while a laptop displays its colored route and map."
 links:
   - kind: "repository"
@@ -30,8 +30,11 @@ links:
     icon: "publication"
 media:
   - kind: "video"
-    path: "/items/lidar-slam-autonomous-navigation/video-final-presentation-bremdial.mp4"
+    path: "/items/lidar-slam-autonomous-navigation/presentation-optimized.mp4"
     title: "Final Presentation Video."
+    poster:
+      path: "/items/lidar-slam-autonomous-navigation/thumbnail.jpg"
+      alt: "MCR2 Puzzlebot navigating a taped maze while a laptop displays its colored route and map."
   - kind: "pdf"
     path: "/items/lidar-slam-autonomous-navigation/ev1_reporte_final_bremdial_v2.pdf"
     title: "Technical Report (ES)"
