@@ -15,7 +15,7 @@ published: true
 portfolio: true
 timeline: true
 thumbnail:
-  path: "/items/ieee-robosoft-2026/thumbnail.png"
+  path: "/items/ieee-robosoft-2026/thumbnail.jpg"
   alt: "RoboSoft 2026 conference logo with a stylized bridge and black-and-gold lettering."
   objectFit: "contain"
   objectPosition: "50% 50%"

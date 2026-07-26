@@ -8,4 +8,10 @@ highlights:
 tags: ["Telemetría", "Vehículo eléctrico", "Liderazgo"]
 ---
 
-La división conectó múltiples subsistemas del vehículo mediante firmware y flujos de comunicación serial. La confiabilidad, la mantenibilidad y la documentación entre equipos se trataron como requisitos centrales de ingeniería, no como tareas secundarias.
+Fundé y lideré la División de Desarrollo de Telemetría del Electrum Performance Racing Team. La división conectó múltiples subsistemas de un vehículo eléctrico mediante firmware embebido y flujos de comunicación serial, con el objetivo de hacer confiable la adquisición de datos en tiempo real en un entorno de carreras exigente.
+
+## Confiabilidad y coordinación
+
+El trabajo se enfocó en rutas de telemetría con mecanismos failsafe capaces de seguir proporcionando datos útiles cuando las condiciones de comunicación no eran ideales. Las interfaces de firmware y comunicación serial se trataron como una frontera de sistema: debían tener un comportamiento claro, una implementación mantenible y documentación que otros equipos pudieran usar al integrar sus propios subsistemas.
+
+El rol también coordinó trabajo más allá del firmware, incluyendo documentación, flujo de trabajo CAD y esfuerzos de optimización de costos entre equipos. De esta forma, la telemetría se convirtió en una capacidad compartida de ingeniería que conectaba las decisiones de integración del vehículo con la confiabilidad y mantenibilidad de la plataforma de carreras.

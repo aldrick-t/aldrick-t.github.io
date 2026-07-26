@@ -16,12 +16,12 @@ published: true
 portfolio: true
 timeline: true
 thumbnail:
-  path: "/items/bs-robotics-digital-systems/thumbnail.png"
+  path: "/items/bs-robotics-digital-systems/thumbnail.jpg"
   alt: "Tecnológico de Monterrey degree certificate for Aldrick Victor Tadeo Arellano in Robotics and Digital Systems Engineering."
   objectFit: "contain"
 media:
   - kind: "image"
-    path: "/items/bs-robotics-digital-systems/thumbnail.png"
+    path: "/items/bs-robotics-digital-systems/thumbnail.jpg"
     alt: "Degree preview image (ES)"
     caption: "Degree preview image (ES)."
 relations:

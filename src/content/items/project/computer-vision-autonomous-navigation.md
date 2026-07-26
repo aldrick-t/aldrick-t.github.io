@@ -17,7 +17,7 @@ published: true
 portfolio: true
 timeline: true
 thumbnail:
-  path: "/items/computer-vision-autonomous-navigation/thumbnail.png"
+  path: "/items/computer-vision-autonomous-navigation/thumbnail.jpg"
   alt: "Differential-drive Puzzlebot following a marked track beside traffic signs."
   objectFit: "contain"
   objectPosition: "50% 50%"

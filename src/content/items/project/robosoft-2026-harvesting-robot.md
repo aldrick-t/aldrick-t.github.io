@@ -1,7 +1,7 @@
 ---
 title: "MORI - Delicate Ripe Fruit Harvesting Robot"
 type: "project"
-summary: "MORI (MOdular RIgidity-adaptive Instrument) is soft robotic harvesting system combining a UR5e manipulator, custom jamming gripper, and in-hand RGB-D perception."
+summary: "MORI (MOdular RIgidity-adaptive Instrument) is a soft robotic harvesting system combining a UR5e manipulator, custom jamming gripper, and in-hand RGB-D perception."
 organization: "IEEE RoboSoft 2026 Manipulation Challenge"
 dateStart: "2025-10"
 dateEnd: "2026-04"
@@ -16,7 +16,7 @@ portfolio: true
 timeline: true
 featuredRank: 2
 thumbnail:
-  path: "/items/robosoft-2026-harvesting-robot/thumbnail.png"
+  path: "/items/robosoft-2026-harvesting-robot/thumbnail.jpg"
   alt: "UR5e manipulator with an RGB-D camera and soft gripper positioned over a fruit during a lab harvesting test."
   objectFit: "fill"
   objectPosition: "50% 0%"
@@ -40,4 +40,10 @@ relations:
 cvReview: ["engineering", "academic", "full"]
 ---
 
-The robot was developed for low-damage interaction with delicate fruit. Mechanical design, silicone fabrication, perception, and manipulator integration were developed together so the end effector could be tested as part of a complete harvesting workflow.
+MORI (MOdular RIgidity-adaptive Instrument) was developed for the Manipulation Challenge at the 9th IEEE International Conference on Soft Robotics. The system targets low-damage interaction with delicate fruit by combining a UR5e manipulator, an end effector inspired by raspberry morphology, granular jamming for stiffness modulation, and RGB-D perception mounted at the tool.
+
+## System design
+
+The four-person team developed the soft gripper and its monolithic silicone manufacturing workflow together with the manipulation and perception stack. Iterative 3D-printed molds supported repeated fabrication changes, while granular jamming allowed the gripper to change its stiffness during interaction. This connected mechanical design decisions directly to the requirements of handling delicate fruit rather than evaluating the gripper as an isolated component.
+
+The manipulation workflow combines the UR5e arm with in-hand RGB-D sensing, object detection, and pose estimation. The perception and control components provide the information needed to locate fruit, plan an approach, and evaluate the interaction as part of a complete harvesting sequence. The project demonstrates an integrated soft-robotics system while leaving broader field deployment, crop variation, and systematic damage benchmarking as future work.

@@ -17,4 +17,10 @@ timeline: true
 cvReview: ["engineering", "academic", "full"]
 ---
 
-The division connected multiple vehicle subsystems through firmware and serial communication workflows. Reliability, maintainability, and cross-team documentation were treated as core engineering requirements rather than afterthoughts.
+I founded and led the Telemetry Development Division for the Electrum Performance Racing Team. The division connected multiple electric-vehicle subsystems through embedded firmware and serial communication workflows, with the goal of making real-time data acquisition dependable in a high-stress racing environment.
+
+## Reliability and coordination
+
+The work focused on failsafe telemetry paths that could continue to provide useful vehicle data when communication conditions were imperfect. Firmware and serial interfaces were treated as a system boundary: they needed clear behavior, maintainable implementation, and documentation that other teams could use when integrating their own subsystems.
+
+The role also coordinated work beyond the firmware itself, including documentation, CAD workflow, and cost-optimization efforts across teams. This made telemetry a shared engineering capability rather than a separate data task, connecting vehicle integration decisions with the reliability and maintainability of the wider racing platform.

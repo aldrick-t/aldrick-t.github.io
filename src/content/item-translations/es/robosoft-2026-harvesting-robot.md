@@ -8,4 +8,10 @@ highlights:
 tags: ["Robótica blanda", "Robótica agrícola", "Manipulación"]
 ---
 
-El robot fue desarrollado para interactuar con fruta delicada causando poco daño. El diseño mecánico, la fabricación en silicón, la percepción y la integración del manipulador se desarrollaron en conjunto para que el efector final pudiera probarse como parte de un flujo completo de cosecha.
+MORI (MOdular RIgidity-adaptive Instrument) se desarrolló para el Manipulation Challenge de la 9.ª IEEE International Conference on Soft Robotics. El sistema busca interactuar con fruta delicada causando poco daño mediante un manipulador UR5e, un efector final inspirado en la morfología de las frambuesas, jamming granular para modular la rigidez y percepción RGB-D montada en la herramienta.
+
+## Diseño del sistema
+
+El equipo de cuatro personas desarrolló la pinza blanda y su flujo de fabricación monolítica en silicón junto con la manipulación y la percepción. Los moldes iterativos impresos en 3D permitieron repetir cambios de fabricación, mientras que el jamming granular hizo posible variar la rigidez de la pinza durante la interacción. Así, las decisiones de diseño mecánico se evaluaron junto con los requisitos de manipular fruta delicada, no como una demostración aislada del efector final.
+
+El flujo de manipulación combina el brazo UR5e con sensado RGB-D en la mano, detección de objetos y estimación de pose. Los componentes de percepción y control proporcionan la información necesaria para localizar la fruta, planear un acercamiento y evaluar la interacción como parte de una secuencia completa de cosecha. El proyecto demuestra un sistema integrado de robótica blanda; la operación en campo, la variación entre cultivos y una evaluación sistemática del daño quedan como trabajo futuro.
