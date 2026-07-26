@@ -241,7 +241,17 @@ export const ui = {
         credentials: 'Courses & certifications'
       },
       researchInterests: 'Research Interests',
-      newsIntro: 'Short updates and longer posts about my work, research, and current interests.'
+      newsIntro: 'Short updates and longer posts about my work, research, and current interests.',
+      skills: {
+        mainTechStack: 'Main Tech Stack',
+        mainSkillStack: 'Main Skill Stack',
+        fullTechStack: 'Full Tech Stack',
+        fullSkillStack: 'Full Skill Stack',
+        seeMore: 'See More',
+        showLess: 'Show Less',
+        usage: '{skill} usage:',
+        emptyUsage: 'No published items currently reference {skill}.'
+      }
     },
     portfolioPage: {
       title: 'Portfolio',
@@ -379,7 +389,17 @@ export const ui = {
         credentials: 'Cursos y certificaciones'
       },
       researchInterests: 'Intereses de investigación',
-      newsIntro: 'Actualizaciones breves y publicaciones sobre mi trabajo, investigación e intereses actuales.'
+      newsIntro: 'Actualizaciones breves y publicaciones sobre mi trabajo, investigación e intereses actuales.',
+      skills: {
+        mainTechStack: 'Stack tecnológico principal',
+        mainSkillStack: 'Stack principal de habilidades',
+        fullTechStack: 'Stack tecnológico completo',
+        fullSkillStack: 'Stack completo de habilidades',
+        seeMore: 'Ver más',
+        showLess: 'Ver menos',
+        usage: 'Uso de {skill}:',
+        emptyUsage: 'Ningún elemento publicado hace referencia a {skill} actualmente.'
+      }
     },
     portfolioPage: {
       title: 'Portafolio',
@@ -517,7 +537,17 @@ export const ui = {
         credentials: 'コースと認定資格'
       },
       researchInterests: '研究関心',
-      newsIntro: '仕事、研究、現在の関心についての短い更新と長めの投稿です。'
+      newsIntro: '仕事、研究、現在の関心についての短い更新と長めの投稿です。',
+      skills: {
+        mainTechStack: '主要技術スタック',
+        mainSkillStack: '主要スキルスタック',
+        fullTechStack: '技術スタック一覧',
+        fullSkillStack: 'スキルスタック一覧',
+        seeMore: 'もっと見る',
+        showLess: '表示を減らす',
+        usage: '{skill}の使用:',
+        emptyUsage: '{skill}を参照する公開済みの項目はありません。'
+      }
     },
     portfolioPage: {
       title: 'ポートフォリオ',
