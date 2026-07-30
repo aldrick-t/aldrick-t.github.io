@@ -14,7 +14,7 @@ tags: ["Telemetry", "Electric vehicle", "Leadership"]
 published: true
 portfolio: true
 timeline: true
-cvReview: ["engineering", "academic", "full"]
+cvReview: ["academic", "full"]
 ---
 
 I founded and led the Telemetry Development Division for the Electrum Performance Racing Team. The division connected multiple electric-vehicle subsystems through embedded firmware and serial communication workflows, with the goal of making real-time data acquisition dependable in a high-stress racing environment.
