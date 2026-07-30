@@ -95,7 +95,7 @@ Robotics, AI, and embedded software engineer focused on ROS 2 autonomous systems
 )
 - Created an object localization system using an in-hand RGB-D camera, YOLO11 object detection, and PnP pose estimation.
 - Led design of a three-finger pneumatic soft gripper and ESP32 electro-pneumatic control PCB.
-- Built a RoboDK simulation cell for UR5e manipulation, robust path planning, and collision detection and avoidance harnesses.
+- Built a RoboDK simulation cell for UR3e manipulation, robust path planning, and collision detection and avoidance harnesses.
 
 #project(
   name: "Computer Vision-Based Autonomous Navigation",
