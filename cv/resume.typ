@@ -27,7 +27,6 @@
 
   // Document-wide formatting, including font and margins
   set text(
-    // LaTeX style font
     font: font,
     size: font-size,
     lang: lang,
@@ -35,7 +34,6 @@
     ligatures: false
   )
 
-  // Reccomended to have 0.5in margin on all sides
   set page(
     margin: marginxy,
     paper: paper,
@@ -185,7 +183,7 @@
     generic-two-by-two(
       top-left: strong(title),
       top-right: dates,
-      bottom-left: company,
+      bottom-left: emph(company),
       bottom-right: emph(location),
     )
   }

@@ -4,7 +4,7 @@
 #let email = "aldricktadeo@gmail.com"
 #let github = "github.com/aldrick-t"
 #let linkedin = "linkedin.com/in/aldrick-t"
-#let phone = "+52 (442) 849-3300"
+#let phone = "+1 (702) 624-4515"
 
 #show: resume.with(
   author: name,
@@ -13,12 +13,10 @@
   linkedin: linkedin,
   phone: phone,
   accent-color: "#3D5475",
-  font: "Helvetica Neue",
   font-size: 10pt,
   paper: "us-letter",
   author-position: left,
   personal-info-position: left,
-  marginxy: (x: 0.25in, y: 0.25in),
 )
 
 == 
@@ -97,6 +95,16 @@ Robotics and Digital Systems Engineering undergraduate focused on autonomous rob
 - Redesigned the ROS2 node-topic architecture to improve modularity, data flow, and deployment robustness.
 - Integrated Gazebo simulation, real-world testing protocols, and telemetry dashboards to support sim-to-real development and performance analysis.
 
+#work(
+  title: "Telemetry Development Division Lead and Founder",
+  company: "Electrum Performance Racing Team",
+  dates: dates-helper(start-date: "Jun 2024", end-date: "Oct 2025"),
+  one-liner: false,
+)
+- Founded and led the telemetry division, building a real-time data acquisition stack for high-stress electric vehicle environments.
+- Developed embedded telemetry and serial communication solutions that reduced data-transmission failures by 15%.
+- Engineered firmware and data workflows across multiple vehicle subsystems while coordinating technical collaboration, documentation, and cost optimization.
+
 == Work and Technical Experience
 
 #work(
@@ -109,15 +117,6 @@ Robotics and Digital Systems Engineering undergraduate focused on autonomous rob
 - Integrated telemetry into Siemens NX-centered toolchains through C\#/.NET services, REST interfaces, and NX Open extensions.
 - Built Grafana dashboards to analyze adoption patterns, bottlenecks, and reliability trends across engineering software systems.
 
-#work(
-  title: "Telemetry Development Division Lead and Founder",
-  company: "Electrum Performance Racing Team",
-  dates: dates-helper(start-date: "Jun 2024", end-date: "Oct 2025"),
-  one-liner: false,
-)
-- Founded and led the telemetry division, building a real-time data acquisition stack for high-stress electric vehicle environments.
-- Developed embedded telemetry and serial communication solutions that reduced data-transmission failures by 15%.
-- Engineered firmware and data workflows across multiple vehicle subsystems while coordinating technical collaboration, documentation, and cost optimization.
 
 == Honors, Leadership, and Service
 
@@ -207,7 +206,7 @@ Robotics and Digital Systems Engineering undergraduate focused on autonomous rob
 
 #language(
   language: "Japanese",
-  proficiency: "Elementary Proficiency",
+  proficiency: "Limited Working Proficiency",
 )
 
 == Certifications
