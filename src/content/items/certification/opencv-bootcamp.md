@@ -21,6 +21,10 @@ media:
   - kind: "pdf"
     path: "/items/opencv-bootcamp/certificate.pdf"
     title: "Report title"
+links:
+  - kind: "credential"
+    label: "Credential ID: 65a25e083f50497dba5f5538026087"
+    url: "https://opencv.org/certificates/65a25e083f50497dba5f5538026087"
 ---
 
 Coursework covering core OpenCV techniques used in later robotics perception projects.

@@ -1,13 +1,13 @@
 ---
 title: "Yeaberry - Autonomous Harvesting Robot"
 type: "project"
-summary: "A cyber-physical strawberry harvesting cell combining a pneumatic soft gripper, YOLO11-S RGB-D perception, UR3e control, and crop monitoring."
+summary: "A cyber-physical strawberry harvesting cell combining a pneumatic soft gripper, in-hand RealSense D435 YOLO11-S RGB-D perception, UR3e control, and crop monitoring."
 organization: "Tecnológico de Monterrey"
 dateStart: "2025-08"
 dateEnd: "2025-12"
 highlights:
   - "Designed and fabricated a three-finger pneumatic soft gripper with a center pad, adjustable mounting rails, universal UR3e coupler, and custom molds."
-  - "Developed a YOLO11-S perception service using about 18,000 public images, 62,213 annotations, RealSense D435 depth, and PnP pose estimation."
+  - "Developed a YOLO11-S perception service using about 18,000 public images, 62,213 annotations, in-hand RealSense D435 depth, and PnP pose estimation."
   - "Implemented a configurable RoboDK/UR3e pick-and-place cycle with pre-pick, pick, post-pick, place, MQTT gripper commands, collision pre-checks, and visual success verification."
   - "Designed a two-layer electro-pneumatic control PCB with ESP32 pressure feedback and PWM control for the pump and valve."
   - "Integrated an ESP32/Raspberry Pi 5 crop-monitoring system with environmental sensors, MQTT logging, dashboard views, and Telegram alerts."
@@ -64,7 +64,7 @@ Yeaberry was developed over 16 weeks as a proof-of-concept cyber-physical cell f
 
 I designed the three-finger pneumatic soft gripper, its universal quick-change coupler for the UR3e, the actuator molds, and the soft center pad that keeps rigid parts away from the fruit. The actuator geometry uses curved, friction-enhancing fingers with two rows of pneumatic chambers so the gripper can conform to irregular fruit. I also used finite-element simulations to study deformation and iterated the manufacturing and sealing process in silicone.
 
-I was responsible for the main vision and robot-integration path. The perception service combines a RealSense D435 RGB-D camera with a YOLO11-S detector trained on roughly 18,000 public images and 62,213 annotations. The model classifies ripe and unripe fruit; depth filtering and a PnP solve then turn each detection into a usable 6-DOF pose. A configurable confidence threshold of 0.65 was selected to reduce unsafe detections in the test setup.
+I was responsible for the main vision and robot-integration path. The perception service combines an in-hand RealSense D435 RGB-D camera with a YOLO11-S detector trained on roughly 18,000 public images and 62,213 annotations. The model classifies ripe and unripe fruit; depth filtering and a PnP solve then turn each detection into a usable 6-DOF pose. A configurable confidence threshold of 0.65 was selected to reduce unsafe detections in the test setup.
 
 ## System architecture
 

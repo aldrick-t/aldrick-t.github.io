@@ -40,7 +40,7 @@ export const siteConfig = {
   languages: [
     { language: 'English', proficiency: 'Native proficiency', detail: 'IELTS 8.5 · C2' },
     { language: 'Spanish', proficiency: 'Native proficiency' },
-    { language: 'Japanese', proficiency: 'Elementary proficiency' }
+    { language: 'Japanese', proficiency: 'Limited working proficiency' }
   ]
 } as const;
 
