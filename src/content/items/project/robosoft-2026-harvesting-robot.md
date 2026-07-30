@@ -1,14 +1,14 @@
 ---
 title: "MORI - Delicate Ripe Fruit Harvesting Robot"
 type: "project"
-summary: "MORI (MOdular RIgidity-adaptive Instrument) is a soft robotic harvesting system combining a UR5e manipulator, custom jamming gripper, and in-hand RGB-D perception."
+summary: "MORI (MOdular RIgidity-adaptive Instrument) is a soft robotic harvesting system combining a UR5e manipulator, fruit-parameterized granular-jamming gripper, and in-hand RGB-D perception."
 organization: "IEEE RoboSoft 2026 Manipulation Challenge"
 dateStart: "2025-10"
 dateEnd: "2026-04"
 highlights:
-  - "Co-developed a raspberry-inspired soft gripper with granular jamming for stiffness modulation."
-  - "Built monolithic silicone manufacturing workflows using iterative 3D-printed molds."
-  - "Integrated manipulation, RGB-D sensing, object detection, and pose estimation in a four-person team."
+  - "Developed a fruit-parameterized granular-jamming gripper for low-damage fruit handling, designed to extend commercial 2F grippers."
+  - "Developed an experimental monolithic silicone manufacturing workflow with custom mold design."
+  - "Integrated UR5e manipulation with in-hand RGB-D sensing, YOLO11 object detection, and PnP pose estimation in a four-person team."
 skills: ["python", "ros2", "computer-vision", "object-detection", "pose-estimation", "robot-control", "embedded", "fusion"]
 tags: ["Soft robotics", "Agricultural robotics", "Manipulation"]
 published: true
@@ -40,10 +40,10 @@ relations:
 cvReview: ["engineering", "academic", "full"]
 ---
 
-MORI (MOdular RIgidity-adaptive Instrument) was developed for the Manipulation Challenge at the 9th IEEE International Conference on Soft Robotics. The system targets low-damage interaction with delicate fruit by combining a UR5e manipulator, an end effector inspired by raspberry morphology, granular jamming for stiffness modulation, and RGB-D perception mounted at the tool.
+MORI (MOdular RIgidity-adaptive Instrument) was developed for the Manipulation Challenge at the 9th IEEE International Conference on Soft Robotics. The system targets low-damage interaction with delicate fruit by combining a UR5e manipulator, a fruit-parameterized granular-jamming end effector designed to extend commercial 2F grippers, and RGB-D perception mounted at the tool.
 
 ## System design
 
-The four-person team developed the soft gripper and its monolithic silicone manufacturing workflow together with the manipulation and perception stack. Iterative 3D-printed molds supported repeated fabrication changes, while granular jamming allowed the gripper to change its stiffness during interaction. This connected mechanical design decisions directly to the requirements of handling delicate fruit rather than evaluating the gripper as an isolated component.
+The four-person team developed the soft gripper and its experimental monolithic silicone manufacturing workflow together with the manipulation and perception stack. Custom molds supported repeated fabrication changes, while granular jamming allowed the gripper to change its stiffness during interaction. This connected mechanical design decisions directly to the requirements of handling delicate fruit rather than evaluating the gripper as an isolated component.
 
-The manipulation workflow combines the UR5e arm with in-hand RGB-D sensing, object detection, and pose estimation. The perception and control components provide the information needed to locate fruit, plan an approach, and evaluate the interaction as part of a complete harvesting sequence. The project demonstrates an integrated soft-robotics system while leaving broader field deployment, crop variation, and systematic damage benchmarking as future work.
+The manipulation workflow combines the UR5e arm with in-hand RGB-D sensing, YOLO11 object detection, and PnP pose estimation. The perception and control components provide the information needed to locate fruit, plan an approach, and evaluate the interaction as part of a complete harvesting sequence. The project demonstrates an integrated soft-robotics system while leaving broader field deployment, crop variation, and systematic damage benchmarking as future work.

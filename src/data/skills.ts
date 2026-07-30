@@ -51,7 +51,7 @@ export const skills: SkillDefinition[] = [
   { id: 'azure-devops', label: 'Azure DevOps', group: 'Software & tools', stack: 'tech', iconIds: ['azure-devops'] },
   { id: 'azure-pipelines', label: 'Azure Pipelines', group: 'Software & tools', stack: 'tech', iconIds: ['azure-pipelines'] },
   { id: 'github-actions', label: 'GitHub Actions', group: 'Software & tools', stack: 'tech', iconIds: ['github-actions'] },
-  { id: 'teamviewer-spatial', label: 'TeamViewer Spatial', group: 'Software & tools', stack: 'tech', iconIds: ['teamviewer-spatial'] },
+  { id: 'teamviewer-spatial', label: 'TeamViewer Frontline Spatial', group: 'Software & tools', stack: 'tech', iconIds: ['teamviewer-spatial'] },
   { id: 'nx', label: 'Siemens NX', group: 'CAD / CAE / simulation', stack: 'tech', iconIds: ['nx'] },
   { id: 'fusion', label: 'Autodesk Fusion', group: 'CAD / CAE / simulation', stack: 'tech', iconIds: ['fusion'] },
   { id: 'solidworks', label: 'SolidWorks', group: 'CAD / CAE / simulation', stack: 'tech', iconIds: ['solidworks'] },
