@@ -204,7 +204,7 @@ export const ui = {
       languages: [
         { language: 'English', proficiency: 'Native proficiency', detail: 'IELTS 8.5 · C2' },
         { language: 'Spanish', proficiency: 'Native proficiency' },
-        { language: 'Japanese', proficiency: 'Elementary proficiency' }
+        { language: 'Japanese', proficiency: 'Limited working proficiency' }
       ]
     },
     nav: { aria: 'Primary navigation', home: 'Home', portfolio: 'Portfolio', cv: 'CV', news: 'News', contact: 'Contact' },
@@ -352,7 +352,7 @@ export const ui = {
       languages: [
         { language: 'Inglés', proficiency: 'Competencia nativa', detail: 'IELTS 8.5 · C2' },
         { language: 'Español', proficiency: 'Competencia nativa' },
-        { language: 'Japonés', proficiency: 'Competencia elemental' }
+        { language: 'Japonés', proficiency: 'Competencia básica profesional' }
       ]
     },
     nav: { aria: 'Navegación principal', home: 'Inicio', portfolio: 'Portafolio', cv: 'CV', news: 'Noticias', contact: 'Contacto' },
@@ -500,7 +500,7 @@ export const ui = {
       languages: [
         { language: '英語', proficiency: 'ネイティブレベル', detail: 'IELTS 8.5 · C2' },
         { language: 'スペイン語', proficiency: 'ネイティブレベル' },
-        { language: '日本語', proficiency: '初級レベル' }
+        { language: '日本語', proficiency: 'ビジネス初級' }
       ]
     },
     nav: { aria: 'メインナビゲーション', home: 'ホーム', portfolio: 'ポートフォリオ', cv: 'CV', news: 'ニュース', contact: '連絡先' },
