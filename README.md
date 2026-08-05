@@ -131,3 +131,15 @@ Agent onboarding lives in `.agent/`:
 ## Deployment
 
 Pushes to `main` run content validation, compile every CV, build Astro, and publish the resulting static artifact to GitHub Pages.
+
+## License
+
+The reusable site code and generic Typst template are licensed separately.  
+Personal portfolio content, resume content, generated documents, media, branding, and third-party assets are not licensed for reuse. No license is granted to those materials.
+
+## Templates
+
+Templates can be found in the corresponding template repositories:
+
+- [Astro portfolio template](https://github.com/aldrick-t/atad-portfolio-template)
+- [Typst resume template](https://github.com/aldrick-t/typst-resume-ofa)
