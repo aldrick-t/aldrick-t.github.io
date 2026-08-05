@@ -4,13 +4,13 @@ A static Astro portfolio with content-driven project pages, localized routes, an
 
 ## Resume
 
-There is an open-source, hand-authored Typst resume template at `cv/resume.typ` which is free to use under the MIT License. The resume is compiled with the Typst CLI and can be built with:
+The resume seen in this portfolio is now available as an open-source (MIT License) Typst resume template at [GitHub: typst-resume-ofa](https://github.com/aldrick-t/typst-resume-ofa) and available for direct use as a package in Typst Universe at [Typst Universe: resume-ofa](https://typst.app/universe/package/resume-ofa).
 
 ```bash
 npm run build:cv
 ```
 
-The resume compilation components and pipeline is also free to use (MIT License) and can be found in `scripts/build-cv.ts`. 
+The resume compilation components and pipeline is also free to use and can be found in `scripts/build-cv.ts`.
 
 The resume is compiled from the `cv/aldrick_tadeo_resume.typ` source file, which is a variant of the `cv/resume.typ` template.
 
