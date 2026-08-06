@@ -16,7 +16,7 @@ const allowedLinkIcons = new Set(['site', 'github', 'publication', 'credential',
 const allowedVideoExtensions = new Set(['.mp4', '.webm']);
 const datePattern = /^\d{4}(-\d{2})?$/;
 const postedDatePattern = /^\d{4}-\d{2}$/;
-const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.ts'), 'utf8');
+const skillSource = readFileSync(path.join(root, 'src', 'data', 'skills.local.ts'), 'utf8');
 const skillIds = new Set([...skillSource.matchAll(/id: '([^']+)'/g)].map((match) => match[1]));
 
 function getMarkdownFiles(directory, prefix = '') {

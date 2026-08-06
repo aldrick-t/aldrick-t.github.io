@@ -1,0 +1,44 @@
+{
+  "manifest": "template-sync.json",
+  "mode": "release-to-downstream-only",
+  "allowedSharedPaths": [
+    "src/components/**",
+    "src/layouts/**",
+    "src/lib/**",
+    "src/pages/**",
+    "src/styles/**",
+    "src/assets/icons/ui/**",
+    "src/config/site.ts",
+    "src/content.config.ts",
+    "src/data/cv.ts",
+    "src/data/profile.ts",
+    "src/data/skills.ts",
+    "src/env.d.ts",
+    "scripts/**",
+    ".github/workflows/ci.yml",
+    "package.json",
+    "package-lock.json",
+    "astro.config.mjs",
+    "tsconfig.json"
+  ],
+  "protectedPaths": [
+    "src/config/site.local.ts",
+    "src/data/skills.local.ts",
+    "src/content/**",
+    "cv/**",
+    "public/**",
+    "tools/**",
+    ".github/workflows/deploy.yml",
+    ".template-sync.json",
+    "template.lock.json",
+    ".gitignore",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
+    "README.md",
+    "CONTENT-NOTICE.md"
+  ],
+  "policy": {
+    "upstreamContribution": "Port only sanitized, reusable changes to the template repository; never sync this repository back automatically.",
+    "releaseRequirement": "Accept only immutable semver release tags and record the resolved commit in template.lock.json after an applied update."
+  }
+}

@@ -13,7 +13,8 @@
     "build": "npm run media:thumbnails && npm run content:check && astro build",
     "build:all": "npm run media:thumbnails && npm run content:check && npm run build:cv && astro build",
     "preview": "astro preview",
-    "check": "npm run media:thumbnails && npm run content:check && astro check"
+    "check": "npm run media:thumbnails && npm run content:check && astro check",
+    "sync:template": "node ./tools/sync-template-release.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

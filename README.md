@@ -137,9 +137,13 @@ Pushes to `main` run content validation, compile every CV, build Astro, and publ
 The reusable site code and generic Typst template are licensed separately.  
 Personal portfolio content, resume content, generated documents, media, branding, and third-party assets are not licensed for reuse. No license is granted to those materials.
 
+See [CONTENT-NOTICE.md](CONTENT-NOTICE.md) for the repository boundary.
+
 ## Templates
 
 Templates can be found in the corresponding template repositories:
 
 - [Astro portfolio template](https://github.com/aldrick-t/atad-portfolio-template)
 - [Typst resume template](https://github.com/aldrick-t/typst-resume-ofa)
+
+Reusable Astro code is consumed through reviewed, tagged template releases. See [the template synchronization guide](docs/template-sync.md) for the safe update and upstream-contribution workflow.

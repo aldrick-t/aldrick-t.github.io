@@ -2,6 +2,6 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://aldrick-t.github.io',
+  site: process.env.SITE_URL ?? 'http://localhost:4321',
   integrations: [sitemap({ filter: (page) => !page.includes('/404') })]
 });
