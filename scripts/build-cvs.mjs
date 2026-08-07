@@ -5,6 +5,7 @@ import path from 'node:path';
 
 const repoRoot = process.cwd();
 const manifestPath = path.join(repoRoot, 'cv', 'manifest.json');
+const fontDir = path.join(repoRoot, 'cv', 'fonts');
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 
 if (!Array.isArray(manifest) || manifest.length === 0) throw new Error('cv/manifest.json must contain at least one CV variant.');
@@ -43,6 +44,6 @@ for (const variant of manifest) {
   const output = path.join(repoRoot, variant.outputPdf);
   rmSync(output, { force: true });
   console.log(`Compiling ${variant.id}: ${variant.entryTypst} -> ${variant.outputPdf}`);
-  execFileSync('typst', ['compile', entry, output], { stdio: 'inherit' });
+  execFileSync('typst', ['compile', '--font-path', fontDir, entry, output], { stdio: 'inherit' });
   if (!existsSync(output)) throw new Error(`Typst did not produce ${variant.outputPdf}`);
 }

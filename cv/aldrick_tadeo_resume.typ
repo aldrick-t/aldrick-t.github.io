@@ -6,14 +6,16 @@
 #let github = "github.com/aldrick-t"
 #let linkedin = "linkedin.com/in/aldrick-t"
 #let phone = "+1 (702) 624-4515"
+#let personal-site = "aldrick-t.github.io"
 
 #show: resume.with(
   author: name,
   email: email,
   github: github,
   linkedin: linkedin,
+  personal-site: personal-site,
   accent-color: "#3D5475",
-  font-size: 10pt,
+  font-size: 9.5pt,
   paper: "us-letter",
   author-position: left,
   personal-info-position: left,
