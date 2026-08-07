@@ -29,7 +29,7 @@
   },
   {
     "id": "shokumu-keirekisho",
-    "label": "Japanese Employment History",
+    "label": "職務経歴書",
     "source": "external",
     "outputPdf": "public/cv/aldrick_tadeo_shokumu_keirekisho.pdf",
     "publicPath": "/cv/aldrick_tadeo_shokumu_keirekisho.pdf",
