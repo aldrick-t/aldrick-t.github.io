@@ -19,3 +19,6 @@ public/items/**/generated/*.png
 # Logs
 npm-debug.log*
 node_modules
+
+# VS Code
+.vscode/
