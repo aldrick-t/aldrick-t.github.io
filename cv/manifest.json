@@ -2,6 +2,7 @@
   {
     "id": "engineering",
     "label": "Engineering",
+    "source": "local",
     "entryTypst": "cv/aldrick_tadeo_resume.typ",
     "outputPdf": "public/cv/aldrick_tadeo_resume.pdf",
     "publicPath": "/cv/aldrick_tadeo_resume.pdf",
@@ -11,6 +12,7 @@
   {
     "id": "academic",
     "label": "Academic",
+    "source": "local",
     "entryTypst": "cv/aldrick_tadeo_cv.typ",
     "outputPdf": "public/cv/aldrick_tadeo_academic.pdf",
     "publicPath": "/cv/aldrick_tadeo_academic.pdf",
@@ -19,9 +21,20 @@
   {
     "id": "full",
     "label": "Full Length",
+    "source": "local",
     "entryTypst": "cv/aldrick_tadeo_cv.typ",
     "outputPdf": "public/cv/aldrick_tadeo_cv.pdf",
     "publicPath": "/cv/aldrick_tadeo_cv.pdf",
+    "published": true
+  },
+  {
+    "id": "shokumu-keirekisho",
+    "label": "Japanese Employment History",
+    "source": "external",
+    "outputPdf": "public/cv/aldrick_tadeo_shokumu_keirekisho.pdf",
+    "publicPath": "/cv/aldrick_tadeo_shokumu_keirekisho.pdf",
+    "checksumFile": "public/cv/aldrick_tadeo_shokumu_keirekisho.sha256",
+    "provenanceFile": "public/cv/aldrick_tadeo_shokumu_keirekisho.provenance.json",
     "published": true
   }
 ]
