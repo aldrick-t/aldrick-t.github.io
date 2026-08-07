@@ -1,11 +1,14 @@
 import manifest from '../../cv/manifest.json';
 
 export interface CvVariant {
-  id: 'engineering' | 'academic' | 'full';
+  id: 'engineering' | 'academic' | 'full' | 'shokumu-keirekisho';
   label: string;
-  entryTypst: string;
+  source: 'local' | 'external';
+  entryTypst?: string;
   outputPdf: string;
   publicPath: string;
+  checksumFile?: string;
+  provenanceFile?: string;
   published: boolean;
   default?: boolean;
 }

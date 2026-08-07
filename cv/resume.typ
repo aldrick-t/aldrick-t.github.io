@@ -13,7 +13,7 @@
   personal-site: "",
   orcid: "",
   accent-color: "#000000",
-  font: "New Computer Modern",
+  font: "Noto Sans",
   paper: "us-letter",
   author-font-size: 20pt,
   font-size: 9pt,

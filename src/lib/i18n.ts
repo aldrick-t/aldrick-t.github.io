@@ -305,7 +305,7 @@ export const ui = {
       previewing: 'Previewing',
       fallback: 'Your browser cannot display the PDF inline.',
       fallbackDownload: 'Download the selected CV',
-      variants: { engineering: 'Engineering', academic: 'Academic', full: 'Full Length' }
+      variants: { engineering: 'Engineering', academic: 'Academic', full: 'Full Length', 'shokumu-keirekisho': 'Japanese Employment History' }
     },
     contactPage: {
       title: 'Contact',
@@ -453,7 +453,7 @@ export const ui = {
       previewing: 'Vista previa de',
       fallback: 'Tu navegador no puede mostrar el PDF en línea.',
       fallbackDownload: 'Descargar el CV seleccionado',
-      variants: { engineering: 'Ingeniería', academic: 'Académico', full: 'Completo' }
+      variants: { engineering: 'Ingeniería', academic: 'Académico', full: 'Completo', 'shokumu-keirekisho': 'Historial laboral japonés' }
     },
     contactPage: {
       title: 'Contacto',
@@ -593,15 +593,15 @@ export const ui = {
       next: '次へ'
     },
     cvPage: {
-      title: '履歴書',
-      description: 'Aldrick TadeoがTypstで手作成したCVのプレビューとダウンロード。',
-      intro: '完全版CV、エンジニアリング向け1ページ履歴書、アカデミック向け1ページ履歴書の複数の範囲があります。',
-      previewAria: '履歴書プレビュー',
+      title: 'CV・職務経歴書',
+      description: 'Aldrick TadeoがTypstで手作成したCVと職務経歴書のプレビューとダウンロード。',
+      intro: '完全版CV、エンジニアリング向け履歴書、アカデミック向け履歴書、日本語の職務経歴書を用意しています。',
+      previewAria: 'CV・職務経歴書プレビュー',
       variantsAria: 'CVの種類',
       previewing: 'プレビュー中:',
       fallback: 'このブラウザではPDFをインライン表示できません。',
       fallbackDownload: '選択したCVをダウンロード',
-      variants: { engineering: 'エンジニアリング', academic: 'アカデミック', full: '完全版' }
+      variants: { engineering: 'エンジニアリング', academic: 'アカデミック', full: '完全版', 'shokumu-keirekisho': '職務経歴書' }
     },
     contactPage: {
       title: '連絡先',

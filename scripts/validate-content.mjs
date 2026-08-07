@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { load } from 'js-yaml';
@@ -376,7 +377,23 @@ for (const variant of manifest) {
   if (outputs.has(variant.outputPdf)) errors.push(`cv/manifest.json: duplicate output ${variant.outputPdf}`);
   cvIds.add(variant.id);
   outputs.add(variant.outputPdf);
-  if (!existsSync(path.join(root, variant.entryTypst))) errors.push(`cv/manifest.json: missing entrypoint ${variant.entryTypst}`);
+  if (!['local', 'external'].includes(variant.source)) errors.push(`cv/manifest.json: ${variant.id} must declare source local or external`);
+  if (variant.source === 'local' && !variant.entryTypst) errors.push(`cv/manifest.json: local ${variant.id} is missing entryTypst`);
+  if (variant.source === 'external' && variant.entryTypst) errors.push(`cv/manifest.json: external ${variant.id} must not declare entryTypst`);
+  if (variant.source === 'local' && !existsSync(path.join(root, variant.entryTypst))) errors.push(`cv/manifest.json: missing entrypoint ${variant.entryTypst}`);
+  if (variant.source === 'external') {
+    for (const field of ['checksumFile', 'provenanceFile']) {
+      if (!variant[field]) errors.push(`cv/manifest.json: external ${variant.id} is missing ${field}`);
+      else if (!existsSync(path.join(root, variant[field]))) errors.push(`cv/manifest.json: missing ${field} ${variant[field]}`);
+    }
+    const output = path.join(root, variant.outputPdf);
+    if (!existsSync(output)) errors.push(`cv/manifest.json: missing external PDF ${variant.outputPdf}`);
+    else if (variant.checksumFile && existsSync(path.join(root, variant.checksumFile))) {
+      const expectedHash = readFileSync(path.join(root, variant.checksumFile), 'utf8').trim().split(/\s+/)[0];
+      const actualHash = createHash('sha256').update(readFileSync(output)).digest('hex');
+      if (actualHash !== expectedHash) errors.push(`cv/manifest.json: checksum mismatch for external ${variant.id}`);
+    }
+  }
 }
 if (manifest.filter((variant) => variant.default && variant.published).length !== 1) errors.push('cv/manifest.json: exactly one published variant must be default');
 
