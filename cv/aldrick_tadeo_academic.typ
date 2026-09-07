@@ -102,7 +102,7 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
 
 #project(
   name: "vid2dataset - Video-to-Image Dataset Tool",
-  org: "Open-source Project",
+  org: "Open-source developer tooling",
   dates: dates-helper(start-date: "Dec 2025", end-date: "Present"),
   url: "",
   one-liner: false,

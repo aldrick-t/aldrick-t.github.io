@@ -1,6 +1,5 @@
 #import "./resume.typ": *
 
-// Put your personal information here, replacing mine
 #let name = "Aldrick Victor Tadeo Arellano"
 #let email = "aldricktadeo@gmail.com"
 #let github = "github.com/aldrick-t"
@@ -21,19 +20,6 @@
   personal-info-position: left,
 )
 
-/*
-* Lines that start with == are formatted into section headings
-* You can use the specific formatting functions if needed
-* The following formatting functions are listed below
-* #edu(dates: "", degree: "", gpa: "", institution: "", location: "", consistent: false)
-* #work(company: "", dates: "", location: "", title: "")
-* #project(dates: "", name: "", role: "", url: "")
-* certificates(name: "", issuer: "", url: "", date: "")
-* #extracurriculars(activity: "", dates: "")
-* There are also the following generic functions that don't apply any formatting
-* #generic-two-by-two(top-left: "", top-right: "", bottom-left: "", bottom-right: "")
-* #generic-one-by-two(left: "", right: "")
-*/
 == 
 
 Robotics, AI, and embedded software engineer focused on ROS 2 autonomous systems, perception, SLAM, and sensor fusion. Experienced in real-time telemetry, computer vision, embedded firmware, and robotic control software across academic and industry environments.
@@ -82,7 +68,7 @@ Robotics, AI, and embedded software engineer focused on ROS 2 autonomous systems
 #project(
   name: "MORI - Delicate Ripe Fruit Harvesting Robot",
   org: "IEEE RoboSoft 2026 Manipulation Challenge",
-  dates: dates-helper(start-date: "Oct 2025", end-date: "Apr 2026"),
+  dates: dates-helper(start-date: "Oct 2025", end-date: "Present"),
   url: "",
 )
 - developed a fruit-parameterized granular-jamming gripper for low-damage fruit handling. Built to extend commercial 2F grippers.
