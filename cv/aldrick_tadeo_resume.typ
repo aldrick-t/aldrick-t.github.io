@@ -71,7 +71,7 @@ Robotics, AI, and embedded software engineer focused on ROS 2 autonomous systems
   dates: dates-helper(start-date: "Oct 2025", end-date: "Present"),
   url: "",
 )
-- developed a fruit-parameterized granular-jamming gripper for low-damage fruit handling. Built to extend commercial 2F grippers.
+- Developed a fruit-parameterized granular-jamming gripper for low-damage fruit handling. Built to extend commercial 2F grippers.
 - Developed an experimental monolithic manufacture, silicone mold design and workflow.
 - Integrated UR5e manipulation with in-hand RGB-D sensing, object detection with YOLO-11, and PnP pose estimation.
 

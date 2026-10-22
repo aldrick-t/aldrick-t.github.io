@@ -53,6 +53,8 @@ collaborators:
 relations:
   - id: "robosoft-2026-harvesting-robot"
     label: "Related system"
+  - id: "electropneumatic-control-system"
+    label: "Electro-pneumatic controller"
   - id: "bs-robotics-digital-systems"
     label: "Academic context"
 cvReview: ["academic", "full"]
