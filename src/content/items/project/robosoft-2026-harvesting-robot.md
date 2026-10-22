@@ -37,6 +37,8 @@ relations:
     label: "Presented at"
   - id: "autonomous-harvesting-robot"
     label: "Related system"
+  - id: "electropneumatic-control-system"
+    label: "Electro-pneumatic controller"
 cvReview: ["engineering", "academic", "full"]
 ---
 
