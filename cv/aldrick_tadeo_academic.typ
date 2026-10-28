@@ -21,8 +21,7 @@
 )
 
 == 
-
-Robotics and Digital Systems Engineering graduate focused on autonomous robotic systems, sim-to-real development, perception, SLAM, and deployable embodied AI. Seeking graduate study opportunities to advance research in robotic autonomy, digital-twin-based experimentation, and field-ready intelligent systems that transfer reliably from simulation to real-world environments.
+Robotics graduate with experience integrating manipulators, RGB-D perception, simulation, and soft end-effectors. Interested in using physical interaction to assess simulated predictions for manipulation planning.
 
 == Education
 
@@ -30,21 +29,39 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
   degree: "B.S. in Robotics and Digital Systems Engineering",
   institution: "Monterrey Institute of Technology and Higher Education (Tecnológico de Monterrey)",
   dates: dates-helper(start-date: "2022", end-date: "2026"),
-  gpa: "CGPA: 95/100",
+  gpa: "CGPA: 94.81/100",
   consistent: true,
 )
 - Academic Excellence Scholarship recipient for sustained high academic performance.
 - Specialization in Cyberphysical Systems, with emphasis on embedded systems, robotics, control, and intelligent automation.
-- Diploma of Student Development for sustained participation in extracurricular formative activities.
-
-== Research Interests
-
-- Sim-to-real robotics, digital twins, and simulation-based experimentation for autonomous systems.
-- SLAM, perception, sensor fusion, and autonomous navigation using LiDAR, RGB-D, and visual sensing.
-- Embodied AI and field robotics for robust deployment in uncertain, real-world environments.
-- Robotic manipulation, soft robotic end-effectors, and perception-guided agricultural robotics.
+- Diploma of Student Development for sustained participation in extracurricular formative activities. 
 
 == Research and Academic Projects
+
+#project(
+  name: "MORI - Delicate Ripe Fruit Harvesting Robot",
+  org: "IEEE RoboSoft 2026 Manipulation Challenge",
+  dates: dates-helper(start-date: "Oct 2025", end-date: "Present"),
+  url: "",
+  one-liner: false,
+)
+- Co-developed a fruit-parameterized granular-jamming gripper pad for low-damage fruit handling, designed to extend commercial 2F grippers.
+- Developed an experimental monolithic silicone manufacturing workflow with custom mold design for iterative fabrication.
+- Integrated a UR5e manipulator with in-hand RGB-D sensing, YOLO11 object detection, and PnP pose estimation.
+- Presented the complete harvesting system in the Manipulation Challenge at the 9th IEEE International Conference on Soft Robotics in Kanazawa, Japan.
+
+#project(
+  name: "Yeaberry - Autonomous Harvesting Robot",
+  org: "Cyberphysical Systems Specialization Project ",  
+  dates: dates-helper(start-date: "Aug 2025", end-date: "Dec 2025"),
+  url: "",
+  one-liner: false,
+)
+- Designed and fabricated a three-finger pneumatic soft gripper with a center pad, universal UR3e coupler, adjustable mounting rails, and custom molds.
+- Designed a two-layer electro-pneumatic control PCB with ESP32 pressure feedback and PWM control for the pump and valve.
+- Developed an in-hand RealSense D435 RGB-D perception service using YOLO11-S, roughly 18,000 public images, 62,213 annotations, depth filtering, and PnP pose estimation.
+- Implemented a configurable RoboDK/UR3e pick-and-place cycle with pre-pick, pick, post-pick, and place poses; MQTT gripper commands; collision pre-checks; and visual success verification.
+- Integrated an ESP32/Raspberry Pi 5 crop-monitoring system with environmental sensors, MQTT logging, dashboard views, and Telegram alerts.
 
 #project(
   name: "LiDAR-Based SLAM for Autonomous Navigation",
@@ -60,34 +77,6 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
 - Packaged simulation, launch files, YAML parameters, RViz configuration, unit tests, and a separate physical-robot bringup path for future deployment.
 
 #project(
-  name: "MORI - Delicate Ripe Fruit Harvesting Robot",
-  org: "IEEE RoboSoft 2026 Manipulation Challenge",
-  dates: dates-helper(start-date: "Oct 2025", end-date: "Present"),
-  url: "",
-  one-liner: false,
-)
-- Co-developed a fruit-parameterized granular-jamming gripper for low-damage fruit handling, designed to extend commercial 2F grippers.
-- Developed an experimental monolithic silicone manufacturing workflow with custom mold design for iterative fabrication.
-- Integrated a UR5e manipulator with in-hand RGB-D sensing, YOLO11 object detection, and PnP pose estimation in a four-person team.
-- Presented the complete harvesting system in the Manipulation Challenge at the 9th IEEE International Conference on Soft Robotics in Kanazawa, Japan.
-
-#project(
-  name: "Yeaberry - Autonomous Harvesting Robot",
-  org: "Cyberphysical Systems Specialization Project ",  
-  dates: dates-helper(start-date: "Aug 2025", end-date: "Dec 2025"),
-  url: "",
-  one-liner: false,
-)
-- Designed and fabricated a three-finger pneumatic soft gripper with a center pad, universal UR3e coupler, adjustable mounting rails, and custom molds.
-- Designed a two-layer electro-pneumatic control PCB with ESP32 pressure feedback and PWM control for the pump and valve.
-- Developed an in-hand RealSense D435 RGB-D perception service using YOLO11-S, roughly 18,000 public images, 62,213 annotations, depth filtering, and PnP pose estimation.
-- Implemented a configurable RoboDK/UR3e pick-and-place cycle with pre-pick, pick, post-pick, and place poses; MQTT gripper commands; collision pre-checks; and visual success verification.
-- Integrated an ESP32/Raspberry Pi 5 crop-monitoring system with environmental sensors, MQTT logging, dashboard views, and Telegram alerts.
-- Exceeded the project's 75% success target in controlled artificial-strawberry tests across visible and partially occluded scenarios.
-
-#pagebreak()
-
-#project(
   name: "Computer Vision-Based Autonomous Navigation",
   org: "Manchester Robotics, Tecnológico de Monterrey",
   dates: dates-helper(start-date: "Feb 2025", end-date: "Aug 2025"),
@@ -95,22 +84,22 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
   one-liner: false,
 )
 - Built and packaged a Python ROS 2 Humble workspace for the Manchester Robotics Puzzlebot with dedicated perception, command, control, and odometry nodes.
-- Implemented grayscale/OpenCV contour processing for line following and crossing cues, using proximal and mid-range camera regions.
-- Developed a custom YOLOv8 detector for three traffic-light states and six traffic-sign classes, improving environmental adaptability and perception reliability by 33%.
-- Connected line commands, crossing state, traffic detections, and encoder-based Pose2D odometry in a parameterized control node; fused visual and onboard sensing to reduce false positives and decision errors by 15%.
-- Supported onboard, remote, and Gazebo launch modes; documented 2.4 GHz Wi-Fi interference and latency as constraints on distributed ROS 2 deployment.
+- Implemented contour processing for line following and crossing cues, using proximal and mid-range camera regions.
+- Developed a custom YOLOv8 detector for three traffic-light states and six traffic-sign classes, improving environmental adaptability and perception reliability.
+- Connected line commands, crossing state, traffic detections, and encoder-based Pose2D odometry in a parameterized control node; fused visual and onboard sensing to reduce false positives and decision errors.
+- Developed a Gazebo simulation digital twin of the robot for modular component testing, and algorithm validation.
 
 #project(
   name: "vid2dataset - Video-to-Image Dataset Tool",
-  org: "Open-source developer tooling",
+  org: "Open-source Tool Personal Project",
   dates: dates-helper(start-date: "Dec 2025", end-date: "Present"),
   url: "",
   one-liner: false,
 )
 - Built a video frame extraction tool and image dataset builder as a Rust workspace with a shared extraction core.
 - Delivered both a complete CLI and a Tauri + React desktop application for video inspection and dataset extraction.
-- Implemented reproducible frame sampling, crop and resize transforms, color conversion, and JSONL/CSV manifests through FFmpeg filtergraphs.
-- Added interactive video preview, scrubbing, frame seeking, crop editing, legacy-profile import, and portable FFmpeg discovery in the functional alpha release.
+- Implemented reproducible frame sampling, image transforms, and JSONL/CSV manifests using FFmpeg.
+- Added video preview, frame seeking, crop editing, profile import, and FFmpeg discovery in the alpha release.
 
 #work(
   title: "Telemetry Development Division Lead and Founder",
@@ -120,9 +109,8 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
 )
 - Founded and led the telemetry division, building a real-time data acquisition stack for high-stress electric vehicle environments.
 - Developed failsafe serial telemetry architecture, reducing data-transmission failures by 15%.
-- Improved cross-team collaboration with Fusion 360 cloud version control, cutting design iteration time by 10%.
 - Directed cost optimization that reduced manufacturing and component expenses by 35% while maintaining system reliability.
-- Engineered firmware and data workflows across multiple vehicle subsystems while coordinating technical collaboration and documentation.
+- Engineered firmware and data workflows across multiple vehicle subsystems while coordinating technical collaboration.
 
 == Work and Technical Experience
 
@@ -136,9 +124,45 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
 - Integrated telemetry into Siemens NX-centered toolchains through C\#/.NET services, REST interfaces, and NX Open extensions.
 - Built Grafana dashboards to analyze adoption patterns, bottlenecks, and reliability trends across engineering software systems.
 - Implemented backend system monitoring and alerting with Prometheus and Grafana.
-- Developed TeamViewer Frontline Spatial AR/VR training and visualization prototypes for aerospace manufacturing and maintenance.
+- Developed TeamViewer Frontline Spatial AR/VR training and visualization prototypes for aerospace maintenance.
 - Created Azure DevOps CI/CD pipelines for telemetry services, NX extensions, Grafana provisioning, and Prometheus exporters.
 
+== Technical Skills
+
+#skills(
+  category: "Programming",
+  items: "Python, C/C++, C# / .NET, MATLAB, JavaScript, TypeScript, Rust, VHDL, Typst"
+)
+
+#skills(
+  category: "Robotics",
+  items: "ROS 2, SLAM, Gazebo, RViz, Nav2D, Sensor Integration, Robot Kinematics, Robot Control, LiDAR"
+)
+
+#skills(
+  category: "AI and Perception",
+  items: "Machine Learning, Deep Learning, Computer Vision, Object Detection, Pose Estimation"
+)
+
+#skills(
+  category: "Embedded and Hardware",
+  items: "Embedded Systems, ESP32, STM32, Arduino, Raspberry Pi, KiCad, Circuit Design, FPGAs"
+)
+
+#skills(
+  category: "Software and Tools",
+  items: "Linux, Docker/Podman, PostgreSQL, Grafana, Prometheus, Git / GitHub, CI/CD, Azure DevOps, Azure Pipelines, GitHub Actions, TeamViewer Frontline Spatial, RoboDK"
+)
+
+#skills(
+  category: "CAD/CAE/SIM",
+  items: "Autodesk Fusion, SolidWorks, Siemens NX, AutoCAD, Ansys Static Structural, Finite Element Analysis (FEA), Hyperelastic Material Modeling"
+)
+
+#skills(
+  category: "Libraries and Frameworks",
+  items: "OpenCV, TensorFlow, PyTorch, NumPy, Ultralytics, React, Tauri"
+)
 
 == Honors, Leadership, and Service
 
@@ -159,7 +183,7 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
   dates: dates-helper(start-date: "Apr 2025", end-date: "Jun 2025"),
 )
 - Delivered hands-on robotics and engineering workshops for children and teenagers in vulnerable situations.
-- Designed outreach activities using computer vision, gesture recognition, and interactive robotics to make STEM concepts accessible and motivating.
+- Designed outreach activities using computer vision and interactive robotics to make STEM concepts accessible and motivating.
 
 #extracurriculars(
   activity: "ExpoIngenierías 2025 Finalist, Tecnológico de Monterrey",
@@ -172,43 +196,6 @@ Robotics and Digital Systems Engineering graduate focused on autonomous robotic 
   dates: dates-helper(start-date: "2022", end-date: "2026"),
 )
 - Merit-based scholarship supporting undergraduate studies in recognition of academic performance and potential.
-
-== Technical Skills
-
-#skills(
-  category: "Programming",
-  items: "Python, C/C++, C# / .NET, MATLAB, JavaScript, TypeScript, Rust, VHDL, Typst"
-)
-
-#skills(
-  category: "Robotics",
-  items: "ROS 2, SLAM, Gazebo, RViz, Nav2D, Sensor Integration, Robot Kinematics, Robot Control, LiDAR, RGB-D Cameras"
-)
-
-#skills(
-  category: "AI and Perception",
-  items: "Machine Learning, Deep Learning, Computer Vision, Object Detection, Pose Estimation"
-)
-
-#skills(
-  category: "Embedded and Hardware",
-  items: "Embedded Systems, ESP32, STM32, Arduino, Raspberry Pi, KiCad, Circuit Design, FPGAs"
-)
-
-#skills(
-  category: "Software and Tools",
-  items: "Linux, Docker / Podman, PostgreSQL, Grafana, Prometheus, Git / GitHub, CI/CD, Azure DevOps, Azure Pipelines, GitHub Actions, TeamViewer Frontline Spatial, RoboDK"
-)
-
-#skills(
-  category: "CAD/CAE/SIM",
-  items: "Autodesk Fusion, SolidWorks, Siemens NX, AutoCAD, SimScale, Ansys Static Structural, Finite Element Analysis (FEA), Hyperelastic Material Modeling"
-)
-
-#skills(
-  category: "Libraries and Frameworks",
-  items: "OpenCV, TensorFlow, PyTorch, NumPy, Ultralytics, React, Tauri"
-)
 
 == Languages
 
