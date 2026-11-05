@@ -34,6 +34,13 @@ links:
     url: "https://youtu.be/C__XYonTsjs"
     icon: "video"
 media:
+  - kind: "video"
+    path: "/items/computer-vision-autonomous-navigation/puzzlebot-run-test-optimized.mp4"
+    title: "Puzzlebot Test Run"
+    caption: "Additional recorded test footage for the ROS 2 navigation stack."
+    poster:
+      path: "/items/computer-vision-autonomous-navigation/thumbnail.jpg"
+      alt: "Differential-drive Puzzlebot following a marked track beside traffic signs."
   - kind: "pdf"
     path: "/items/computer-vision-autonomous-navigation/Poster-Puzzlebot-Emdial.pdf"
     title: "Technical poster (ES)"
