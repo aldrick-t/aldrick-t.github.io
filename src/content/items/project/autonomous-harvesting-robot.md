@@ -45,6 +45,13 @@ media:
     poster:
       path: "/items/autonomous-harvesting-robot/thumbnail.jpg"
       alt: "UR3e arm with Yeaberry's three-finger soft gripper harvesting strawberries beside a RoboDK simulation and monitoring dashboard."
+  - kind: "video"
+    path: "/items/autonomous-harvesting-robot/demo_video_harvest_sequence.mp4"
+    title: "Harvest Sequence Video"
+    caption: "Additional recorded harvesting-sequence footage."
+    poster:
+      path: "/items/autonomous-harvesting-robot/thumbnail.jpg"
+      alt: "UR3e arm with Yeaberry's three-finger soft gripper harvesting strawberries beside a RoboDK simulation and monitoring dashboard."
 collaborators:
   - name: "Yael Cortés"
     url: "mailto:A01275893@tec.mx"
