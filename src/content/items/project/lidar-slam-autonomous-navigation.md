@@ -30,6 +30,13 @@ links:
     icon: "publication"
 media:
   - kind: "video"
+    path: "/items/lidar-slam-autonomous-navigation/gazebo-slam-nav2-test-optimized.mp4"
+    title: "Gazebo SLAM and Nav2 Test"
+    caption: "Additional simulation recording for the LiDAR navigation stack."
+    poster:
+      path: "/items/lidar-slam-autonomous-navigation/thumbnail.jpg"
+      alt: "MCR2 Puzzlebot navigating a taped maze while a laptop displays its colored route and map."
+  - kind: "video"
     path: "/items/lidar-slam-autonomous-navigation/presentation-optimized.mp4"
     title: "Final Presentation Video."
     poster:
